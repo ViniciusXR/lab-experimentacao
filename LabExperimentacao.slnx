@@ -1,0 +1,32 @@
+<Solution>
+  <Folder Name="/Enunciado 1/">
+    <Project Path="Enunciado 1/Sprint 1/Sprint1.csproj" />
+    <Project Path="Enunciado 1/Sprint 2/Sprint2.csproj" />
+    <Project Path="Enunciado 1/Sprint 3/Sprint3.csproj" />
+    <Project Path="Enunciado 1/Sprint 4/Sprint4.csproj" />
+  </Folder>
+  <Folder Name="/Enunciado 2/">
+    <Project Path="Enunciado 2/Sprint 1/Sprint1.csproj" />
+    <Project Path="Enunciado 2/Sprint 2/Sprint2.csproj" />
+    <Project Path="Enunciado 2/Sprint 3/Sprint3.csproj" />
+    <Project Path="Enunciado 2/Sprint 4/Sprint4.csproj" />
+  </Folder>
+  <Folder Name="/Enunciado 3/">
+    <Project Path="Enunciado 3/Sprint 1/Sprint1.csproj" />
+    <Project Path="Enunciado 3/Sprint 2/Sprint2.csproj" />
+    <Project Path="Enunciado 3/Sprint 3/Sprint3.csproj" />
+    <Project Path="Enunciado 3/Sprint 4/Sprint4.csproj" />
+  </Folder>
+  <Folder Name="/Enunciado 4/">
+    <Project Path="Enunciado 4/Sprint 1/Sprint1.csproj" />
+    <Project Path="Enunciado 4/Sprint 2/Sprint2.csproj" />
+    <Project Path="Enunciado 4/Sprint 3/Sprint3.csproj" />
+    <Project Path="Enunciado 4/Sprint 4/Sprint4.csproj" />
+  </Folder>
+  <Folder Name="/Enunciado 5/">
+    <Project Path="Enunciado 5/Sprint 1/Sprint1.csproj" />
+    <Project Path="Enunciado 5/Sprint 2/Sprint2.csproj" />
+    <Project Path="Enunciado 5/Sprint 3/Sprint3.csproj" />
+    <Project Path="Enunciado 5/Sprint 4/Sprint4.csproj" />
+  </Folder>
+</Solution>
