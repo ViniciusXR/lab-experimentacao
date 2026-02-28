@@ -13,8 +13,8 @@ class Program
     private static readonly HttpClient Http = new();
     private const string GraphQLEndpoint = "https://api.github.com/graphql";
     private const int ReposPorPagina = 30;
-    private const int TotalRepos = 100;      // quantidade padrão de repositórios
-    private const int TotalReposBonus = 200; // bônus: mais repositórios
+    private const int TotalRepos = 100;      
+    private const int TotalReposBonus = 200; /
 
     // Token do GitHub (evita limite anônimo 60/h → 5000/h com autenticação)
     private static string? _token;
@@ -368,7 +368,7 @@ class Program
         sb.Append($"   Mediana de issues abertas: {medianaIssuesAbertas:F0}").Append(nl);
         sb.Append("   Conclusão: ").Append(medianaIssuesAbertas <= 50 ? "Sim; em geral mantêm poucas issues abertas." : medianaIssuesAbertas <= 200 ? "Variável; alguns mantêm bem, outros acumulam mais." : "Muitos projetos populares têm grande volume de issues abertas.").Append(nl).Append(nl);
 
-        // BÔNUS (sempre incluído para nota máxima)
+        // BÔNUS 
         sb.Append("═══════════════════════════════════════════════════════════════").Append(nl);
         sb.Append("  Atividade Bônus - Análises adicionais").Append(nl);
         sb.Append("═══════════════════════════════════════════════════════════════").Append(nl).Append(nl);
