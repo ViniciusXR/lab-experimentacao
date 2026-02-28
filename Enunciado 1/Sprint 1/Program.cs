@@ -14,7 +14,7 @@ class Program
     private const string GraphQLEndpoint = "https://api.github.com/graphql";
     private const int ReposPorPagina = 30;
     private const int TotalRepos = 100;      
-    private const int TotalReposBonus = 200; /
+    private const int TotalReposBonus = 200; 
 
     // Token do GitHub (evita limite anônimo 60/h → 5000/h com autenticação)
     private static string? _token;
