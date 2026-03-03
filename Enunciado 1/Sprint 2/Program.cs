@@ -17,6 +17,18 @@ class Program
     private const int TotalRepos = 1000;
     private const int MaxRetries = 3;
 
+    // Limiares para conclusões das RQs (hipóteses informais)
+    private const double LimiteIdadeMaduroAnos = 5;
+    private const double LimiteIdadeParcialAnos = 2;
+    private const double LimitePRsAlto = 500;
+    private const double LimitePRsParcial = 100;
+    private const double LimiteReleasesFrequente = 20;
+    private const double LimiteReleasesParcial = 5;
+    private const double LimiteDiasAtualizadoRecente = 30;
+    private const double LimiteDiasAtualizadoParcial = 90;
+    private const double LimiteRazaoIssuesAlta = 0.70;
+    private const double LimiteRazaoIssuesParcial = 0.50;
+
     private static string? _token;
 
     static Program()
@@ -134,9 +146,10 @@ class Program
 
         AnsiConsole.MarkupLine($"\n[green]✔ {metricas.Count} repositórios obtidos com sucesso![/]\n");
 
-        EscreverRelatorio(metricas);
+        var resultados = CalcularResultadosRQs(metricas);
+        EscreverRelatorio(metricas, resultados);
         ExportarCsv(metricas);
-        ExportarReadme(metricas);
+        ExportarReadme(metricas, resultados);
 
         AnsiConsole.MarkupLine("\n[dim]Pressione qualquer tecla para sair...[/]");
         Console.ReadKey();
@@ -247,7 +260,7 @@ class Program
             HttpResponseMessage res = null!;
             for (var tentativa = 0; tentativa <= MaxRetries; tentativa++)
             {
-                var content = new StringContent(body, Encoding.UTF8, "application/json");
+                using var content = new StringContent(body, Encoding.UTF8, "application/json");
                 res = await Http.PostAsync(GraphQLEndpoint, content).ConfigureAwait(false);
 
                 var code = (int)res.StatusCode;
@@ -277,7 +290,8 @@ class Program
                     seg = Math.Clamp(seg, 1, 3600);
                     _ultimoErro = $"Rate limit atingido. Aguardando {seg}s...";
                     await Task.Delay(TimeSpan.FromSeconds(seg)).ConfigureAwait(false);
-                    res = await Http.PostAsync(GraphQLEndpoint, new StringContent(body, Encoding.UTF8, "application/json")).ConfigureAwait(false);
+                    using (var retryContent = new StringContent(body, Encoding.UTF8, "application/json"))
+                        res = await Http.PostAsync(GraphQLEndpoint, retryContent).ConfigureAwait(false);
                     if (res.StatusCode == System.Net.HttpStatusCode.Forbidden)
                     {
                         _ultimoErro = "Ainda no rate limit após espera. Tente novamente mais tarde.";
@@ -321,9 +335,86 @@ class Program
         }
     }
 
+    // ───────────────────── Resultados das RQs (computados uma vez) ─────────────────────
+
+    private sealed record ResultadosRQs(
+        List<double> IdadesAnos,
+        List<double> PRs,
+        List<double> Releases,
+        List<double> DiasDesdeAtualizacao,
+        List<IGrouping<string, MetricasRepo>> PorLinguagem,
+        List<double> RazoesIssuesFechadas,
+        double MedianaIdade,
+        double MedianaPRs,
+        double MedianaReleases,
+        double MedianaDias,
+        double MedianaRazaoIssues,
+        string ConclusaoIdade,
+        string ConclusaoPRs,
+        string ConclusaoReleases,
+        string ConclusaoDias,
+        string ConclusaoRazaoIssues,
+        int ReposSemIssues);
+
+    private static ResultadosRQs CalcularResultadosRQs(List<MetricasRepo> metricas)
+    {
+        var idadesAnos = metricas.Select(m => (DateTime.UtcNow - m.CriadoEm).TotalDays / 365.25).OrderBy(x => x).ToList();
+        var prs = metricas.Select(m => (double)m.PullRequestsAceitas).OrderBy(x => x).ToList();
+        var releases = metricas.Select(m => (double)m.TotalReleases).OrderBy(x => x).ToList();
+        var diasAtual = metricas.Select(m => (DateTime.UtcNow - m.AtualizadoEm).TotalDays).OrderBy(x => x).ToList();
+        var porLinguagem = metricas.GroupBy(m => m.Linguagem).OrderByDescending(g => g.Count()).ToList();
+        var razoes = metricas.Where(m => m.TotalIssues > 0).Select(m => (double)m.IssuesFechadas / m.TotalIssues).OrderBy(x => x).ToList();
+
+        var medianaIdade = Mediana(idadesAnos);
+        var medianaPRs = Mediana(prs);
+        var medianaReleases = Mediana(releases);
+        var medianaDias = Mediana(diasAtual);
+        var medianaRazao = Mediana(razoes);
+
+        string Conclusao(double valor, double limOk, double limParcial, bool maiorMelhor, string ok, string parcial, string refutada) =>
+            maiorMelhor
+                ? (valor >= limOk ? ok : valor >= limParcial ? parcial : refutada)
+                : (valor <= limOk ? ok : valor <= limParcial ? parcial : refutada);
+
+        return new ResultadosRQs(
+            IdadesAnos: idadesAnos,
+            PRs: prs,
+            Releases: releases,
+            DiasDesdeAtualizacao: diasAtual,
+            PorLinguagem: porLinguagem,
+            RazoesIssuesFechadas: razoes,
+            MedianaIdade: medianaIdade,
+            MedianaPRs: medianaPRs,
+            MedianaReleases: medianaReleases,
+            MedianaDias: medianaDias,
+            MedianaRazaoIssues: medianaRazao,
+            ConclusaoIdade: Conclusao(medianaIdade, LimiteIdadeMaduroAnos, LimiteIdadeParcialAnos, true,
+                "Hipótese confirmada. Sistemas populares são, em geral, maduros.",
+                "Parcialmente confirmada. Há um mix de projetos maduros e relativamente recentes.",
+                "Hipótese refutada. Muitos projetos populares são relativamente recentes."),
+            ConclusaoPRs: Conclusao(medianaPRs, LimitePRsAlto, LimitePRsParcial, true,
+                "Hipótese confirmada. Recebem muita contribuição externa via PRs.",
+                "Parcialmente confirmada. Contribuição significativa, mas não tão alta quanto esperado.",
+                "Hipótese refutada. Muitos projetos populares têm poucas PRs aceitas."),
+            ConclusaoReleases: Conclusao(medianaReleases, LimiteReleasesFrequente, LimiteReleasesParcial, true,
+                "Hipótese confirmada. Lançam releases com boa frequência.",
+                "Parcialmente confirmada. Alguns usam menos releases formais (preferem tags/commits).",
+                "Hipótese refutada. Muitos projetos populares não utilizam releases formais."),
+            ConclusaoDias: Conclusao(medianaDias, LimiteDiasAtualizadoRecente, LimiteDiasAtualizadoParcial, false,
+                "Hipótese confirmada. São projetos muito ativos e atualizados frequentemente.",
+                "Parcialmente confirmada. Atualizações regulares, mas não diárias.",
+                "Hipótese refutada. Alguns repositórios populares são estáveis e atualizados com menor frequência."),
+            ConclusaoRazaoIssues: medianaRazao >= LimiteRazaoIssuesAlta
+                ? "Hipótese confirmada. A maioria dos projetos populares fecha uma proporção alta de issues."
+                : medianaRazao >= LimiteRazaoIssuesParcial
+                    ? "Parcialmente confirmada. Fecham mais da metade, mas há margem de melhoria."
+                    : "Hipótese refutada. Muitos projetos populares acumulam issues abertas.",
+            ReposSemIssues: metricas.Count(m => m.TotalIssues == 0));
+    }
+
     // ───────────────────── Relatório (Spectre.Console) ─────────────────────
 
-    private static void EscreverRelatorio(List<MetricasRepo> metricas)
+    private static void EscreverRelatorio(List<MetricasRepo> metricas, ResultadosRQs r)
     {
         AnsiConsole.Write(new Rule("[bold yellow]RELATÓRIO — Repositórios Populares do GitHub[/]").RuleStyle("yellow"));
         AnsiConsole.MarkupLine($"[dim]Data: {DateTime.Now:yyyy-MM-dd HH:mm} | Repositórios analisados: {metricas.Count}[/]\n");
@@ -375,112 +466,76 @@ class Program
         AnsiConsole.WriteLine();
 
         // ── RQ 01: Maturidade ──
-        var idadesAnos = metricas.Select(m => (DateTime.UtcNow - m.CriadoEm).TotalDays / 365.25).OrderBy(x => x).ToList();
-        var medianaIdade = Mediana(idadesAnos);
-        var corIdade = medianaIdade >= 5 ? "green" : medianaIdade >= 2 ? "yellow" : "red";
-        var conclusaoIdade = medianaIdade >= 5
-            ? "Hipótese confirmada. Sistemas populares são, em geral, maduros."
-            : medianaIdade >= 2
-                ? "Parcialmente confirmada. Há um mix de projetos maduros e relativamente recentes."
-                : "Hipótese refutada. Muitos projetos populares são relativamente recentes.";
+        var corIdade = r.MedianaIdade >= LimiteIdadeMaduroAnos ? "green" : r.MedianaIdade >= LimiteIdadeParcialAnos ? "yellow" : "red";
         AnsiConsole.Write(new Panel(
                 new Markup($"[bold]Métrica:[/] idade do repositório (anos desde a criação)\n"
-                    + $"[bold]Mediana:[/] [{corIdade}]{medianaIdade:F1} anos[/]\n"
-                    + $"[bold]Mín/Máx:[/] {idadesAnos[0]:F1} / {idadesAnos[^1]:F1} anos\n"
-                    + $"[bold]Análise:[/] [{corIdade}]{Markup.Escape(conclusaoIdade)}[/]"))
+                    + $"[bold]Mediana:[/] [{corIdade}]{r.MedianaIdade:F1} anos[/]\n"
+                    + $"[bold]Mín/Máx:[/] {r.IdadesAnos[0]:F1} / {r.IdadesAnos[^1]:F1} anos\n"
+                    + $"[bold]Análise:[/] [{corIdade}]{Markup.Escape(r.ConclusaoIdade)}[/]"))
             .Header("[bold blue]RQ 01 — Sistemas populares são maduros/antigos?[/]")
             .Border(BoxBorder.Rounded).Expand());
         AnsiConsole.WriteLine();
 
         // ── RQ 02: Pull Requests aceitas ──
-        var prs = metricas.Select(m => (double)m.PullRequestsAceitas).OrderBy(x => x).ToList();
-        var medianaPRs = Mediana(prs);
-        var corPRs = medianaPRs >= 500 ? "green" : medianaPRs >= 100 ? "yellow" : "red";
-        var conclusaoPRs = medianaPRs >= 500
-            ? "Hipótese confirmada. Recebem muita contribuição externa via PRs."
-            : medianaPRs >= 100
-                ? "Parcialmente confirmada. Contribuição significativa, mas não tão alta quanto esperado."
-                : "Hipótese refutada. Muitos projetos populares têm poucas PRs aceitas.";
+        var corPRs = r.MedianaPRs >= LimitePRsAlto ? "green" : r.MedianaPRs >= LimitePRsParcial ? "yellow" : "red";
         AnsiConsole.Write(new Panel(
                 new Markup($"[bold]Métrica:[/] total de pull requests aceitas (merged)\n"
-                    + $"[bold]Mediana:[/] [{corPRs}]{medianaPRs:F0}[/]\n"
-                    + $"[bold]Mín/Máx:[/] {prs[0]:F0} / {prs[^1]:F0}\n"
-                    + $"[bold]Análise:[/] [{corPRs}]{Markup.Escape(conclusaoPRs)}[/]"))
+                    + $"[bold]Mediana:[/] [{corPRs}]{r.MedianaPRs:F0}[/]\n"
+                    + $"[bold]Mín/Máx:[/] {r.PRs[0]:F0} / {r.PRs[^1]:F0}\n"
+                    + $"[bold]Análise:[/] [{corPRs}]{Markup.Escape(r.ConclusaoPRs)}[/]"))
             .Header("[bold blue]RQ 02 — Sistemas populares recebem muita contribuição externa?[/]")
             .Border(BoxBorder.Rounded).Expand());
         AnsiConsole.WriteLine();
 
         // ── RQ 03: Releases ──
-        var releases = metricas.Select(m => (double)m.TotalReleases).OrderBy(x => x).ToList();
-        var medianaReleases = Mediana(releases);
-        var corReleases = medianaReleases >= 20 ? "green" : medianaReleases >= 5 ? "yellow" : "red";
-        var conclusaoReleases = medianaReleases >= 20
-            ? "Hipótese confirmada. Lançam releases com boa frequência."
-            : medianaReleases >= 5
-                ? "Parcialmente confirmada. Alguns usam menos releases formais (preferem tags/commits)."
-                : "Hipótese refutada. Muitos projetos populares não utilizam releases formais.";
+        var corReleases = r.MedianaReleases >= LimiteReleasesFrequente ? "green" : r.MedianaReleases >= LimiteReleasesParcial ? "yellow" : "red";
         AnsiConsole.Write(new Panel(
                 new Markup($"[bold]Métrica:[/] total de releases publicadas\n"
-                    + $"[bold]Mediana:[/] [{corReleases}]{medianaReleases:F0}[/]\n"
-                    + $"[bold]Mín/Máx:[/] {releases[0]:F0} / {releases[^1]:F0}\n"
-                    + $"[bold]Análise:[/] [{corReleases}]{Markup.Escape(conclusaoReleases)}[/]"))
+                    + $"[bold]Mediana:[/] [{corReleases}]{r.MedianaReleases:F0}[/]\n"
+                    + $"[bold]Mín/Máx:[/] {r.Releases[0]:F0} / {r.Releases[^1]:F0}\n"
+                    + $"[bold]Análise:[/] [{corReleases}]{Markup.Escape(r.ConclusaoReleases)}[/]"))
             .Header("[bold blue]RQ 03 — Sistemas populares lançam releases com frequência?[/]")
             .Border(BoxBorder.Rounded).Expand());
         AnsiConsole.WriteLine();
 
         // ── RQ 04: Atualizações ──
-        var diasAtual = metricas.Select(m => (DateTime.UtcNow - m.AtualizadoEm).TotalDays).OrderBy(x => x).ToList();
-        var medianaDias = Mediana(diasAtual);
-        var corDias = medianaDias <= 30 ? "green" : medianaDias <= 90 ? "yellow" : "red";
-        var conclusaoDias = medianaDias <= 30
-            ? "Hipótese confirmada. São projetos muito ativos e atualizados frequentemente."
-            : medianaDias <= 90
-                ? "Parcialmente confirmada. Atualizações regulares, mas não diárias."
-                : "Hipótese refutada. Alguns repositórios populares são estáveis e atualizados com menor frequência.";
+        var corDias = r.MedianaDias <= LimiteDiasAtualizadoRecente ? "green" : r.MedianaDias <= LimiteDiasAtualizadoParcial ? "yellow" : "red";
         AnsiConsole.Write(new Panel(
                 new Markup($"[bold]Métrica:[/] dias desde a última atualização\n"
-                    + $"[bold]Mediana:[/] [{corDias}]{medianaDias:F0} dias[/]\n"
-                    + $"[bold]Mín/Máx:[/] {diasAtual[0]:F0} / {diasAtual[^1]:F0} dias\n"
-                    + $"[bold]Análise:[/] [{corDias}]{Markup.Escape(conclusaoDias)}[/]"))
+                    + $"[bold]Mediana:[/] [{corDias}]{r.MedianaDias:F0} dias[/]\n"
+                    + $"[bold]Mín/Máx:[/] {r.DiasDesdeAtualizacao[0]:F0} / {r.DiasDesdeAtualizacao[^1]:F0} dias\n"
+                    + $"[bold]Análise:[/] [{corDias}]{Markup.Escape(r.ConclusaoDias)}[/]"))
             .Header("[bold blue]RQ 04 — Sistemas populares são atualizados com frequência?[/]")
             .Border(BoxBorder.Rounded).Expand());
         AnsiConsole.WriteLine();
 
         // ── RQ 05: Linguagens ──
-        var porLinguagem = metricas.GroupBy(m => m.Linguagem).OrderByDescending(g => g.Count()).ToList();
         var cores = new[] { Color.Green, Color.Yellow, Color.Blue, Color.Red, Color.Purple,
             Color.Aqua, Color.Orange1, Color.Fuchsia, Color.Lime, Color.Teal };
         var barChart = new BarChart()
             .Label("[bold blue]Distribuição por linguagem (top 15)[/]")
             .Width(70);
-        foreach (var (g, i) in porLinguagem.Take(15).Select((g, i) => (g, i)))
+        foreach (var (g, i) in r.PorLinguagem.Take(15).Select((g, i) => (g, i)))
             barChart.AddItem(Markup.Escape(g.Key), g.Count(), cores[i % cores.Length]);
         AnsiConsole.Write(new Panel(barChart)
             .Header("[bold blue]RQ 05 — Sistemas populares são escritos nas linguagens mais populares?[/]")
             .Border(BoxBorder.Rounded).Expand());
 
-        var top3 = string.Join(", ", porLinguagem.Take(3).Select(g => $"{g.Key} ({g.Count()})"));
+        var top3 = string.Join(", ", r.PorLinguagem.Take(3).Select(g => $"{g.Key} ({g.Count()})"));
         AnsiConsole.MarkupLine($"   [bold]Top 3:[/] {Markup.Escape(top3)}");
         AnsiConsole.MarkupLine("   [bold]Análise:[/] [green]Hipótese confirmada. Predominam linguagens amplamente adotadas.[/]\n");
 
         // ── RQ 06: Issues fechadas / total ──
-        var razoes = metricas
-            .Where(m => m.TotalIssues > 0)
-            .Select(m => (double)m.IssuesFechadas / m.TotalIssues)
-            .OrderBy(x => x).ToList();
-        var medianaRazao = Mediana(razoes);
-        var corRazao = medianaRazao >= 0.70 ? "green" : medianaRazao >= 0.50 ? "yellow" : "red";
-        var conclusaoRazao = medianaRazao >= 0.70
-            ? "Hipótese confirmada. A maioria dos projetos populares fecha uma proporção alta de issues."
-            : medianaRazao >= 0.50
-                ? "Parcialmente confirmada. Fecham mais da metade, mas há margem de melhoria."
-                : "Hipótese refutada. Muitos projetos populares acumulam issues abertas.";
+        var corRazao = r.MedianaRazaoIssues >= LimiteRazaoIssuesAlta ? "green" : r.MedianaRazaoIssues >= LimiteRazaoIssuesParcial ? "yellow" : "red";
+        var minMaxRazao = r.RazoesIssuesFechadas.Count > 0
+            ? $"{r.RazoesIssuesFechadas[0]:P1} / {r.RazoesIssuesFechadas[^1]:P1}"
+            : "N/A (nenhum repositório com issues)";
         AnsiConsole.Write(new Panel(
                 new Markup($"[bold]Métrica:[/] razão issues fechadas / total de issues\n"
-                    + $"[bold]Mediana:[/] [{corRazao}]{medianaRazao:P1}[/]\n"
-                    + $"[bold]Mín/Máx:[/] {razoes[0]:P1} / {razoes[^1]:P1}\n"
-                    + $"[bold]Repos sem issues:[/] {metricas.Count(m => m.TotalIssues == 0)}\n"
-                    + $"[bold]Análise:[/] [{corRazao}]{Markup.Escape(conclusaoRazao)}[/]"))
+                    + $"[bold]Mediana:[/] [{corRazao}]{r.MedianaRazaoIssues:P1}[/]\n"
+                    + $"[bold]Mín/Máx:[/] {minMaxRazao}\n"
+                    + $"[bold]Repos sem issues:[/] {r.ReposSemIssues}\n"
+                    + $"[bold]Análise:[/] [{corRazao}]{Markup.Escape(r.ConclusaoRazaoIssues)}[/]"))
             .Header("[bold blue]RQ 06 — Sistemas populares possuem alto percentual de issues fechadas?[/]")
             .Border(BoxBorder.Rounded).Expand());
         AnsiConsole.WriteLine();
@@ -493,12 +548,12 @@ class Program
             .AddColumn(new TableColumn("[bold]Questão[/]").LeftAligned())
             .AddColumn(new TableColumn("[bold]Métrica[/]").LeftAligned())
             .AddColumn(new TableColumn("[bold]Mediana[/]").RightAligned());
-        resumo.AddRow("RQ 01 — Maturidade", "Idade (anos)", $"{medianaIdade:F1}");
-        resumo.AddRow("RQ 02 — Contribuição", "PRs aceitas", $"{medianaPRs:F0}");
-        resumo.AddRow("RQ 03 — Releases", "Total releases", $"{medianaReleases:F0}");
-        resumo.AddRow("RQ 04 — Atualizações", "Dias desde última atualiz.", $"{medianaDias:F0}");
-        resumo.AddRow("RQ 05 — Linguagens", "Linguagem mais comum", Markup.Escape(porLinguagem[0].Key));
-        resumo.AddRow("RQ 06 — Issues fechadas", "Razão fechadas/total", $"{medianaRazao:P1}");
+        resumo.AddRow("RQ 01 — Maturidade", "Idade (anos)", $"{r.MedianaIdade:F1}");
+        resumo.AddRow("RQ 02 — Contribuição", "PRs aceitas", $"{r.MedianaPRs:F0}");
+        resumo.AddRow("RQ 03 — Releases", "Total releases", $"{r.MedianaReleases:F0}");
+        resumo.AddRow("RQ 04 — Atualizações", "Dias desde última atualiz.", $"{r.MedianaDias:F0}");
+        resumo.AddRow("RQ 05 — Linguagens", "Linguagem mais comum", Markup.Escape(r.PorLinguagem[0].Key));
+        resumo.AddRow("RQ 06 — Issues fechadas", "Razão fechadas/total", $"{r.MedianaRazaoIssues:P1}");
         AnsiConsole.Write(resumo);
         AnsiConsole.WriteLine();
 
@@ -535,7 +590,7 @@ class Program
 
     // ───────────────────── Exportação README.md ─────────────────────
 
-    private static void ExportarReadme(List<MetricasRepo> metricas)
+    private static void ExportarReadme(List<MetricasRepo> metricas, ResultadosRQs r)
     {
         try
         {
@@ -567,7 +622,7 @@ class Program
             sb.Append("## 2. Metodologia").Append(nl).Append(nl);
             sb.Append("- **Fonte de dados:** GitHub GraphQL API v4").Append(nl);
             sb.Append("- **Critério de seleção:** 1 000 repositórios com maior número de estrelas (`stars:>1000 sort:stars-desc`)").Append(nl);
-            sb.Append("- **Paginação:** consultas de 30 repositórios por página com cursor-based pagination").Append(nl);
+            sb.Append($"- **Paginação:** consultas de até {ReposPorPagina} repositórios por página com cursor-based pagination").Append(nl);
             sb.Append("- **Sumarização:** valores medianos para métricas numéricas; contagem por categoria para linguagens").Append(nl);
             sb.Append("- **Ferramentas:** C# / .NET 10, Spectre.Console, System.Text.Json").Append(nl).Append(nl);
 
@@ -598,126 +653,114 @@ class Program
             sb.Append(nl);
 
             // RQ 01
-            var idadesAnos = metricas.Select(m => (DateTime.UtcNow - m.CriadoEm).TotalDays / 365.25).OrderBy(x => x).ToList();
-            var medianaIdade = Mediana(idadesAnos);
-            var conclusaoIdade = medianaIdade >= 5
+            var conclusaoIdadeMd = r.MedianaIdade >= LimiteIdadeMaduroAnos
                 ? "✅ **Hipótese confirmada.** Sistemas populares são, em geral, maduros."
-                : medianaIdade >= 2
+                : r.MedianaIdade >= LimiteIdadeParcialAnos
                     ? "⚠️ **Parcialmente confirmada.** Há um mix de projetos maduros e relativamente recentes."
                     : "❌ **Hipótese refutada.** Muitos projetos populares são relativamente recentes.";
 
             sb.Append("### RQ 01 — Sistemas populares são maduros/antigos?").Append(nl).Append(nl);
             sb.Append("| Estatística | Valor |").Append(nl);
             sb.Append("|-------------|-------|").Append(nl);
-            sb.Append($"| **Mediana** | {medianaIdade:F1} anos |").Append(nl);
-            sb.Append($"| Mínimo | {idadesAnos[0]:F1} anos |").Append(nl);
-            sb.Append($"| Máximo | {idadesAnos[^1]:F1} anos |").Append(nl).Append(nl);
-            sb.Append($"> {conclusaoIdade}").Append(nl).Append(nl);
+            sb.Append($"| **Mediana** | {r.MedianaIdade:F1} anos |").Append(nl);
+            sb.Append($"| Mínimo | {r.IdadesAnos[0]:F1} anos |").Append(nl);
+            sb.Append($"| Máximo | {r.IdadesAnos[^1]:F1} anos |").Append(nl).Append(nl);
+            sb.Append($"> {conclusaoIdadeMd}").Append(nl).Append(nl);
 
             // RQ 02
-            var prs = metricas.Select(m => (double)m.PullRequestsAceitas).OrderBy(x => x).ToList();
-            var medianaPRs = Mediana(prs);
-            var conclusaoPRs = medianaPRs >= 500
+            var conclusaoPRsMd = r.MedianaPRs >= LimitePRsAlto
                 ? "✅ **Hipótese confirmada.** Recebem muita contribuição externa via PRs."
-                : medianaPRs >= 100
+                : r.MedianaPRs >= LimitePRsParcial
                     ? "⚠️ **Parcialmente confirmada.** Contribuição significativa, mas não tão alta quanto esperado."
                     : "❌ **Hipótese refutada.** Muitos projetos populares têm poucas PRs aceitas.";
 
             sb.Append("### RQ 02 — Sistemas populares recebem muita contribuição externa?").Append(nl).Append(nl);
             sb.Append("| Estatística | Valor |").Append(nl);
             sb.Append("|-------------|-------|").Append(nl);
-            sb.Append($"| **Mediana** | {medianaPRs:F0} PRs aceitas |").Append(nl);
-            sb.Append($"| Mínimo | {prs[0]:F0} |").Append(nl);
-            sb.Append($"| Máximo | {prs[^1]:F0} |").Append(nl).Append(nl);
-            sb.Append($"> {conclusaoPRs}").Append(nl).Append(nl);
+            sb.Append($"| **Mediana** | {r.MedianaPRs:F0} PRs aceitas |").Append(nl);
+            sb.Append($"| Mínimo | {r.PRs[0]:F0} |").Append(nl);
+            sb.Append($"| Máximo | {r.PRs[^1]:F0} |").Append(nl).Append(nl);
+            sb.Append($"> {conclusaoPRsMd}").Append(nl).Append(nl);
 
             // RQ 03
-            var releases = metricas.Select(m => (double)m.TotalReleases).OrderBy(x => x).ToList();
-            var medianaReleases = Mediana(releases);
-            var conclusaoReleases = medianaReleases >= 20
+            var conclusaoReleasesMd = r.MedianaReleases >= LimiteReleasesFrequente
                 ? "✅ **Hipótese confirmada.** Lançam releases com boa frequência."
-                : medianaReleases >= 5
+                : r.MedianaReleases >= LimiteReleasesParcial
                     ? "⚠️ **Parcialmente confirmada.** Alguns usam menos releases formais (preferem tags/commits)."
                     : "❌ **Hipótese refutada.** Muitos projetos populares não utilizam releases formais.";
 
             sb.Append("### RQ 03 — Sistemas populares lançam releases com frequência?").Append(nl).Append(nl);
             sb.Append("| Estatística | Valor |").Append(nl);
             sb.Append("|-------------|-------|").Append(nl);
-            sb.Append($"| **Mediana** | {medianaReleases:F0} releases |").Append(nl);
-            sb.Append($"| Mínimo | {releases[0]:F0} |").Append(nl);
-            sb.Append($"| Máximo | {releases[^1]:F0} |").Append(nl).Append(nl);
-            sb.Append($"> {conclusaoReleases}").Append(nl).Append(nl);
+            sb.Append($"| **Mediana** | {r.MedianaReleases:F0} releases |").Append(nl);
+            sb.Append($"| Mínimo | {r.Releases[0]:F0} |").Append(nl);
+            sb.Append($"| Máximo | {r.Releases[^1]:F0} |").Append(nl).Append(nl);
+            sb.Append($"> {conclusaoReleasesMd}").Append(nl).Append(nl);
 
             // RQ 04
-            var diasAtualList = metricas.Select(m => (DateTime.UtcNow - m.AtualizadoEm).TotalDays).OrderBy(x => x).ToList();
-            var medianaDias = Mediana(diasAtualList);
-            var conclusaoDias = medianaDias <= 30
+            var conclusaoDiasMd = r.MedianaDias <= LimiteDiasAtualizadoRecente
                 ? "✅ **Hipótese confirmada.** São projetos muito ativos e atualizados frequentemente."
-                : medianaDias <= 90
+                : r.MedianaDias <= LimiteDiasAtualizadoParcial
                     ? "⚠️ **Parcialmente confirmada.** Atualizações regulares, mas não diárias."
                     : "❌ **Hipótese refutada.** Alguns repositórios populares são estáveis e atualizados com menor frequência.";
 
             sb.Append("### RQ 04 — Sistemas populares são atualizados com frequência?").Append(nl).Append(nl);
             sb.Append("| Estatística | Valor |").Append(nl);
             sb.Append("|-------------|-------|").Append(nl);
-            sb.Append($"| **Mediana** | {medianaDias:F0} dias |").Append(nl);
-            sb.Append($"| Mínimo | {diasAtualList[0]:F0} dias |").Append(nl);
-            sb.Append($"| Máximo | {diasAtualList[^1]:F0} dias |").Append(nl).Append(nl);
-            sb.Append($"> {conclusaoDias}").Append(nl).Append(nl);
+            sb.Append($"| **Mediana** | {r.MedianaDias:F0} dias |").Append(nl);
+            sb.Append($"| Mínimo | {r.DiasDesdeAtualizacao[0]:F0} dias |").Append(nl);
+            sb.Append($"| Máximo | {r.DiasDesdeAtualizacao[^1]:F0} dias |").Append(nl).Append(nl);
+            sb.Append($"> {conclusaoDiasMd}").Append(nl).Append(nl);
 
             // RQ 05
-            var porLinguagem = metricas.GroupBy(m => m.Linguagem).OrderByDescending(g => g.Count()).ToList();
-
             sb.Append("### RQ 05 — Sistemas populares são escritos nas linguagens mais populares?").Append(nl).Append(nl);
             sb.Append("| Linguagem | Repositórios |").Append(nl);
             sb.Append("|-----------|-------------|").Append(nl);
-            foreach (var g in porLinguagem)
+            foreach (var g in r.PorLinguagem)
                 sb.Append($"| {g.Key} | {g.Count()} |").Append(nl);
             sb.Append(nl);
             sb.Append("> ✅ **Hipótese confirmada.** Predominam linguagens amplamente adotadas na indústria.").Append(nl).Append(nl);
 
             // RQ 06
-            var razoes = metricas
-                .Where(m => m.TotalIssues > 0)
-                .Select(m => (double)m.IssuesFechadas / m.TotalIssues)
-                .OrderBy(x => x).ToList();
-            var medianaRazao = Mediana(razoes);
-            var conclusaoRazao = medianaRazao >= 0.70
+            var conclusaoRazaoMd = r.MedianaRazaoIssues >= LimiteRazaoIssuesAlta
                 ? "✅ **Hipótese confirmada.** A maioria dos projetos populares fecha uma proporção alta de issues."
-                : medianaRazao >= 0.50
+                : r.MedianaRazaoIssues >= LimiteRazaoIssuesParcial
                     ? "⚠️ **Parcialmente confirmada.** Fecham mais da metade, mas há margem de melhoria."
                     : "❌ **Hipótese refutada.** Muitos projetos populares acumulam issues abertas.";
 
             sb.Append("### RQ 06 — Sistemas populares possuem alto percentual de issues fechadas?").Append(nl).Append(nl);
             sb.Append("| Estatística | Valor |").Append(nl);
             sb.Append("|-------------|-------|").Append(nl);
-            sb.Append($"| **Mediana** | {medianaRazao:P1} |").Append(nl);
-            sb.Append($"| Mínimo | {razoes[0]:P1} |").Append(nl);
-            sb.Append($"| Máximo | {razoes[^1]:P1} |").Append(nl);
-            sb.Append($"| Repos sem issues | {metricas.Count(m => m.TotalIssues == 0)} |").Append(nl).Append(nl);
-            sb.Append($"> {conclusaoRazao}").Append(nl).Append(nl);
+            sb.Append($"| **Mediana** | {r.MedianaRazaoIssues:P1} |").Append(nl);
+            if (r.RazoesIssuesFechadas.Count > 0)
+            {
+                sb.Append($"| Mínimo | {r.RazoesIssuesFechadas[0]:P1} |").Append(nl);
+                sb.Append($"| Máximo | {r.RazoesIssuesFechadas[^1]:P1} |").Append(nl);
+            }
+            sb.Append($"| Repos sem issues | {r.ReposSemIssues} |").Append(nl).Append(nl);
+            sb.Append($"> {conclusaoRazaoMd}").Append(nl).Append(nl);
 
             // ── Discussão ──
             sb.Append("## 4. Discussão").Append(nl).Append(nl);
             sb.Append("### Resumo — Valores Medianos").Append(nl).Append(nl);
             sb.Append("| Questão | Métrica | Mediana |").Append(nl);
             sb.Append("|---------|---------|--------|").Append(nl);
-            sb.Append($"| RQ 01 — Maturidade | Idade (anos) | {medianaIdade:F1} |").Append(nl);
-            sb.Append($"| RQ 02 — Contribuição | PRs aceitas | {medianaPRs:F0} |").Append(nl);
-            sb.Append($"| RQ 03 — Releases | Total releases | {medianaReleases:F0} |").Append(nl);
-            sb.Append($"| RQ 04 — Atualizações | Dias desde última atualiz. | {medianaDias:F0} |").Append(nl);
-            sb.Append($"| RQ 05 — Linguagens | Linguagem mais comum | {porLinguagem[0].Key} |").Append(nl);
-            sb.Append($"| RQ 06 — Issues fechadas | Razão fechadas/total | {medianaRazao:P1} |").Append(nl).Append(nl);
+            sb.Append($"| RQ 01 — Maturidade | Idade (anos) | {r.MedianaIdade:F1} |").Append(nl);
+            sb.Append($"| RQ 02 — Contribuição | PRs aceitas | {r.MedianaPRs:F0} |").Append(nl);
+            sb.Append($"| RQ 03 — Releases | Total releases | {r.MedianaReleases:F0} |").Append(nl);
+            sb.Append($"| RQ 04 — Atualizações | Dias desde última atualiz. | {r.MedianaDias:F0} |").Append(nl);
+            sb.Append($"| RQ 05 — Linguagens | Linguagem mais comum | {r.PorLinguagem[0].Key} |").Append(nl);
+            sb.Append($"| RQ 06 — Issues fechadas | Razão fechadas/total | {r.MedianaRazaoIssues:P1} |").Append(nl).Append(nl);
 
             sb.Append("### Comparação com as hipóteses").Append(nl).Append(nl);
             sb.Append("| Hipótese | Esperado | Obtido | Resultado |").Append(nl);
             sb.Append("|----------|----------|--------|-----------|").Append(nl);
-            sb.Append($"| H1 — Maturidade | > 5 anos | {medianaIdade:F1} anos | {(medianaIdade >= 5 ? "✅ Confirmada" : medianaIdade >= 2 ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl);
-            sb.Append($"| H2 — PRs aceitas | > 500 | {medianaPRs:F0} | {(medianaPRs >= 500 ? "✅ Confirmada" : medianaPRs >= 100 ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl);
-            sb.Append($"| H3 — Releases | > 20 | {medianaReleases:F0} | {(medianaReleases >= 20 ? "✅ Confirmada" : medianaReleases >= 5 ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl);
-            sb.Append($"| H4 — Atualizações | < 30 dias | {medianaDias:F0} dias | {(medianaDias <= 30 ? "✅ Confirmada" : medianaDias <= 90 ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl);
-            sb.Append($"| H5 — Linguagens | JS, Python, TS... | {porLinguagem[0].Key} | ✅ Confirmada |").Append(nl);
-            sb.Append($"| H6 — Issues fechadas | > 70% | {medianaRazao:P1} | {(medianaRazao >= 0.70 ? "✅ Confirmada" : medianaRazao >= 0.50 ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl).Append(nl);
+            sb.Append($"| H1 — Maturidade | > 5 anos | {r.MedianaIdade:F1} anos | {(r.MedianaIdade >= LimiteIdadeMaduroAnos ? "✅ Confirmada" : r.MedianaIdade >= LimiteIdadeParcialAnos ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl);
+            sb.Append($"| H2 — PRs aceitas | > 500 | {r.MedianaPRs:F0} | {(r.MedianaPRs >= LimitePRsAlto ? "✅ Confirmada" : r.MedianaPRs >= LimitePRsParcial ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl);
+            sb.Append($"| H3 — Releases | > 20 | {r.MedianaReleases:F0} | {(r.MedianaReleases >= LimiteReleasesFrequente ? "✅ Confirmada" : r.MedianaReleases >= LimiteReleasesParcial ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl);
+            sb.Append($"| H4 — Atualizações | < 30 dias | {r.MedianaDias:F0} dias | {(r.MedianaDias <= LimiteDiasAtualizadoRecente ? "✅ Confirmada" : r.MedianaDias <= LimiteDiasAtualizadoParcial ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl);
+            sb.Append($"| H5 — Linguagens | JS, Python, TS... | {r.PorLinguagem[0].Key} | ✅ Confirmada |").Append(nl);
+            sb.Append($"| H6 — Issues fechadas | > 70% | {r.MedianaRazaoIssues:P1} | {(r.MedianaRazaoIssues >= LimiteRazaoIssuesAlta ? "✅ Confirmada" : r.MedianaRazaoIssues >= LimiteRazaoIssuesParcial ? "⚠️ Parcial" : "❌ Refutada")} |").Append(nl).Append(nl);
 
             sb.Append("---").Append(nl).Append(nl);
 
