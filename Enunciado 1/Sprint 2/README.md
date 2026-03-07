@@ -26,7 +26,7 @@ buscando entender como eles são desenvolvidos, com que frequência recebem cont
 
 - **Fonte de dados:** GitHub GraphQL API v4
 - **Critério de seleção:** 1 000 repositórios com maior número de estrelas (`stars:>1000 sort:stars-desc`)
-- **Paginação:** consultas de 30 repositórios por página com cursor-based pagination
+- **Paginação:** consultas de 10 repositórios por página com cursor-based pagination
 - **Sumarização:** valores medianos para métricas numéricas; contagem por categoria para linguagens
 - **Ferramentas:** C# / .NET 10, Spectre.Console, System.Text.Json
 
