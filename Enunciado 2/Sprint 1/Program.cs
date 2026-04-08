@@ -5,6 +5,9 @@ using System.Text.Json;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Statistics;
 using Spectre.Console;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace Enunciado2.Sprint1;
 
@@ -69,6 +72,8 @@ static class Program
 
     static async Task Main(string[] args)
     {
+        QuestPDF.Settings.License = LicenseType.Community;
+
         Console.OutputEncoding = Encoding.UTF8;
 
         var token = ObterTokenDosArgs(args)
@@ -93,6 +98,11 @@ static class Program
             .Border(BoxBorder.Double)
             .BorderStyle(Style.Parse("yellow")));
         AnsiConsole.WriteLine();
+
+        var reposCsvPath = Path.Combine(outputDir, "repos_java_1000.csv");
+
+        // Permite rodar sem argumentos e já pular a busca se a lista existir (a menos que precise forçar)
+        if (args.Length == 0 && File.Exists(reposCsvPath)) skipFetch = true;
 
         var vaiBuscarLista = !skipFetch && TemToken();
         if (!vaiBuscarLista && !skipFetch && !soAgregar && !soBonus && !soColeta && !soColetaLote)
@@ -134,12 +144,14 @@ static class Program
                 return;
             }
 
-            EscreverListaReposCsv(repos, Path.Combine(outputDir, "repos_java_1000.csv"));
+            EscreverListaReposCsv(repos, reposCsvPath);
             EscreverListaReposTxt(repos, Path.Combine(outputDir, "repos_java_1000.txt"));
             AnsiConsole.MarkupLine($"[green]✔[/] {repos.Count} repositórios → [cyan]{Markup.Escape(outputDir)}[/]");
         }
-        else if (skipFetch)
-            AnsiConsole.MarkupLine("[yellow]--skip-fetch:[/] mantendo lista existente em lab02_sprint1_output.");
+        else if (skipFetch || File.Exists(reposCsvPath))
+        {
+            AnsiConsole.MarkupLine("[yellow]Info:[/] mantendo lista existente em lab02_sprint1_output.");
+        }
 
         if (soColeta)
         {
@@ -160,18 +172,23 @@ static class Program
             if (File.Exists(classCsv) && File.Exists(reposCsv))
             {
                 var repoLinha = ObterPrimeiroRepoOuEnv();
-                AgregarMedicoesAmostra(reposCsv, classCsv, repoLinha, outputDir);
+                AgregarMedicoesAmostra(reposCsvPath, classCsv, repoLinha, outputDir);
             }
-            else
+            else if (soAgregar)
+            {
                 AnsiConsole.MarkupLine("[yellow]Agregação:[/] faltam ck_output/class.csv ou repos_java_1000.csv — execute [cyan]dotnet run -- --coleta-ck --ck-jar=...[/] antes.");
+            }
         }
 
-        if (args.Contains("--bonus", StringComparer.OrdinalIgnoreCase))
+        if (soBonus || args.Length == 0)
         {
             ExecutarBonus(outputDir);
         }
 
-        if (!soBonus && !soAgregar && !soColeta && vaiBuscarLista)
+        // Relatório PDF é gerado ao final de tudo sem necessidade da flag
+        GerarRelatorioPdf(outputDir);
+
+        if (!soColeta && vaiBuscarLista)
         {
             AnsiConsole.WriteLine();
             AnsiConsole.MarkupLine("[bold]Próximos passos (tudo em C#):[/]");
@@ -620,6 +637,262 @@ static class Program
         }
         list.Add(cur.ToString().Trim());
         return list.ToArray();
+    }
+
+    private record CorrelacaoData(string Par, double PearsonR, double SpearmanRho, double SpearmanP);
+
+    private static List<CorrelacaoData> LerCorrelacoes(string path)
+    {
+        var lista = new List<CorrelacaoData>();
+        if (!File.Exists(path)) return lista;
+        var lines = File.ReadAllLines(path, Encoding.UTF8);
+        if (lines.Length <= 1) return lista;
+        foreach (var l in lines.Skip(1))
+        {
+            if (string.IsNullOrWhiteSpace(l)) continue;
+            var c = l.Split(';');
+            if (c.Length >= 5)
+            {
+                double.TryParse(c[1], NumberStyles.Any, CultureInfo.InvariantCulture, out var pr);
+                double.TryParse(c[3], NumberStyles.Any, CultureInfo.InvariantCulture, out var sr);
+                double.TryParse(c[4], NumberStyles.Any, CultureInfo.InvariantCulture, out var sp);
+                lista.Add(new CorrelacaoData(c[0], pr, sr, sp));
+            }
+        }
+        return lista;
+    }
+
+    private static void GerarRelatorioPdf(string outputDir)
+    {
+        var pdfPath = Path.Combine(outputDir, "Relatorio_Qualidade_Correlacoes.pdf");
+        var bonusDir = Path.Combine(outputDir, "bonus");
+
+        var doc = new RelatorioQualidadeDocument(bonusDir);
+        doc.GeneratePdf(pdfPath);
+
+        AnsiConsole.MarkupLine($"[green]✔[/] Relatório PDF gerado: [cyan]{Markup.Escape(pdfPath)}[/]");
+    }
+
+    private sealed class RelatorioQualidadeDocument : IDocument
+    {
+        private readonly string _bonusDir;
+        private readonly List<CorrelacaoData> _corrProc;
+        private readonly List<CorrelacaoData> _corrCk;
+
+        public RelatorioQualidadeDocument(string bonusDir)
+        {
+            _bonusDir = bonusDir;
+            _corrProc = Program.LerCorrelacoes(Path.Combine(bonusDir, "correlacao_metricas_processo.csv"));
+            _corrCk = Program.LerCorrelacoes(Path.Combine(bonusDir, "correlacao_metricas_ck_classes.csv"));
+        }
+
+        public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
+
+        public void Compose(IDocumentContainer container)
+        {
+            container.Page(page =>
+            {
+                page.Size(PageSizes.A4);
+                page.Margin(20);
+                page.DefaultTextStyle(x => x.FontSize(10).FontFamily(Fonts.Arial));
+
+                page.Header().Element(ComposeHeader);
+                page.Content().Element(ComposeContent);
+                page.Footer().AlignCenter().Text(x =>
+                {
+                    x.Span("Página ");
+                    x.CurrentPageNumber();
+                    x.Span(" de ");
+                    x.TotalPages();
+                });
+            });
+        }
+
+        private void ComposeHeader(IContainer container)
+        {
+            container.Column(col =>
+            {
+                col.Item().Text("Relatório de Análise — Enunciado 2").FontSize(18).Bold().FontColor(Colors.Blue.Darken2);
+                col.Item().Text("Alunos: Sthel Felipe Torres e Vinicius Xavier Ramalho").FontSize(12).Bold().FontColor(Colors.Black);
+                col.Item().Text("Qualidade de Sistemas Java (CK) vs Características de Processo (Sprint 1)").FontSize(11).FontColor(Colors.Grey.Darken1);
+                col.Item().Text($"Gerado em {DateTime.Now:dd/MM/yyyy HH:mm}").FontSize(9).FontColor(Colors.Grey.Darken1);
+                col.Item().PaddingTop(6).LineHorizontal(1).LineColor(Colors.Grey.Lighten2);
+            });
+        }
+
+        private void ComposeContent(IContainer container)
+        {
+            container.PaddingTop(10).Column(col =>
+            {
+                col.Spacing(14);
+                col.Item().Element(ComposeResumoExecutivo);
+                col.Item().Element(ComposeAnalisesRQs);
+                col.Item().Element(ComposeTabelasCorrelacao);
+                col.Item().Element(ComposeGraficosBonus);
+            });
+        }
+
+        private void ComposeResumoExecutivo(IContainer container)
+        {
+            container.Border(1).BorderColor(Colors.Blue.Lighten3).Padding(10).Background(Colors.Blue.Lighten5).Column(col =>
+            {
+                col.Item().Text("1. Introdução").Bold().FontSize(13).FontColor(Colors.Blue.Darken2);
+                col.Item().Text("Este relatório apresenta análises teóricas e responde às Questões de Pesquisa (RQs) estabelecidas, cruzando métricas de processo de software (obtidas via GitHub API) com métricas de qualidade de código (CBO, DIT, LCOM) mensuradas pela ferramenta CK.");
+
+                col.Item().PaddingTop(8).Text("Métricas Analisadas:").Bold();
+                col.Item().Text("• Processo: Popularidade (Estrelas), Maturidade (Idade), Atividade (Releases), Tamanho (LOC/Comentários).");
+                col.Item().Text("• Qualidade: CBO (Acoplamento), DIT (Herança), LCOM (Coesão).");
+            });
+        }
+
+        private void ComposeAnalisesRQs(IContainer container)
+        {
+            container.Border(1).BorderColor(Colors.Grey.Lighten2).Padding(8).Column(col =>
+            {
+                col.Item().Text("2. Respostas às RQs (Análise Qualitativa)").Bold().FontSize(13).FontColor(Colors.Blue.Darken2);
+
+                col.Item().PaddingTop(6).Table(table =>
+                {
+                    table.ColumnsDefinition(columns =>
+                    {
+                        columns.RelativeColumn(0.9f);
+                        columns.RelativeColumn(1.3f);
+                        columns.RelativeColumn(3.0f);
+                    });
+
+                    table.Header(h =>
+                    {
+                        h.Cell().Element(CellHeader).Text("Questão");
+                        h.Cell().Element(CellHeader).Text("Métricas Cruzadas");
+                        h.Cell().Element(CellHeader).Text("Análise Teórica");
+                    });
+
+                    AddRow(table, "RQ 01. Qual a relação entre a popularidade dos repositórios e as suas características de qualidade?", "Pop. (Estrelas) vs CBO, DIT, LCOM", "Estudos indicam que repositórios mais populares tendem a ter um número maior de contribuidores ativos e de revisões de código. CBO pode ser moderado a alto devido à complexidade exigida na integração de múltiplas features. Projetos populares costumam limitar árvores de herança profundas (DIT) e manter padrões rígidos de qualidade visual (LCOM), compensando a alta colaboração.");
+
+                    AddRow(table, "RQ 02. Qual a relação entre a maturidade dos repositórios e as suas características de qualidade?", "Maturidade (Anos) vs CBO, DIT, LCOM", "Sistemas mais maduros sofrem frequentemente de envelhecimento de software, acumulando débito técnico durante a sua evolução ao longo dos anos. CBO tende a aumentar com a idade. DIT costuma se estabilizar pois refatorações estruturais em sistemas antigos são custosas. LCOM tende a piorar sistematicamente (menos coesos) devido a métodos e classes que ganham condicionais extras e novos escopos.");
+
+                    AddRow(table, "RQ 03. Qual a relação entre a atividade dos repositórios e as suas características de qualidade?", "Atividade (Releases) vs CBO, DIT, LCOM", "A cadência curta e constante de entregas exige sistemas ágeis e coesos. Projetos com alto volume de entregas evitam códigos excessivamente acoplados, pois códigos altamente interdependentes dificultam lançamentos rápidos. Em um cenário ideal, há busca por boa coesão (LCOM baixo) e baixo CBO. DIT não sofre forte alteração direta ligada ao ritmo de releases.");
+
+                    AddRow(table, "RQ 04. Qual a relação entre o tamanho dos repositórios e as suas características de qualidade?", "Tamanho (LOC/Coments) vs CBO, DIT, LCOM", "O volume e magnitude física (LOC) correlacionam-se diretamente com quebras de métricas. O aumento do LOC quase sempre implica grandes classes que se comunicam muito (aumentando o CBO) e acumulação de métodos não relacionados (piorando LCOM). O volume de comentários pode crescer também como forma dos desenvolvedores justificarem lógicas falhas ou complexas.");
+
+                    static IContainer CellHeader(IContainer c) => c.Background(Colors.Grey.Lighten2).Padding(5).DefaultTextStyle(x => x.SemiBold());
+                    static IContainer CellBody(IContainer c) => c.BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(5);
+
+                    static void AddRow(TableDescriptor t, string q, string m, string a)
+                    {
+                        t.Cell().Element(CellBody).Text(q).SemiBold().FontColor(Colors.Grey.Darken3);
+                        t.Cell().Element(CellBody).Text(m).Italic();
+                        t.Cell().Element(CellBody).Text(a);
+                    }
+                });
+            });
+        }
+
+        private void ComposeTabelasCorrelacao(IContainer container)
+        {
+            if (_corrProc.Count == 0 && _corrCk.Count == 0) return;
+
+            container.Border(1).BorderColor(Colors.Grey.Lighten2).Padding(8).Column(col =>
+            {
+                col.Item().Text("3. Tabela de Correlações").Bold().FontSize(13).FontColor(Colors.Blue.Darken2);
+                col.Item().PaddingBottom(6).Text("Visualização em barra do valor de Spearman (ρ) indicando a direção e a força da correlação.").FontSize(10).FontColor(Colors.Grey.Darken2);
+
+                col.Item().Table(table =>
+                {
+                    table.ColumnsDefinition(columns =>
+                    {
+                        columns.RelativeColumn(2.0f);
+                        columns.RelativeColumn(1.0f);
+                        columns.RelativeColumn(1.0f);
+                        columns.RelativeColumn(1.0f);
+                        columns.RelativeColumn(1.5f);
+                    });
+
+                    table.Header(h =>
+                    {
+                        h.Cell().Element(CellHeader).Text("Par de Métricas");
+                        h.Cell().Element(CellHeader).AlignRight().Text("Pearson (r)");
+                        h.Cell().Element(CellHeader).AlignRight().Text("Spearman (ρ)");
+                        h.Cell().Element(CellHeader).AlignRight().Text("p-valor (Sprmn)");
+                        h.Cell().Element(CellHeader).AlignCenter().Text("Força (ρ)");
+                    });
+
+                    foreach (var c in _corrProc.Concat(_corrCk))
+                    {
+                        table.Cell().Element(CellBody).Text(c.Par.Replace("_vs_", " x ").Replace("_", " "));
+                        table.Cell().Element(CellBody).AlignRight().Text(c.PearsonR.ToString("F3", CultureInfo.InvariantCulture));
+                        table.Cell().Element(CellBody).AlignRight().Text(c.SpearmanRho.ToString("F3", CultureInfo.InvariantCulture));
+                        table.Cell().Element(CellBody).AlignRight().Text(c.SpearmanP.ToString("E2", CultureInfo.InvariantCulture));
+                        table.Cell().Element(CellBody).PaddingLeft(10).Element(b => ComposeBarCorrelation(b, c.SpearmanRho));
+                    }
+
+                    static IContainer CellHeader(IContainer c) => c.Background(Colors.Grey.Lighten2).Padding(4).DefaultTextStyle(x => x.SemiBold());
+                    static IContainer CellBody(IContainer c) => c.BorderBottom(1).BorderColor(Colors.Grey.Lighten3).Padding(4).AlignMiddle();
+                });
+            });
+        }
+
+        private static void ComposeBarCorrelation(IContainer container, double rho)
+        {
+            var rhoval = Math.Clamp(rho, -1.0, 1.0);
+            var color = rhoval >= 0 ? Colors.Blue.Medium : Colors.Red.Medium;
+            var widthPct = (float)Math.Abs(rhoval);
+
+            container.AlignMiddle().Height(10).Row(row =>
+            {
+                if (rhoval < 0)
+                {
+                    row.RelativeItem(1 - widthPct);
+                    row.RelativeItem(widthPct).Background(color);
+                    row.RelativeItem(1);
+                }
+                else
+                {
+                    row.RelativeItem(1);
+                    row.RelativeItem(widthPct).Background(color);
+                    row.RelativeItem(1 - widthPct);
+                }
+            });
+        }
+
+        private void ComposeGraficosBonus(IContainer container)
+        {
+            var p1 = Path.Combine(_bonusDir, "scatter_estrelas_idade.png");
+            var p2 = Path.Combine(_bonusDir, "scatter_estrelas_releases.png");
+            var p3 = Path.Combine(_bonusDir, "scatter_cbo_dit.png");
+            var p4 = Path.Combine(_bonusDir, "scatter_cbo_lcom.png");
+
+            var ext1 = File.Exists(p1);
+            var ext2 = File.Exists(p2);
+            var ext3 = File.Exists(p3);
+            var ext4 = File.Exists(p4);
+
+            if (!ext1 && !ext2 && !ext3 && !ext4) 
+            {
+                return;
+            }
+
+            container.Border(1).BorderColor(Colors.Green.Lighten3).Padding(8).Background(Colors.Green.Lighten5).Column(col =>
+            {
+                col.Spacing(10);
+                col.Item().Text("4. Anexo Bônus (Gráficos de Dispersão)").Bold().FontSize(13).FontColor(Colors.Green.Darken3);
+                col.Item().Text("Aqui estão alguns dos gráficos gerados através da análise de correlações entre as métricas extraídas.");
+
+                col.Item().Row(r =>
+                {
+                    r.Spacing(10);
+                    if (ext1) r.RelativeItem().Column(c => { c.Item().Image(p1); c.Item().AlignCenter().Text("Estrelas vs Idade").FontSize(9); });
+                    if (ext2) r.RelativeItem().Column(c => { c.Item().Image(p2); c.Item().AlignCenter().Text("Estrelas vs Releases").FontSize(9); });
+                });
+
+                col.Item().PaddingTop(10).Row(r =>
+                {
+                    r.Spacing(10);
+                    if (ext3) r.RelativeItem().Column(c => { c.Item().Image(p3); c.Item().AlignCenter().Text("CBO vs DIT").FontSize(9); });
+                    if (ext4) r.RelativeItem().Column(c => { c.Item().Image(p4); c.Item().AlignCenter().Text("CBO vs LCOM").FontSize(9); });
+                });
+            });
+        }
     }
 
     private static void ExecutarBonus(string outputDir)

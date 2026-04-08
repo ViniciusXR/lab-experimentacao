@@ -1,0 +1,5 @@
+﻿par;pearson_r;pearson_p_aprox;spearman_rho;spearman_p_aprox;n
+estrelas_vs_idade_anos;-0.0274;3.896E-001;0.0389;2.217E-001;990
+estrelas_vs_releases;0.1082;6.464E-004;0.1265;6.551E-005;990
+estrelas_vs_disk_usage_kb;NaN;NaN;NaN;NaN;990
+idade_anos_vs_releases;0.0281;3.773E-001;0.0096;7.628E-001;990
