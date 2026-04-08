@@ -13,6 +13,14 @@ namespace Enunciado2.Sprint1;
 /// Sprint 1: lista dos 1.000 repositórios Java, automação de clone/CK em C# (Process),
 /// CSV com medições de 1 repositório. Bônus: correlação (Pearson/Spearman), gráficos e p-valor aproximado.
 /// </summary>
+/// <remarks>
+/// Enunciado LAB 02 — mapeamento: Lab02S01 (top-1000 Java) = BuscarRepositoriosJava* + repos_java_1000.csv/.txt.
+/// Automação clone+CK = ExecutarColetaCk; lote = ExecutarColetaLote → medicoes_ck_lote.csv.
+/// Coleta lote: use --lote-limpar-work se Windows negar acesso a .git/objects/pack (*.idx) — apaga lab02_sprint1_output/lote_work antes.
+/// CSV amostra = AgregarMedicoesAmostra → medicoes_repositorio_amostra.csv.
+/// Métricas processo: estrelas, idade_anos, releases, disk (REST), LOC/comentários na coleta CK.
+/// Bônus local (um repo) = ExecutarBonus em lab02_sprint1_output/bonus/. Relatório global = Sprint 3 após Sprint 2.
+/// </remarks>
 static class Program
 {
     private static readonly HttpClient Http = new();
@@ -21,6 +29,10 @@ static class Program
     private const int ReposPorPaginaGraphQl = 18;
     private const int PausaEntrePaginasGraphQlMs = 1400;
     private const int TotalRepos = 1000;
+
+    /// <summary>Mensagem estável para o lote tratar como “ignorado”, não falha técnica.</summary>
+    private const string ErroRepoSemFicheirosJava =
+        "Nenhum .java encontrado no clone (repo pode ser só docs/markdown ou estrutura não standard).";
 
     private static string? _token;
     private static bool _rateLimitAvisado;
@@ -71,6 +83,7 @@ static class Program
         var skipFetch = args.Contains("--skip-fetch", StringComparer.OrdinalIgnoreCase);
         var forcarRest = args.Contains("--rest", StringComparer.OrdinalIgnoreCase);
         var soColeta = args.Contains("--coleta-ck", StringComparer.OrdinalIgnoreCase);
+        var soColetaLote = args.Contains("--coleta-lote", StringComparer.OrdinalIgnoreCase);
         var soAgregar = args.Contains("--agregar-ck", StringComparer.OrdinalIgnoreCase);
         var soBonus = args.Contains("--bonus", StringComparer.OrdinalIgnoreCase);
 
@@ -82,14 +95,14 @@ static class Program
         AnsiConsole.WriteLine();
 
         var vaiBuscarLista = !skipFetch && TemToken();
-        if (!vaiBuscarLista && !skipFetch && !soAgregar && !soBonus && !soColeta)
+        if (!vaiBuscarLista && !skipFetch && !soAgregar && !soBonus && !soColeta && !soColetaLote)
         {
             AnsiConsole.MarkupLine("[red]Token GitHub ausente.[/] Use [cyan].github-token[/], [cyan]GITHUB_TOKEN[/] ou [cyan]--token=...[/]");
-            AnsiConsole.MarkupLine("[dim]Coleta CK (sem API): [cyan]--coleta-ck --ck-jar=caminho\\ck.jar[/] | Pós-processamento: [cyan]--skip-fetch[/] + [cyan]--agregar-ck[/] / [cyan]--bonus[/][/]");
+            AnsiConsole.MarkupLine("[dim]Coleta CK (sem API): [cyan]--coleta-ck --ck-jar=caminho\\ck.jar[/] | Lote: [cyan]--coleta-lote --ck-jar=...[/] | Pós: [cyan]--skip-fetch[/] + [cyan]--agregar-ck[/] / [cyan]--bonus[/][/]");
             return;
         }
 
-        if (!skipFetch && !TemToken() && (soAgregar || soBonus) && !soColeta)
+        if (!skipFetch && !TemToken() && (soAgregar || soBonus) && !soColeta && !soColetaLote)
             AnsiConsole.MarkupLine("[yellow]Sem token:[/] pulando download da lista (use lista já gerada ou --skip-fetch explícito).");
 
         if (vaiBuscarLista)
@@ -134,6 +147,12 @@ static class Program
                 return;
         }
 
+        if (soColetaLote)
+        {
+            if (!ExecutarColetaLote(outputDir, pastaProjeto, args))
+                return;
+        }
+
         if (soAgregar || (args.Contains("--bonus", StringComparer.OrdinalIgnoreCase) && File.Exists(Path.Combine(outputDir, "ck_output", "class.csv"))))
         {
             var classCsv = Path.Combine(outputDir, "ck_output", "class.csv");
@@ -159,6 +178,8 @@ static class Program
             AnsiConsole.MarkupLine("  1. Baixe o [bold]ck.jar[/]: [link]https://github.com/mauricioaniche/ck/releases[/]");
             AnsiConsole.MarkupLine("  2. [cyan]dotnet run -- --coleta-ck --ck-jar=caminho\\para\\ck.jar[/] [dim](opcional: [cyan]--repo=owner/nome[/] ou [cyan]LAB02_REPO[/])[/]");
             AnsiConsole.MarkupLine("  3. [cyan]dotnet run -- --agregar-ck --bonus[/] [dim]— consolidar CSV e gráficos/estatísticas[/]");
+            AnsiConsole.MarkupLine("  4. [cyan]dotnet run -- --skip-fetch --coleta-lote --ck-jar=... --lote-max=10[/] [dim]— vários repos → medicoes_ck_lote.csv[/]");
+            AnsiConsole.MarkupLine("  5. Se [red]Access denied[/] em [dim]pack-*.idx[/]: feche o Explorador nessa pasta, use [cyan]--lote-limpar-work[/] ou apague [dim]lab02_sprint1_output\\lote_work[/] manualmente.");
             AnsiConsole.MarkupLine("[dim]Se GraphQL falhar (502): use [cyan]--rest[/] para só REST ([yellow]releases=0[/] nesse modo).[/]");
         }
     }
@@ -215,9 +236,7 @@ static class Program
 
         var saida = Path.Combine(outputDir, "medicoes_repositorio_amostra.csv");
         var sb = new StringBuilder();
-        sb.AppendLine(
-            "nome_completo;estrelas;forks;releases;idade_anos;disk_usage_kb;loc_java;comentarios_linhas;" +
-            "classes_analisadas;cbo_media;cbo_mediana;cbo_desvio;dit_media;dit_mediana;dit_desvio;lcom_media;lcom_mediana;lcom_desvio");
+        sb.AppendLine(HeaderMedicoesCk);
         static string G(Dictionary<string, string> d, string k) => d.TryGetValue(k, out var v) ? v : "";
 
         var loc = File.Exists(Path.Combine(outputDir, "ck_output", "loc_java.txt"))
@@ -251,6 +270,290 @@ static class Program
         AnsiConsole.MarkupLine($"[green]✔[/] Amostra consolidada: [cyan]{Markup.Escape(saida)}[/]");
     }
 
+    private const string HeaderMedicoesCk =
+        "nome_completo;estrelas;forks;releases;idade_anos;disk_usage_kb;loc_java;comentarios_linhas;" +
+        "classes_analisadas;cbo_media;cbo_mediana;cbo_desvio;dit_media;dit_mediana;dit_desvio;lcom_media;lcom_mediana;lcom_desvio";
+
+    /// <summary>
+    /// Percorre <c>repos_java_1000.txt</c> (ou <c>--lote-lista</c>), clona, roda CK e acrescenta linhas em <c>medicoes_ck_lote.csv</c> (retomável).
+    /// </summary>
+    private static bool ExecutarColetaLote(string outputDir, string pastaProjeto, string[] args)
+    {
+        var ckJar = ObterValorArg(args, "--ck-jar")
+            ?? Environment.GetEnvironmentVariable("CK_JAR")?.Trim();
+        if (string.IsNullOrWhiteSpace(ckJar))
+            ckJar = Path.Combine(pastaProjeto, "ck.jar");
+        ckJar = Path.GetFullPath(ckJar);
+        if (!File.Exists(ckJar))
+        {
+            AnsiConsole.MarkupLine($"[red]ck.jar não encontrado:[/] {Markup.Escape(ckJar)}");
+            return false;
+        }
+
+        var reposCsv = Path.Combine(outputDir, "repos_java_1000.csv");
+        if (!File.Exists(reposCsv))
+        {
+            AnsiConsole.MarkupLine($"[red]Falta {Markup.Escape(reposCsv)}[/] — rode a Sprint 1 com token ou use lista existente.");
+            return false;
+        }
+
+        var listaRepos = ObterValorArg(args, "--lote-lista")
+            ?? Path.Combine(outputDir, "repos_java_1000.txt");
+        listaRepos = Path.GetFullPath(listaRepos);
+        if (!File.Exists(listaRepos))
+        {
+            AnsiConsole.MarkupLine($"[red]Lista não encontrada:[/] {Markup.Escape(listaRepos)}");
+            return false;
+        }
+
+        var max = 5;
+        if (int.TryParse(ObterValorArg(args, "--lote-max"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var m) && m >= 0)
+            max = m;
+        var offset = 0;
+        if (int.TryParse(ObterValorArg(args, "--lote-offset"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var o) && o >= 0)
+            offset = o;
+
+        var continuarErro = args.Contains("--lote-continuar", StringComparer.OrdinalIgnoreCase);
+        var semResume = args.Contains("--lote-sem-resume", StringComparer.OrdinalIgnoreCase);
+        var manterArtefatos = args.Contains("--lote-manter-artefatos", StringComparer.OrdinalIgnoreCase);
+
+        var loteOut = Path.Combine(outputDir, "medicoes_ck_lote.csv");
+        var ja = semResume ? new HashSet<string>(StringComparer.OrdinalIgnoreCase) : CarregarNomesJaMedidosLote(loteOut);
+        var nomesLista = File.ReadAllLines(listaRepos, Encoding.UTF8)
+            .Select(l => l.Trim())
+            .Where(l => l.Length > 0 && !l.StartsWith("#", StringComparison.Ordinal))
+            .Skip(offset)
+            .ToList();
+        if (max > 0)
+            nomesLista = nomesLista.Take(max).ToList();
+
+        if (nomesLista.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]Nenhum repositório no intervalo (offset/max).[/]");
+            return true;
+        }
+
+        var loteRoot = Path.Combine(outputDir, "lote_work");
+        if (args.Contains("--lote-limpar-work", StringComparer.OrdinalIgnoreCase) && Directory.Exists(loteRoot))
+        {
+            AnsiConsole.MarkupLine("[cyan]--lote-limpar-work:[/] a remover pasta de trabalho do lote (clones antigos)…");
+            if (!TryApagarPastaRobusta(loteRoot, out var limpaErro))
+                AnsiConsole.MarkupLine($"[yellow]Aviso:[/] não foi possível apagar lote_work por completo: {Markup.Escape(limpaErro)}");
+        }
+        var cloneParent = Path.Combine(loteRoot, "clone");
+        var ckParent = Path.Combine(loteRoot, "ck");
+        Directory.CreateDirectory(cloneParent);
+        Directory.CreateDirectory(ckParent);
+
+        AnsiConsole.MarkupLine($"[cyan]Coleta em lote:[/] {nomesLista.Count} repo(s) | retomar: {(semResume ? "não" : "sim")} | saída: [cyan]{Markup.Escape(loteOut)}[/]");
+        var ok = 0;
+        var falha = 0;
+        var ignoradosSemJava = 0;
+
+        foreach (var nomeRepo in nomesLista)
+        {
+            if (!semResume && ja.Contains(nomeRepo))
+            {
+                AnsiConsole.MarkupLine($"[dim]Pulando (já em lote):[/] {Markup.Escape(nomeRepo)}");
+                continue;
+            }
+
+            var processo = CarregarProcessoParaRepo(reposCsv, nomeRepo);
+            if (processo == null)
+            {
+                AnsiConsole.MarkupLine($"[yellow]Repo não está em repos_java_1000.csv:[/] {Markup.Escape(nomeRepo)}");
+                falha++;
+                if (!continuarErro) return false;
+                continue;
+            }
+
+            AnsiConsole.MarkupLine($"[bold]→[/] {Markup.Escape(nomeRepo)}");
+            if (!ColetarCkUmRepoIsolado(ckJar, nomeRepo, cloneParent, ckParent, manterArtefatos, out var classCsv, out var locJ, out var locC, out var err))
+            {
+                if (string.Equals(err, ErroRepoSemFicheirosJava, StringComparison.Ordinal))
+                {
+                    AnsiConsole.MarkupLine(
+                        $"[yellow]Ignorado (sem código Java no clone):[/] {Markup.Escape(nomeRepo)} — típico de guias/docs; o CK não aplica.");
+                    ignoradosSemJava++;
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]Falha:[/] {Markup.Escape(err)}");
+                    falha++;
+                }
+
+                if (!continuarErro) return false;
+                continue;
+            }
+
+            if (!TryParseCkClassCsv(classCsv, out var cbo, out var dit, out var lcom, out var nClasses))
+            {
+                AnsiConsole.MarkupLine("[red]class.csv inválido ou sem classes.[/]");
+                falha++;
+                if (!manterArtefatos)
+                {
+                    var slugLimpeza = nomeRepo.Replace('/', '_');
+                    TryApagarPastaRobusta(Path.Combine(cloneParent, slugLimpeza), out _);
+                    TryApagarPastaRobusta(Path.Combine(ckParent, slugLimpeza), out _);
+                }
+
+                if (!continuarErro) return false;
+                continue;
+            }
+
+            static string G(Dictionary<string, string> d, string k) => d.TryGetValue(k, out var v) ? v : "";
+            var linha = string.Join(";",
+                nomeRepo,
+                G(processo, "estrelas"),
+                G(processo, "forks"),
+                G(processo, "releases"),
+                G(processo, "idade_anos"),
+                G(processo, "disk_usage_kb"),
+                locJ.ToString(CultureInfo.InvariantCulture),
+                locC.ToString(CultureInfo.InvariantCulture),
+                nClasses.ToString(CultureInfo.InvariantCulture),
+                Media(cbo).ToString("F4", CultureInfo.InvariantCulture),
+                Mediana(cbo).ToString("F4", CultureInfo.InvariantCulture),
+                DesvioPadrao(cbo).ToString("F4", CultureInfo.InvariantCulture),
+                Media(dit).ToString("F4", CultureInfo.InvariantCulture),
+                Mediana(dit).ToString("F4", CultureInfo.InvariantCulture),
+                DesvioPadrao(dit).ToString("F4", CultureInfo.InvariantCulture),
+                Media(lcom).ToString("F4", CultureInfo.InvariantCulture),
+                Mediana(lcom).ToString("F4", CultureInfo.InvariantCulture),
+                DesvioPadrao(lcom).ToString("F4", CultureInfo.InvariantCulture));
+
+            if (!File.Exists(loteOut))
+                File.WriteAllText(loteOut, HeaderMedicoesCk + Environment.NewLine, Encoding.UTF8);
+            File.AppendAllText(loteOut, linha + Environment.NewLine, Encoding.UTF8);
+            ja.Add(nomeRepo);
+            ok++;
+            AnsiConsole.MarkupLine($"[green]✔[/] Medição gravada ({ok}/{nomesLista.Count})");
+            if (!manterArtefatos)
+            {
+                var slugOk = nomeRepo.Replace('/', '_');
+                TryApagarPastaRobusta(Path.Combine(cloneParent, slugOk), out _);
+                TryApagarPastaRobusta(Path.Combine(ckParent, slugOk), out _);
+            }
+        }
+
+        AnsiConsole.MarkupLine(
+            $"[green]Lote concluído.[/] Sucesso: {ok} | falhas: {falha} | ignorados (sem .java): {ignoradosSemJava} → [cyan]{Markup.Escape(loteOut)}[/]");
+        AnsiConsole.MarkupLine("[dim]Sprint 2:[/] [cyan]dotnet run[/] na pasta Sprint 2 para fundir no consolidado.");
+        return true;
+    }
+
+    private static HashSet<string> CarregarNomesJaMedidosLote(string path)
+    {
+        var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (!File.Exists(path)) return set;
+        var lines = File.ReadAllLines(path, Encoding.UTF8);
+        for (var i = 1; i < lines.Length; i++)
+        {
+            if (string.IsNullOrWhiteSpace(lines[i])) continue;
+            var c = lines[i].Split(';');
+            if (c.Length > 0 && !string.IsNullOrWhiteSpace(c[0]))
+                set.Add(c[0].Trim());
+        }
+
+        return set;
+    }
+
+    private static Dictionary<string, string>? CarregarProcessoParaRepo(string reposCsv, string nomeRepo)
+    {
+        var linhas = File.ReadAllLines(reposCsv, Encoding.UTF8);
+        if (linhas.Length < 2) return null;
+        var header = linhas[0].Split(';');
+        var idxNome = Array.IndexOf(header, "nome_completo");
+        if (idxNome < 0) idxNome = 0;
+        foreach (var linha in linhas.Skip(1))
+        {
+            if (string.IsNullOrWhiteSpace(linha)) continue;
+            var cols = linha.Split(';');
+            if (cols.Length <= idxNome) continue;
+            if (!string.Equals(cols[idxNome].Trim(), nomeRepo, StringComparison.OrdinalIgnoreCase))
+                continue;
+            return header.Zip(cols, (h, c) => (h, c)).ToDictionary(x => x.h, x => x.c, StringComparer.OrdinalIgnoreCase);
+        }
+
+        return null;
+    }
+
+    private static bool ColetarCkUmRepoIsolado(
+        string ckJar,
+        string nomeRepo,
+        string cloneParent,
+        string ckParent,
+        bool manterArtefatos,
+        out string classCsvPath,
+        out int locJava,
+        out int locComentario,
+        out string erro)
+    {
+        classCsvPath = "";
+        locJava = 0;
+        locComentario = 0;
+        erro = "";
+        var slug = nomeRepo.Replace('/', '_');
+        var target = Path.Combine(cloneParent, slug);
+        if (Directory.Exists(target) && !TryApagarPastaRobusta(target, out erro))
+            return false;
+
+        var url = $"https://github.com/{nomeRepo}.git";
+        if (!ExecutarProcessoExito("git", $"clone --depth 1 \"{url}\" \"{target}\"", cloneParent, out erro))
+            return false;
+
+        var srcRoot = EncontrarRaizFontesJava(target);
+        if (ContarFicheirosJava(srcRoot) == 0)
+        {
+            erro = ErroRepoSemFicheirosJava;
+            TryApagarPastaRobusta(target, out _);
+            return false;
+        }
+
+        ContarLocJava(srcRoot, out locJava, out locComentario);
+
+        var ckDir = Path.Combine(ckParent, slug);
+        if (Directory.Exists(ckDir) && !TryApagarPastaRobusta(ckDir, out erro))
+            return false;
+
+        Directory.CreateDirectory(ckDir);
+        try
+        {
+            foreach (var f in Directory.GetFiles(ckDir, "*.csv"))
+                File.Delete(f);
+        }
+        catch { /* ignore */ }
+
+        var javaArgs = $"-jar \"{ckJar}\" \"{srcRoot}\" false 0";
+        if (!ExecutarProcessoExito("java", javaArgs, ckDir, out erro))
+        {
+            if (!manterArtefatos)
+            {
+                TryApagarPastaRobusta(target, out _);
+                TryApagarPastaRobusta(ckDir, out _);
+            }
+
+            return false;
+        }
+
+        classCsvPath = Path.Combine(ckDir, "class.csv");
+        if (!File.Exists(classCsvPath))
+        {
+            erro = "class.csv não gerado pelo CK.";
+            if (!manterArtefatos)
+            {
+                TryApagarPastaRobusta(target, out _);
+                TryApagarPastaRobusta(ckDir, out _);
+            }
+
+            return false;
+        }
+
+        // Não apagar clone/ck aqui: o lote ainda precisa de ler class.csv (TryParseCkClassCsv).
+        // Limpeza em ExecutarColetaLote após gravar a linha no CSV.
+        return true;
+    }
+
     private static bool TryParseCkClassCsv(string path, out List<double> cbo, out List<double> dit, out List<double> lcom, out int nClasses)
     {
         cbo = new List<double>();
@@ -259,6 +562,7 @@ static class Program
         nClasses = 0;
         var lines = File.ReadAllLines(path, Encoding.UTF8);
         if (lines.Length < 2) return false;
+        lines[0] = lines[0].TrimStart('\uFEFF');
         var h = lines[0].Split(',');
         int Ic(string name)
         {
@@ -267,9 +571,12 @@ static class Program
                     return i;
             return -1;
         }
+
         var iCbo = Ic("cbo");
         var iDit = Ic("dit");
         var iLcom = Ic("lcom");
+        if (iLcom < 0)
+            iLcom = Ic("lcom*");
         if (iCbo < 0 || iDit < 0 || iLcom < 0) return false;
 
         for (var r = 1; r < lines.Length; r++)
@@ -982,6 +1289,46 @@ static class Program
         return true;
     }
 
+    /// <summary>Apaga pasta com retentativas e <c>attrib/rd</c> no Windows (ficheiros .git pack *.idx bloqueados por AV/Explorador).</summary>
+    private static bool TryApagarPastaRobusta(string caminho, out string mensagemErro)
+    {
+        mensagemErro = "";
+        if (string.IsNullOrWhiteSpace(caminho) || !Directory.Exists(caminho))
+            return true;
+
+        var completo = Path.GetFullPath(caminho);
+        for (var tentativa = 0; tentativa < 5; tentativa++)
+        {
+            try
+            {
+                if (OperatingSystem.IsWindows() && tentativa == 0)
+                    ExecutarProcessoExito("cmd.exe", $"/c attrib -R \"{completo}\\*\" /S /D", Environment.SystemDirectory, out _);
+
+                Directory.Delete(completo, true);
+                if (!Directory.Exists(completo))
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                mensagemErro = ex.Message;
+            }
+
+            if (tentativa < 4)
+                Thread.Sleep(2000);
+        }
+
+        if (OperatingSystem.IsWindows())
+        {
+            ExecutarProcessoExito("cmd.exe", $"/c rd /s /q \"{completo}\"", Environment.SystemDirectory, out var rdLog);
+            if (!Directory.Exists(completo))
+                return true;
+            if (!string.IsNullOrWhiteSpace(rdLog))
+                mensagemErro = rdLog.Trim();
+        }
+
+        return !Directory.Exists(completo);
+    }
+
     private static bool ExecutarProcessoExito(string fileName, string arguments, string workingDirectory, out string combinedLog)
     {
         combinedLog = "";
@@ -1012,28 +1359,97 @@ static class Program
         }
     }
 
+    private static int ContarFicheirosJava(string dir)
+    {
+        if (!Directory.Exists(dir)) return 0;
+        try
+        {
+            var opts = new EnumerationOptions
+            {
+                RecurseSubdirectories = true,
+                IgnoreInaccessible = true,
+                AttributesToSkip = FileAttributes.ReparsePoint
+            };
+            return Directory.GetFiles(dir, "*.java", opts).Length;
+        }
+        catch
+        {
+            return ContarFicheirosJavaPorPastas(dir);
+        }
+    }
+
+    /// <summary>Contagem resiliente quando <see cref="Directory.GetFiles"/> falha (ex.: algumas pastas inacessíveis).</summary>
+    private static int ContarFicheirosJavaPorPastas(string dir)
+    {
+        var n = 0;
+        try
+        {
+            foreach (var f in Directory.EnumerateFiles(dir, "*.java", SearchOption.TopDirectoryOnly))
+                n++;
+        }
+        catch
+        {
+            /* ignora esta pasta */
+        }
+
+        try
+        {
+            foreach (var sub in Directory.EnumerateDirectories(dir))
+                n += ContarFicheirosJavaPorPastas(sub);
+        }
+        catch
+        {
+            /* ignora */
+        }
+
+        return n;
+    }
+
+    /// <summary>Escolhe a pasta com mais ficheiros .java (repos “docs” no topo costumam ter pouco código em <c>src</c>).</summary>
     private static string EncontrarRaizFontesJava(string cloneRoot)
     {
-        var candidates = new[]
+        if (!Directory.Exists(cloneRoot))
+            return Path.GetFullPath(cloneRoot);
+
+        var melhor = cloneRoot;
+        var max = ContarFicheirosJava(cloneRoot);
+
+        void TentarMelhor(string rel)
         {
-            Path.Combine(cloneRoot, "src", "main", "java"),
-            Path.Combine(cloneRoot, "src"),
-            cloneRoot
-        };
-        foreach (var c in candidates)
-        {
-            if (!Directory.Exists(c)) continue;
-            try
+            var p = Path.Combine(cloneRoot, rel);
+            if (!Directory.Exists(p)) return;
+            var n = ContarFicheirosJava(p);
+            if (n > max)
             {
-                if (Directory.GetFiles(c, "*.java", SearchOption.AllDirectories).Length > 0)
-                    return Path.GetFullPath(c);
-            }
-            catch
-            {
-                // caminhos longos / permissão
+                max = n;
+                melhor = p;
             }
         }
-        return Path.GetFullPath(cloneRoot);
+
+        TentarMelhor(Path.Combine("src", "main", "java"));
+        TentarMelhor("src");
+        TentarMelhor("java");
+        TentarMelhor("lib");
+        TentarMelhor("code");
+
+        try
+        {
+            foreach (var sub in Directory.GetDirectories(cloneRoot))
+            {
+                var n = ContarFicheirosJava(sub);
+                if (n > max)
+                {
+                    max = n;
+                    melhor = sub;
+                }
+            }
+        }
+        catch
+        {
+            // ignorar
+        }
+
+        return Path.GetFullPath(melhor);
     }
 
     private static void ContarLocJava(string srcRoot, out int locJava, out int locComentario)

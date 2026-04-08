@@ -1,0 +1,4 @@
+# Renomeie ou copie este ficheiro para: lab02_autores.txt
+# A Sprint 3 usa a primeira linha não vazia que não comece por #
+
+Acadêmicos: Nome Sobrenome 1, Nome Sobrenome 2

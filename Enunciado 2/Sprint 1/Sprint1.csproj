@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Enunciado2.Sprint1</RootNamespace>
+    <!-- Clones CK ficam aqui; sem isto o SDK inclui *.cs dos repositórios e a build falha. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);lab02_sprint1_output/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
