@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using System.Threading;
 using System.Text.Json;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Statistics;
@@ -18,7 +19,7 @@ namespace Enunciado2.Sprint1;
 /// </summary>
 /// <remarks>
 /// Enunciado LAB 02 — mapeamento: Lab02S01 (top-1000 Java) = BuscarRepositoriosJava* + repos_java_1000.csv/.txt.
-/// Automação clone+CK = ExecutarColetaCk; lote = ExecutarColetaLote → medicoes_ck_lote.csv.
+/// Automação clone+CK = ExecutarColetaCk; lote = ExecutarColetaLoteAsync → medicoes_ck_lote.csv (paralelo: --lote-paralelo).
 /// Coleta lote: use --lote-limpar-work se Windows negar acesso a .git/objects/pack (*.idx) — apaga lab02_sprint1_output/lote_work antes.
 /// CSV amostra = AgregarMedicoesAmostra → medicoes_repositorio_amostra.csv.
 /// Métricas processo: estrelas, idade_anos, releases, disk (REST), LOC/comentários na coleta CK.
@@ -28,9 +29,9 @@ static class Program
 {
     private static readonly HttpClient Http = new();
     private const string GraphQLEndpoint = "https://api.github.com/graphql";
-    /// <summary>Páginas pequenas reduzem 502/proxy (GraphQL pesado com 100 nós).</summary>
-    private const int ReposPorPaginaGraphQl = 18;
-    private const int PausaEntrePaginasGraphQlMs = 1400;
+    /// <summary>Predefinição alinhada ao Enunciado 1 (Lab01): 30 nós/página, sem pausa. Use <c>--gql-page-size</c> / <c>--gql-pause-ms</c> se tiver 502/proxy.</summary>
+    private const int ReposPorPaginaGraphQlPredef = 30;
+    private const int PausaEntrePaginasGraphQlMsPredef = 0;
     private const int TotalRepos = 1000;
 
     /// <summary>Mensagem estável para o lote tratar como “ignorado”, não falha técnica.</summary>
@@ -40,6 +41,9 @@ static class Program
     private static string? _token;
     private static bool _rateLimitAvisado;
     private static string? _ultimoErro;
+
+    /// <summary>Serializa saída Spectre no lote paralelo (evita linhas intercaladas).</summary>
+    private static readonly object LoteConsoleLock = new();
 
     private const string SearchQuery = """
         query($queryString: String!, $first: Int!, $after: String) {
@@ -124,7 +128,7 @@ static class Program
                     ? "Buscando repositórios Java (API REST)..."
                     : "Buscando repositórios Java (GraphQL leve + fallback REST)...", async ctx =>
                 {
-                    repos = await BuscarRepositoriosJavaAsync(TotalRepos, ctx, forcarRest).ConfigureAwait(false);
+                    repos = await BuscarRepositoriosJavaAsync(TotalRepos, ctx, forcarRest, args).ConfigureAwait(false);
                 });
 
             if (repos.Count == 0)
@@ -161,7 +165,7 @@ static class Program
 
         if (soColetaLote)
         {
-            if (!ExecutarColetaLote(outputDir, pastaProjeto, args))
+            if (!await ExecutarColetaLoteAsync(outputDir, pastaProjeto, args).ConfigureAwait(false))
                 return;
         }
 
@@ -195,9 +199,9 @@ static class Program
             AnsiConsole.MarkupLine("  1. Baixe o [bold]ck.jar[/]: [link]https://github.com/mauricioaniche/ck/releases[/]");
             AnsiConsole.MarkupLine("  2. [cyan]dotnet run -- --coleta-ck --ck-jar=caminho\\para\\ck.jar[/] [dim](opcional: [cyan]--repo=owner/nome[/] ou [cyan]LAB02_REPO[/])[/]");
             AnsiConsole.MarkupLine("  3. [cyan]dotnet run -- --agregar-ck --bonus[/] [dim]— consolidar CSV e gráficos/estatísticas[/]");
-            AnsiConsole.MarkupLine("  4. [cyan]dotnet run -- --skip-fetch --coleta-lote --ck-jar=... --lote-max=10[/] [dim]— vários repos → medicoes_ck_lote.csv[/]");
+            AnsiConsole.MarkupLine("  4. [cyan]dotnet run -- --skip-fetch --coleta-lote --ck-jar=... --lote-max=10 --lote-paralelo=4[/] [dim]— vários repos em paralelo → medicoes_ck_lote.csv[/]");
             AnsiConsole.MarkupLine("  5. Se [red]Access denied[/] em [dim]pack-*.idx[/]: feche o Explorador nessa pasta, use [cyan]--lote-limpar-work[/] ou apague [dim]lab02_sprint1_output\\lote_work[/] manualmente.");
-            AnsiConsole.MarkupLine("[dim]Se GraphQL falhar (502): use [cyan]--rest[/] para só REST ([yellow]releases=0[/] nesse modo).[/]");
+            AnsiConsole.MarkupLine("[dim]GraphQL lento/502: [cyan]--gql-page-size=18 --gql-pause-ms=1400[/] ou [cyan]--rest[/] ([yellow]releases=0[/] no REST).[/]");
         }
     }
 
@@ -293,8 +297,9 @@ static class Program
 
     /// <summary>
     /// Percorre <c>repos_java_1000.txt</c> (ou <c>--lote-lista</c>), clona, roda CK e acrescenta linhas em <c>medicoes_ck_lote.csv</c> (retomável).
+    /// Paralelismo: <c>--lote-paralelo=N</c> (predefinição 4).
     /// </summary>
-    private static bool ExecutarColetaLote(string outputDir, string pastaProjeto, string[] args)
+    private static async Task<bool> ExecutarColetaLoteAsync(string outputDir, string pastaProjeto, string[] args)
     {
         var ckJar = ObterValorArg(args, "--ck-jar")
             ?? Environment.GetEnvironmentVariable("CK_JAR")?.Trim();
@@ -330,6 +335,10 @@ static class Program
         if (int.TryParse(ObterValorArg(args, "--lote-offset"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var o) && o >= 0)
             offset = o;
 
+        var paralelo = 4;
+        if (int.TryParse(ObterValorArg(args, "--lote-paralelo"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var p) && p >= 1)
+            paralelo = p;
+
         var continuarErro = args.Contains("--lote-continuar", StringComparer.OrdinalIgnoreCase);
         var semResume = args.Contains("--lote-sem-resume", StringComparer.OrdinalIgnoreCase);
         var manterArtefatos = args.Contains("--lote-manter-artefatos", StringComparer.OrdinalIgnoreCase);
@@ -362,97 +371,161 @@ static class Program
         Directory.CreateDirectory(cloneParent);
         Directory.CreateDirectory(ckParent);
 
-        AnsiConsole.MarkupLine($"[cyan]Coleta em lote:[/] {nomesLista.Count} repo(s) | retomar: {(semResume ? "não" : "sim")} | saída: [cyan]{Markup.Escape(loteOut)}[/]");
-        var ok = 0;
-        var falha = 0;
-        var ignoradosSemJava = 0;
+        AnsiConsole.MarkupLine(
+            $"[cyan]Coleta em lote:[/] {nomesLista.Count} repo(s) | paralelo: [bold]{paralelo}[/] | retomar: {(semResume ? "não" : "sim")} | saída: [cyan]{Markup.Escape(loteOut)}[/]");
 
-        foreach (var nomeRepo in nomesLista)
+        // [0]=ok, [1]=falha, [2]=ignoradosSemJava — ref a elementos de array para Interlocked
+        var contadores = new int[3];
+        var lockCsvJa = new object();
+        using var cts = new CancellationTokenSource();
+        var token = cts.Token;
+        // 1 = cancelamento por erro sem --lote-continuar (visível entre threads)
+        var abortPorErroFatal = new int[1];
+
+        void MarcarAbortFatal()
         {
-            if (!semResume && ja.Contains(nomeRepo))
+            if (!continuarErro)
             {
-                AnsiConsole.MarkupLine($"[dim]Pulando (já em lote):[/] {Markup.Escape(nomeRepo)}");
-                continue;
-            }
-
-            var processo = CarregarProcessoParaRepo(reposCsv, nomeRepo);
-            if (processo == null)
-            {
-                AnsiConsole.MarkupLine($"[yellow]Repo não está em repos_java_1000.csv:[/] {Markup.Escape(nomeRepo)}");
-                falha++;
-                if (!continuarErro) return false;
-                continue;
-            }
-
-            AnsiConsole.MarkupLine($"[bold]→[/] {Markup.Escape(nomeRepo)}");
-            if (!ColetarCkUmRepoIsolado(ckJar, nomeRepo, cloneParent, ckParent, manterArtefatos, out var classCsv, out var locJ, out var locC, out var err))
-            {
-                if (string.Equals(err, ErroRepoSemFicheirosJava, StringComparison.Ordinal))
-                {
-                    AnsiConsole.MarkupLine(
-                        $"[yellow]Ignorado (sem código Java no clone):[/] {Markup.Escape(nomeRepo)} — típico de guias/docs; o CK não aplica.");
-                    ignoradosSemJava++;
-                }
-                else
-                {
-                    AnsiConsole.MarkupLine($"[red]Falha:[/] {Markup.Escape(err)}");
-                    falha++;
-                }
-
-                if (!continuarErro) return false;
-                continue;
-            }
-
-            if (!TryParseCkClassCsv(classCsv, out var cbo, out var dit, out var lcom, out var nClasses))
-            {
-                AnsiConsole.MarkupLine("[red]class.csv inválido ou sem classes.[/]");
-                falha++;
-                if (!manterArtefatos)
-                {
-                    var slugLimpeza = nomeRepo.Replace('/', '_');
-                    TryApagarPastaRobusta(Path.Combine(cloneParent, slugLimpeza), out _);
-                    TryApagarPastaRobusta(Path.Combine(ckParent, slugLimpeza), out _);
-                }
-
-                if (!continuarErro) return false;
-                continue;
-            }
-
-            static string G(Dictionary<string, string> d, string k) => d.TryGetValue(k, out var v) ? v : "";
-            var linha = string.Join(";",
-                nomeRepo,
-                G(processo, "estrelas"),
-                G(processo, "forks"),
-                G(processo, "releases"),
-                G(processo, "idade_anos"),
-                G(processo, "disk_usage_kb"),
-                locJ.ToString(CultureInfo.InvariantCulture),
-                locC.ToString(CultureInfo.InvariantCulture),
-                nClasses.ToString(CultureInfo.InvariantCulture),
-                Media(cbo).ToString("F4", CultureInfo.InvariantCulture),
-                Mediana(cbo).ToString("F4", CultureInfo.InvariantCulture),
-                DesvioPadrao(cbo).ToString("F4", CultureInfo.InvariantCulture),
-                Media(dit).ToString("F4", CultureInfo.InvariantCulture),
-                Mediana(dit).ToString("F4", CultureInfo.InvariantCulture),
-                DesvioPadrao(dit).ToString("F4", CultureInfo.InvariantCulture),
-                Media(lcom).ToString("F4", CultureInfo.InvariantCulture),
-                Mediana(lcom).ToString("F4", CultureInfo.InvariantCulture),
-                DesvioPadrao(lcom).ToString("F4", CultureInfo.InvariantCulture));
-
-            if (!File.Exists(loteOut))
-                File.WriteAllText(loteOut, HeaderMedicoesCk + Environment.NewLine, Encoding.UTF8);
-            File.AppendAllText(loteOut, linha + Environment.NewLine, Encoding.UTF8);
-            ja.Add(nomeRepo);
-            ok++;
-            AnsiConsole.MarkupLine($"[green]✔[/] Medição gravada ({ok}/{nomesLista.Count})");
-            if (!manterArtefatos)
-            {
-                var slugOk = nomeRepo.Replace('/', '_');
-                TryApagarPastaRobusta(Path.Combine(cloneParent, slugOk), out _);
-                TryApagarPastaRobusta(Path.Combine(ckParent, slugOk), out _);
+                Interlocked.Exchange(ref abortPorErroFatal[0], 1);
+                cts.Cancel();
             }
         }
 
+        try
+        {
+            await Parallel.ForEachAsync(
+                nomesLista,
+                new ParallelOptions { MaxDegreeOfParallelism = paralelo, CancellationToken = token },
+                async (nomeRepo, ct) =>
+                {
+                    await Task.Run(() =>
+                    {
+                        ct.ThrowIfCancellationRequested();
+
+                        if (!semResume)
+                        {
+                            lock (lockCsvJa)
+                            {
+                                if (ja.Contains(nomeRepo))
+                                {
+                                    lock (LoteConsoleLock)
+                                        AnsiConsole.MarkupLine($"[dim]Pulando (já em lote):[/] {Markup.Escape(nomeRepo)}");
+                                    return;
+                                }
+                            }
+                        }
+
+                        var processo = CarregarProcessoParaRepo(reposCsv, nomeRepo);
+                        if (processo == null)
+                        {
+                            lock (LoteConsoleLock)
+                                AnsiConsole.MarkupLine($"[yellow]Repo não está em repos_java_1000.csv:[/] {Markup.Escape(nomeRepo)}");
+                            Interlocked.Increment(ref contadores[1]);
+                            MarcarAbortFatal();
+                            return;
+                        }
+
+                        lock (LoteConsoleLock)
+                            AnsiConsole.MarkupLine($"[bold]→[/] {Markup.Escape(nomeRepo)}");
+
+                        if (!ColetarCkUmRepoIsolado(ckJar, nomeRepo, cloneParent, ckParent, manterArtefatos, args, out var classCsv, out var locJ, out var locC, out var err))
+                        {
+                            if (string.Equals(err, ErroRepoSemFicheirosJava, StringComparison.Ordinal))
+                            {
+                                lock (LoteConsoleLock)
+                                    AnsiConsole.MarkupLine(
+                                        $"[yellow]Ignorado (sem código Java no clone):[/] {Markup.Escape(nomeRepo)} — típico de guias/docs; o CK não aplica.");
+                                Interlocked.Increment(ref contadores[2]);
+                            }
+                            else
+                            {
+                                lock (LoteConsoleLock)
+                                    AnsiConsole.MarkupLine($"[red]Falha:[/] {Markup.Escape(err)}");
+                                Interlocked.Increment(ref contadores[1]);
+                                MarcarAbortFatal();
+                            }
+
+                            return;
+                        }
+
+                        if (!TryParseCkClassCsv(classCsv, out var cbo, out var dit, out var lcom, out var nClasses))
+                        {
+                            lock (LoteConsoleLock)
+                                AnsiConsole.MarkupLine("[red]class.csv inválido ou sem classes.[/]");
+                            Interlocked.Increment(ref contadores[1]);
+                            if (!manterArtefatos)
+                            {
+                                var slugLimpeza = nomeRepo.Replace('/', '_');
+                                TryApagarPastaRobusta(Path.Combine(cloneParent, slugLimpeza), out _);
+                                TryApagarPastaRobusta(Path.Combine(ckParent, slugLimpeza), out _);
+                            }
+
+                            MarcarAbortFatal();
+                            return;
+                        }
+
+                        static string G(Dictionary<string, string> d, string k) => d.TryGetValue(k, out var v) ? v : "";
+                        var linha = string.Join(";",
+                            nomeRepo,
+                            G(processo, "estrelas"),
+                            G(processo, "forks"),
+                            G(processo, "releases"),
+                            G(processo, "idade_anos"),
+                            G(processo, "disk_usage_kb"),
+                            locJ.ToString(CultureInfo.InvariantCulture),
+                            locC.ToString(CultureInfo.InvariantCulture),
+                            nClasses.ToString(CultureInfo.InvariantCulture),
+                            Media(cbo).ToString("F4", CultureInfo.InvariantCulture),
+                            Mediana(cbo).ToString("F4", CultureInfo.InvariantCulture),
+                            DesvioPadrao(cbo).ToString("F4", CultureInfo.InvariantCulture),
+                            Media(dit).ToString("F4", CultureInfo.InvariantCulture),
+                            Mediana(dit).ToString("F4", CultureInfo.InvariantCulture),
+                            DesvioPadrao(dit).ToString("F4", CultureInfo.InvariantCulture),
+                            Media(lcom).ToString("F4", CultureInfo.InvariantCulture),
+                            Mediana(lcom).ToString("F4", CultureInfo.InvariantCulture),
+                            DesvioPadrao(lcom).ToString("F4", CultureInfo.InvariantCulture));
+
+                        lock (lockCsvJa)
+                        {
+                            if (!semResume && ja.Contains(nomeRepo))
+                                return;
+
+                            if (!File.Exists(loteOut))
+                                File.WriteAllText(loteOut, HeaderMedicoesCk + Environment.NewLine, Encoding.UTF8);
+                            File.AppendAllText(loteOut, linha + Environment.NewLine, Encoding.UTF8);
+                            ja.Add(nomeRepo);
+                        }
+
+                        var atualOk = Interlocked.Increment(ref contadores[0]);
+
+                        lock (LoteConsoleLock)
+                            AnsiConsole.MarkupLine($"[green]✔[/] Medição gravada ({atualOk}/{nomesLista.Count}) — [dim]{Markup.Escape(nomeRepo)}[/]");
+
+                        if (!manterArtefatos)
+                        {
+                            var slugOk = nomeRepo.Replace('/', '_');
+                            TryApagarPastaRobusta(Path.Combine(cloneParent, slugOk), out _);
+                            TryApagarPastaRobusta(Path.Combine(ckParent, slugOk), out _);
+                        }
+                    }, ct).ConfigureAwait(false);
+                }).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            // TaskCanceledException deriva de OperationCanceledException (.NET)
+            if (Volatile.Read(ref abortPorErroFatal[0]) != 0)
+            {
+                lock (LoteConsoleLock)
+                    AnsiConsole.MarkupLine("[red]Coleta em lote interrompida[/] (erro sem [cyan]--lote-continuar[/]).");
+                return false;
+            }
+
+            throw;
+        }
+
+        var ok = contadores[0];
+        var falha = contadores[1];
+        var ignoradosSemJava = contadores[2];
         AnsiConsole.MarkupLine(
             $"[green]Lote concluído.[/] Sucesso: {ok} | falhas: {falha} | ignorados (sem .java): {ignoradosSemJava} → [cyan]{Markup.Escape(loteOut)}[/]");
         AnsiConsole.MarkupLine("[dim]Sprint 2:[/] [cyan]dotnet run[/] na pasta Sprint 2 para fundir no consolidado.");
@@ -495,12 +568,29 @@ static class Program
         return null;
     }
 
+    /// <summary>Argumentos da JVM para o CK: <c>CK_JAVA_OPTS</c> (opcional) + <c>-Xmx</c> via <c>--ck-xmx</c>, <c>CK_XMX</c> ou 4096m.</summary>
+    private static string MontarArgumentosJavaCk(string ckJar, string srcRoot, string[]? programaArgs)
+    {
+        programaArgs ??= Array.Empty<string>();
+        var xmx = ObterValorArg(programaArgs, "--ck-xmx")
+            ?? Environment.GetEnvironmentVariable("CK_XMX")?.Trim();
+        if (string.IsNullOrWhiteSpace(xmx))
+            xmx = "4096m";
+        if (!xmx.StartsWith("-Xmx", StringComparison.OrdinalIgnoreCase) && !xmx.StartsWith("-XX:", StringComparison.Ordinal))
+            xmx = "-Xmx" + xmx;
+
+        var prefix = Environment.GetEnvironmentVariable("CK_JAVA_OPTS")?.Trim();
+        var core = $"{xmx} -jar \"{ckJar}\" \"{srcRoot}\" false 0";
+        return string.IsNullOrEmpty(prefix) ? core : prefix + " " + core;
+    }
+
     private static bool ColetarCkUmRepoIsolado(
         string ckJar,
         string nomeRepo,
         string cloneParent,
         string ckParent,
         bool manterArtefatos,
+        string[] programaArgs,
         out string classCsvPath,
         out int locJava,
         out int locComentario,
@@ -541,7 +631,7 @@ static class Program
         }
         catch { /* ignore */ }
 
-        var javaArgs = $"-jar \"{ckJar}\" \"{srcRoot}\" false 0";
+        var javaArgs = MontarArgumentosJavaCk(ckJar, srcRoot, programaArgs);
         if (!ExecutarProcessoExito("java", javaArgs, ckDir, out erro))
         {
             if (!manterArtefatos)
@@ -567,7 +657,7 @@ static class Program
         }
 
         // Não apagar clone/ck aqui: o lote ainda precisa de ler class.csv (TryParseCkClassCsv).
-        // Limpeza em ExecutarColetaLote após gravar a linha no CSV.
+        // Limpeza em ExecutarColetaLoteAsync após gravar a linha no CSV.
         return true;
     }
 
@@ -1125,28 +1215,42 @@ static class Program
         File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
     }
 
-    private static async Task<List<RepoProcesso>> BuscarRepositoriosJavaAsync(int total, StatusContext ctx, bool forcarRest)
+    private static async Task<List<RepoProcesso>> BuscarRepositoriosJavaAsync(int total, StatusContext ctx, bool forcarRest, string[] args)
     {
         if (!forcarRest)
         {
-            var viaGql = await BuscarRepositoriosJavaGraphQlAsync(total, ctx).ConfigureAwait(false);
+            var viaGql = await BuscarRepositoriosJavaGraphQlAsync(total, ctx, args).ConfigureAwait(false);
             if (viaGql.Count > 0)
                 return viaGql;
             AnsiConsole.MarkupLine("[yellow]GraphQL não retornou dados (ex.: 502/proxy). Usando API REST…[/]");
             AnsiConsole.MarkupLine("[dim]Neste modo [bold]releases = 0[/] (a busca REST não expõe o total de releases).[/]");
         }
-        return await BuscarRepositoriosJavaRestAsync(total, ctx).ConfigureAwait(false);
+        return await BuscarRepositoriosJavaRestAsync(total, ctx, args).ConfigureAwait(false);
     }
 
-    private static async Task<List<RepoProcesso>> BuscarRepositoriosJavaGraphQlAsync(int total, StatusContext ctx)
+    /// <summary>GraphQL: tamanho de página e pausa (ms) entre páginas; sobrescreve com <c>--gql-page-size</c> e <c>--gql-pause-ms</c>.</summary>
+    private static void ResolverOpcoesGraphQl(string[] args, out int reposPorPagina, out int pausaEntrePaginasMs)
     {
+        reposPorPagina = ReposPorPaginaGraphQlPredef;
+        if (int.TryParse(ObterValorArg(args, "--gql-page-size"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var ps) && ps is >= 1 and <= 100)
+            reposPorPagina = ps;
+
+        pausaEntrePaginasMs = PausaEntrePaginasGraphQlMsPredef;
+        if (int.TryParse(ObterValorArg(args, "--gql-pause-ms"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var pm) && pm >= 0 && pm <= 120_000)
+            pausaEntrePaginasMs = pm;
+    }
+
+    private static async Task<List<RepoProcesso>> BuscarRepositoriosJavaGraphQlAsync(int total, StatusContext ctx, string[] args)
+    {
+        ResolverOpcoesGraphQl(args, out var reposPorPagina, out var pausaEntrePaginasMs);
+        ctx.Status($"GraphQL: {reposPorPagina} repos/página | pausa {pausaEntrePaginasMs} ms");
         var lista = new List<RepoProcesso>();
         string? cursor = null;
         const string q = "language:Java sort:stars-desc";
 
         while (lista.Count < total)
         {
-            var porPagina = Math.Min(ReposPorPaginaGraphQl, total - lista.Count);
+            var porPagina = Math.Min(reposPorPagina, total - lista.Count);
             var variables = new Dictionary<string, object?>
             {
                 ["queryString"] = q,
@@ -1192,15 +1296,20 @@ static class Program
             if (lista.Count >= total)
                 break;
             cursor = pageInfo.GetProperty("endCursor").GetString();
-            await Task.Delay(PausaEntrePaginasGraphQlMs).ConfigureAwait(false);
+            if (pausaEntrePaginasMs > 0)
+                await Task.Delay(pausaEntrePaginasMs).ConfigureAwait(false);
         }
 
         return lista.Take(total).ToList();
     }
 
     /// <summary>Fallback: até 1000 resultados (limite GitHub), páginas de 100, menos pesado que GraphQL para alguns proxies.</summary>
-    private static async Task<List<RepoProcesso>> BuscarRepositoriosJavaRestAsync(int total, StatusContext ctx)
+    private static async Task<List<RepoProcesso>> BuscarRepositoriosJavaRestAsync(int total, StatusContext ctx, string[] args)
     {
+        var restPausaMs = 600;
+        if (int.TryParse(ObterValorArg(args, "--rest-pause-ms"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var rp) && rp >= 0 && rp <= 120_000)
+            restPausaMs = rp;
+
         const int perPage = 100;
         var lista = new List<RepoProcesso>();
         var maxPages = Math.Min(10, (int)Math.Ceiling(Math.Min(total, 1000) / (double)perPage));
@@ -1260,7 +1369,8 @@ static class Program
                 break;
             if (lista.Count >= total)
                 break;
-            await Task.Delay(1600).ConfigureAwait(false);
+            if (restPausaMs > 0)
+                await Task.Delay(restPausaMs).ConfigureAwait(false);
         }
 
         return lista.Take(total).ToList();
@@ -1549,8 +1659,8 @@ static class Program
         }
         catch { /* ignore */ }
 
-        AnsiConsole.MarkupLine($"[cyan]java -jar CK[/] em [dim]{Markup.Escape(srcRoot)}[/]");
-        var javaArgs = $"-jar \"{ckJar}\" \"{srcRoot}\" false 0";
+        AnsiConsole.MarkupLine($"[cyan]java[/] (heap CK configurável, ver [dim]--ck-xmx[/]) em [dim]{Markup.Escape(srcRoot)}[/]");
+        var javaArgs = MontarArgumentosJavaCk(ckJar, srcRoot, args);
         if (!ExecutarProcessoExito("java", javaArgs, ckOut, out var javaErr))
         {
             AnsiConsole.MarkupLine($"[red]CK/Java falhou:[/] {Markup.Escape(javaErr)}");

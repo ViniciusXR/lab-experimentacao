@@ -3,7 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-# Token do GitHub (nunca commitar)
+# Token do GitHub (nunca commitar). Crie o ficheiro só na sua máquina, ex.:
+#   Enunciado 2/Sprint 1/.github-token  (uma linha, só o valor do PAT; o Git ignora por causa desta regra)
 .github-token
 
 # User-specific files

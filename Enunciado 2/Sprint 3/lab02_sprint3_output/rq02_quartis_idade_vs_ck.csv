@@ -1,0 +1,5 @@
+﻿RQ02_maturidade_idade;quartil_processo;n_com_ck;cbo_media_media;cbo_media_mediana;dit_media_media;lcom_media_media
+RQ02_maturidade_idade;Q1_baixo;237;5.4661;5.5400;1.3663;61.8672
+RQ02_maturidade_idade;Q2;244;5.1923;5.1500;1.4255;51.9709
+RQ02_maturidade_idade;Q3;241;5.3824;5.2543;1.4937;278.1094
+RQ02_maturidade_idade;Q4_alto;240;5.4513;5.3978;1.5408;80.3520

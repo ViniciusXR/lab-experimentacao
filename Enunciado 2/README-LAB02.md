@@ -6,7 +6,7 @@ Este diretório contém as **Sprints 1–3**: lista de repositórios, coleta CK,
 
 - [.NET SDK](https://dotnet.microsoft.com/download) (projeto alvo: `net10.0`).
 - **Token GitHub** (Sprint 1, para buscar os 1000 repos): ficheiro `Sprint 1/.github-token`, variável `GITHUB_TOKEN`, ou `--token=...`.
-- **Java + `ck.jar`** (ferramenta [CK](https://github.com/mauricioaniche/ck)) para `--coleta-ck` / `--coleta-lote`.
+- **Java + `ck.jar`** (ferramenta [CK](https://github.com/mauricioaniche/ck)) para `--coleta-ck` / `--coleta-lote`. Se aparecer `OutOfMemoryError: Java heap space`, use `--ck-xmx=6g` (ou `CK_XMX`) e/ou reduza `--lote-paralelo`.
 - Espaço em disco e tempo para clones (a coleta em lote é demorada).
 
 ## Um comando (recomendado)
@@ -31,7 +31,11 @@ A pasta `lab02_sprint3_output/` é **apagada e recriada** após validar o consol
 |-----------|--------|
 | `--apenas-sprint3` | Só regenera relatório (ignora Sprint 1 e 2); precisa do consolidado já existente. |
 | `--refetch` | Força nova descarga da lista na Sprint 1 (não usa `--skip-fetch`). |
+| `--gql-page-size=N` | GraphQL: repos por página (predefinição **30**, alinhado ao Lab01). Reduza (ex. 18) se tiver 502. |
+| `--gql-pause-ms=N` | GraphQL: pausa em ms entre páginas (predefinição **0**). Use 400–1400 se a rede/proxy falhar. |
+| `--rest-pause-ms=N` | REST (modo `--rest`): pausa entre páginas em ms (predefinição **600**). |
 | `--coleta-lote --ck-jar=caminho\ck.jar` | Repassado à Sprint 1 — coleta CK em lote (demorado). |
+| `--lote-paralelo=N` | Repassado à Sprint 1 — repos processados em paralelo (predefinição 4). |
 | `--lote-limpar-work` | Antes do lote, apaga `Sprint 1/lab02_sprint1_output/lote_work` (útil se Windows der *Access denied* em `pack-*.idx`). |
 | `--no-pdf` | Só Markdown/CSVs/gráficos, sem PDF. |
 | `--input=caminho\consolidado.csv` | Consolidado alternativo. |

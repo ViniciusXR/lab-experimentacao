@@ -1,0 +1,13 @@
+﻿x;y;pearson_r;pearson_p_aprox;spearman_rho;spearman_p_aprox;n
+estrelas;cbo_media;-0.1318;4.138E-005;0.0208;5.193E-001;962
+estrelas;dit_media;-0.1095;6.725E-004;-0.0485;1.326E-001;962
+estrelas;lcom_media;0.0179;5.796E-001;0.0510;1.138E-001;962
+idade_anos;cbo_media;0.0046;8.878E-001;0.0003;9.924E-001;962
+idade_anos;dit_media;0.1683;1.516E-007;0.2798;0.000E+000;962
+idade_anos;lcom_media;0.0268;4.059E-001;0.1947;1.139E-009;962
+releases;cbo_media;0.2144;1.812E-011;0.4041;0.000E+000;962
+releases;dit_media;0.0507;1.163E-001;0.2099;4.838E-011;962
+releases;lcom_media;-0.0126;6.974E-001;0.3286;0.000E+000;962
+loc_java;cbo_media;0.1943;1.237E-009;0.4237;0.000E+000;962
+loc_java;dit_media;0.0282;3.817E-001;0.2340;1.965E-013;962
+loc_java;lcom_media;0.0531;1.001E-001;0.4542;0.000E+000;962

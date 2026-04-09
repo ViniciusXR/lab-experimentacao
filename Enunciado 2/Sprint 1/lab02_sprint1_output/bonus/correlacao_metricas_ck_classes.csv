@@ -1,0 +1,4 @@
+﻿par;pearson_r;pearson_p_aprox;spearman_rho;spearman_p_aprox;n
+cbo_vs_dit;-0.0535;1.707E-002;-0.0002;9.924E-001;1990
+cbo_vs_lcom;0.1106;7.622E-007;0.1778;1.332E-015;1990
+dit_vs_lcom;-0.0173;4.403E-001;0.0318;1.566E-001;1990

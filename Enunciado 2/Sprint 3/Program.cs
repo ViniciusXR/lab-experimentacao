@@ -31,7 +31,7 @@ namespace Enunciado2.Sprint3;
  *
  * Pipeline único: por defeito este executável corre Sprint 1 → Sprint 2 → Sprint 3 (subprocessos dotnet).
  * Use --apenas-sprint3 para só regenerar relatório a partir do consolidado já existente.
- * --refetch força nova busca da lista (sem --skip-fetch na Sprint 1). Coleta CK: repasse --coleta-lote, --ck-jar=..., etc.
+ * --refetch força nova busca da lista (sem --skip-fetch na Sprint 1). Coleta CK: repasse --coleta-lote, --lote-paralelo=N, --ck-jar=..., etc.
  * ═══════════════════════════════════════════════════════════════════════════
  */
 

@@ -89,7 +89,12 @@ internal static class Lab02Pipeline
         string.Equals(a, "--lote-limpar-work", StringComparison.OrdinalIgnoreCase) ||
         string.Equals(a, "--lote-continuar", StringComparison.OrdinalIgnoreCase) ||
         a.StartsWith("--ck-jar=", StringComparison.OrdinalIgnoreCase) ||
+        a.StartsWith("--ck-xmx=", StringComparison.OrdinalIgnoreCase) ||
         a.StartsWith("--lote-max=", StringComparison.OrdinalIgnoreCase) ||
+        a.StartsWith("--lote-paralelo=", StringComparison.OrdinalIgnoreCase) ||
+        a.StartsWith("--gql-page-size=", StringComparison.OrdinalIgnoreCase) ||
+        a.StartsWith("--gql-pause-ms=", StringComparison.OrdinalIgnoreCase) ||
+        a.StartsWith("--rest-pause-ms=", StringComparison.OrdinalIgnoreCase) ||
         a.StartsWith("--token=", StringComparison.OrdinalIgnoreCase) ||
         a.StartsWith("--repo=", StringComparison.OrdinalIgnoreCase);
 

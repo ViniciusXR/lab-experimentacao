@@ -1,0 +1,4 @@
+﻿x;y;pearson_r;pearson_p_aprox;spearman_rho;spearman_p_aprox;n
+estrelas;idade_anos;-0.0294;3.561E-001;0.0370;2.448E-001;990
+estrelas;releases;0.1090;5.894E-004;0.1316;3.265E-005;990
+idade_anos;releases;0.0273;3.903E-001;0.0109;7.314E-001;990
