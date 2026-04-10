@@ -53,7 +53,11 @@ internal sealed class RepoRow
     public double? DitMediana { get; init; }
     public double? LcomMediana { get; init; }
 
-    public bool TemCk => CboMedia.HasValue && DitMedia.HasValue && LcomMedia.HasValue;
+    public bool TemCk =>
+        CboMedia.HasValue && DitMedia.HasValue && LcomMedia.HasValue &&
+        !double.IsNaN(CboMedia.Value) && !double.IsInfinity(CboMedia.Value) &&
+        !double.IsNaN(DitMedia.Value) && !double.IsInfinity(DitMedia.Value) &&
+        !double.IsNaN(LcomMedia.Value) && !double.IsInfinity(LcomMedia.Value);
 }
 
 /// <summary>
@@ -107,6 +111,8 @@ static class Program
         }
 
         var rows = CarregarConsolidado(path);
+        var reposS1 = Path.Combine(pastaS3, "..", "Sprint 1", "lab02_sprint1_output", "repos_java_1000.csv");
+        rows = CompletarDadosProcessoComSprint1(rows, reposS1);
         if (rows.Count == 0)
         {
             AnsiConsole.MarkupLine("[red]Nenhuma linha válida no consolidado.[/]");
@@ -124,6 +130,8 @@ static class Program
 
         var nComCk = rows.Count(r => r.TemCk);
         AnsiConsole.MarkupLine($"Repositórios no consolidado: [bold]{rows.Count}[/] | com métricas CK: [bold]{nComCk}[/]");
+        if (rows.Count < 1000)
+            AnsiConsole.MarkupLine($"[yellow]Aviso:[/] a base consolidada contém [bold]{rows.Count}[/] repositórios (esperado no enunciado: 1000). Os n do relatório refletem essa entrada.");
 
         // Lab02 — medidas centrais globais (complementa a sumarização "por repo" que veio no consolidado).
         EscreverResumoGlobal(rows, Path.Combine(outDir, "resumo_global_metricas.csv"));
@@ -264,7 +272,11 @@ static class Program
         string titulo,
         string path)
     {
-        var comProcesso = rows.Where(r => selector(r).HasValue).ToList();
+        var comProcesso = rows.Where(r =>
+        {
+            var v = selector(r);
+            return v.HasValue && !double.IsNaN(v.Value) && !double.IsInfinity(v.Value);
+        }).ToList();
         if (comProcesso.Count < 4)
         {
             File.WriteAllText(path, $"# {titulo}\n# Poucos dados para quartis (n={comProcesso.Count}).\n", Encoding.UTF8);
@@ -314,13 +326,13 @@ static class Program
     {
         var pathMd = Path.Combine(outDir, "RELATORIO_LAB02.md");
         var n = rows.Count;
-        var est = rows.Where(r => r.Estrelas.HasValue).Select(r => r.Estrelas!.Value).ToList();
-        var idade = rows.Where(r => r.IdadeAnos.HasValue).Select(r => r.IdadeAnos!.Value).ToList();
-        var rel = rows.Where(r => r.Releases.HasValue).Select(r => r.Releases!.Value).ToList();
-        var loc = rows.Where(r => r.LocJava.HasValue).Select(r => r.LocJava!.Value).ToList();
-        var forks = rows.Where(r => r.Forks.HasValue).Select(r => r.Forks!.Value).ToList();
-        var disk = rows.Where(r => r.DiskKb.HasValue).Select(r => r.DiskKb!.Value).ToList();
-        var com = rows.Where(r => r.Comentarios.HasValue).Select(r => r.Comentarios!.Value).ToList();
+        var est = ValoresValidos(rows.Select(r => r.Estrelas));
+        var idade = ValoresValidos(rows.Select(r => r.IdadeAnos));
+        var rel = ValoresValidos(rows.Select(r => r.Releases));
+        var loc = ValoresValidos(rows.Select(r => r.LocJava));
+        var forks = ValoresValidos(rows.Select(r => r.Forks));
+        var disk = ValoresValidos(rows.Select(r => r.DiskKb));
+        var com = ValoresValidos(rows.Select(r => r.Comentarios));
 
         var sb = new StringBuilder();
         sb.AppendLine("# Laboratório 02 — Qualidade de sistemas Java (CK + GitHub)");
@@ -387,9 +399,9 @@ static class Program
 
         if (nComCk > 0)
         {
-            var cbo = rows.Where(r => r.CboMedia.HasValue).Select(r => r.CboMedia!.Value).ToList();
-            var dit = rows.Where(r => r.DitMedia.HasValue).Select(r => r.DitMedia!.Value).ToList();
-            var lcom = rows.Where(r => r.LcomMedia.HasValue).Select(r => r.LcomMedia!.Value).ToList();
+            var cbo = ValoresValidos(rows.Select(r => r.CboMedia));
+            var dit = ValoresValidos(rows.Select(r => r.DitMedia));
+            var lcom = ValoresValidos(rows.Select(r => r.LcomMedia));
             sb.AppendLine("## 3.1 Qualidade (CK) — repositórios com medição");
             sb.AppendLine();
             Tabela("CBO (média por repo)", cbo);
@@ -484,7 +496,10 @@ static class Program
         {
             var xv = fx(r);
             var yv = fy(r);
-            if (!xv.HasValue || !yv.HasValue) continue;
+            if (!xv.HasValue || !yv.HasValue ||
+                double.IsNaN(xv.Value) || double.IsInfinity(xv.Value) ||
+                double.IsNaN(yv.Value) || double.IsInfinity(yv.Value))
+                continue;
             xs.Add(xv.Value);
             ys.Add(yv.Value);
         }
@@ -537,7 +552,10 @@ static class Program
             {
                 var xv = fx(r);
                 var yv = fy(r);
-                if (!xv.HasValue || !yv.HasValue) continue;
+                if (!xv.HasValue || !yv.HasValue ||
+                    double.IsNaN(xv.Value) || double.IsInfinity(xv.Value) ||
+                    double.IsNaN(yv.Value) || double.IsInfinity(yv.Value))
+                    continue;
                 xs.Add(xv.Value);
                 ys.Add(yv.Value);
             }
@@ -582,7 +600,10 @@ static class Program
             {
                 var v1 = f1(r);
                 var v2 = f2(r);
-                if (!v1.HasValue || !v2.HasValue) continue;
+                if (!v1.HasValue || !v2.HasValue ||
+                    double.IsNaN(v1.Value) || double.IsInfinity(v1.Value) ||
+                    double.IsNaN(v2.Value) || double.IsInfinity(v2.Value))
+                    continue;
                 a.Add(v1.Value);
                 b.Add(v2.Value);
             }
@@ -681,6 +702,102 @@ static class Program
         if (v.Count < 2) return 0;
         var m = v.Average();
         return Math.Sqrt(v.Sum(x => (x - m) * (x - m)) / (v.Count - 1));
+    }
+
+    private static List<double> ValoresValidos(IEnumerable<double?> origem) =>
+        origem.Where(x => x.HasValue)
+            .Select(x => x!.Value)
+            .Where(x => !double.IsNaN(x) && !double.IsInfinity(x))
+            .ToList();
+
+    private static List<RepoRow> CompletarDadosProcessoComSprint1(List<RepoRow> rows, string reposSprint1Path)
+    {
+        if (!File.Exists(reposSprint1Path) || rows.Count == 0)
+            return rows;
+
+        var s1 = CarregarReposSprint1(reposSprint1Path);
+        if (s1.Count == 0)
+            return rows;
+
+        var porNome = new Dictionary<string, RepoRow>(StringComparer.OrdinalIgnoreCase);
+        foreach (var r in rows)
+            porNome[r.Nome] = r;
+
+        foreach (var r1 in s1)
+        {
+            if (porNome.TryGetValue(r1.Nome, out var atual))
+            {
+                porNome[r1.Nome] = new RepoRow
+                {
+                    Nome = atual.Nome,
+                    Estrelas = atual.Estrelas ?? r1.Estrelas,
+                    Forks = atual.Forks ?? r1.Forks,
+                    Releases = atual.Releases ?? r1.Releases,
+                    IdadeAnos = atual.IdadeAnos ?? r1.IdadeAnos,
+                    DiskKb = atual.DiskKb ?? r1.DiskKb,
+                    LocJava = atual.LocJava,
+                    Comentarios = atual.Comentarios,
+                    Classes = atual.Classes,
+                    CboMedia = atual.CboMedia,
+                    DitMedia = atual.DitMedia,
+                    LcomMedia = atual.LcomMedia,
+                    CboMediana = atual.CboMediana,
+                    DitMediana = atual.DitMediana,
+                    LcomMediana = atual.LcomMediana
+                };
+            }
+            else
+            {
+                porNome[r1.Nome] = r1;
+            }
+        }
+
+        return porNome.Values.OrderBy(x => x.Nome, StringComparer.OrdinalIgnoreCase).ToList();
+    }
+
+    private static List<RepoRow> CarregarReposSprint1(string path)
+    {
+        var lines = File.ReadAllLines(path, Encoding.UTF8);
+        if (lines.Length < 2) return new List<RepoRow>();
+        var h = lines[0].Split(';');
+
+        int I(string name)
+        {
+            for (var i = 0; i < h.Length; i++)
+                if (string.Equals(h[i].Trim(), name, StringComparison.OrdinalIgnoreCase))
+                    return i;
+            return -1;
+        }
+
+        var inome = I("nome_completo");
+        if (inome < 0) return new List<RepoRow>();
+
+        double? P(string[] cols, int idx) =>
+            idx >= 0 && idx < cols.Length && double.TryParse(cols[idx].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var v)
+                ? v
+                : null;
+
+        var list = new List<RepoRow>();
+        foreach (var line in lines.Skip(1))
+        {
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            var c = line.Split(';');
+            if (c.Length <= inome) continue;
+            var nome = c[inome].Trim();
+            if (string.IsNullOrEmpty(nome)) continue;
+
+            list.Add(new RepoRow
+            {
+                Nome = nome,
+                Estrelas = P(c, I("estrelas")),
+                Forks = P(c, I("forks")),
+                Releases = P(c, I("releases")),
+                IdadeAnos = P(c, I("idade_anos")),
+                DiskKb = P(c, I("disk_usage_kb"))
+            });
+        }
+
+        return list;
     }
 
     private static string? ObterArg(string[] args, string flag)
