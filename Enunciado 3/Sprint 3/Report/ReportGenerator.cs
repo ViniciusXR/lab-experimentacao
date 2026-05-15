@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using Lab03S03.Analysis;
+using Lab03S03.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -10,9 +13,10 @@ namespace Lab03S03.Report
 {
     public static class ReportGenerator
     {
-        public static void Generate(List<AnalysisResult> results, string outputPath, int totalPrs)
+        public static void Generate(List<AnalysisResult> results, string outputPath, List<PullRequest> prs)
         {
             QuestPDF.Settings.License = LicenseType.Community;
+            int totalPrs = prs.Count;
 
             Document.Create(container =>
             {
@@ -23,7 +27,7 @@ namespace Lab03S03.Report
                     page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(10));
 
                     page.Header().Element(ComposeHeader);
-                    page.Content().Element(content => ComposeContent(content, results, totalPrs));
+                    page.Content().Element(content => ComposeContent(content, results, totalPrs, prs));
                     page.Footer().AlignCenter().Text(x =>
                     {
                         x.Span("Página ");
@@ -64,90 +68,33 @@ namespace Lab03S03.Report
             });
         }
 
-        private static void ComposeContent(IContainer container, List<AnalysisResult> results, int totalPrs)
+        private static void ComposeContent(IContainer container, List<AnalysisResult> results, int totalPrs, List<PullRequest> prs)
         {
+            var pt = CultureInfo.GetCultureInfo("pt-BR");
+            var globalRows = GlobalDescriptiveStats.SummarizeAll(prs);
+            string interpretacaoGlobal = GlobalDescriptiveStats.BuildInterpretation(globalRows, totalPrs);
+
+            string chartsDir = results.Count > 0 && !string.IsNullOrEmpty(results[0].ChartPath)
+                ? Path.GetDirectoryName(results[0].ChartPath) ?? ""
+                : "";
+
             container.Column(col =>
             {
                 col.Spacing(12);
 
-                // Sumário / Índice Box
-                col.Item().Border(1).BorderColor(Colors.Grey.Lighten2).Padding(10).Column(box =>
-                {
-                    box.Item().Text("Índice").Bold().FontSize(15).FontColor(Colors.Blue.Darken2);
-
-                    // Adicionamos um Row para separar o Título do número da página justificado
-                    box.Item().PaddingTop(4).Row(row => { row.RelativeItem().Text("1. Introdução").SemiBold().FontSize(12); row.AutoItem().Text("Pag. 2").FontSize(11).FontColor(Colors.Grey.Darken2); });
-                    box.Item().Text("   1.1 Contexto").FontSize(11);
-                    box.Item().Text("   1.2 Definição do Problema").FontSize(11);
-                    box.Item().Text("   1.3 Questões de Pesquisa e Hipóteses").FontSize(11);
-                    box.Item().Text("   1.4 Objetivo Principal").FontSize(11);
-
-                    box.Item().PaddingTop(2).Row(row => { row.RelativeItem().Text("2. Planejamento e execução do experimento").SemiBold().FontSize(12); row.AutoItem().Text("Pag. 3").FontSize(11).FontColor(Colors.Grey.Darken2); });
-                    box.Item().Text("   2.1 Evidência visual do planejamento - Parte 2").FontSize(11);
-
-                    box.Item().PaddingTop(2).Row(row => { row.RelativeItem().Text("3. Metodologia").SemiBold().FontSize(12); row.AutoItem().Text("Pag. 5").FontSize(11).FontColor(Colors.Grey.Darken2); });
-                    box.Item().Text("   3.1 Criação do Dataset").FontSize(11);
-                    box.Item().Text("   3.2 Teste Estatístico").FontSize(11);
-                    box.Item().Text("   3.3 Sumarização dos Resultados").FontSize(11);
-
-                    box.Item().PaddingTop(2).Row(row => { row.RelativeItem().Text("4. Resultados (RQs)").SemiBold().FontSize(12); row.AutoItem().Text("Pag. 6").FontSize(11).FontColor(Colors.Grey.Darken2); });
-
-                    // Adiciona dinamicamente as RQs calculando as páginas (Página base 6 = RQ01, cada RQ pula 1 BreakPage)
-                    int pPage = 6;
-                    foreach (var res in results)
-                    {
-                        box.Item().Row(row => 
-                        {
-                            row.RelativeItem().Text($"   • {res.RQCode}: {res.Title}").FontSize(11);
-                            row.AutoItem().Text($"Pag. {pPage}").FontSize(11).FontColor(Colors.Grey.Darken2); 
-                        });
-                        pPage++;
-                    }
-
-                    box.Item().PaddingTop(2).Row(row => { row.RelativeItem().Text("5. Discussão Geral e Conclusão").SemiBold().FontSize(12); row.AutoItem().Text($"Pag. {pPage}").FontSize(11).FontColor(Colors.Grey.Darken2); });
-                });
-
+                ReportNarrativeContent.ComposeIndice(col);
                 col.Item().PageBreak();
 
-                // Intro Box
-                col.Item().Border(1).BorderColor(Colors.Orange.Lighten3).Padding(10).Background(Colors.Orange.Lighten5).Column(box =>
-                {
-                    box.Item().Text("1. Introdução").Bold().FontSize(15).FontColor(Colors.Orange.Darken3);
-                    box.Item().PaddingTop(4).Text("A revisão de código (code review) é uma etapa indispensável no desenvolvimento de software, destacando-se em metodologias ágeis e projetos de código aberto (open source). Seu propósito é auditar modificações antes de incorporá-las à base principal do projeto, minimizando a inserção de falhas e elevando a qualidade do produto final. No ecossistema do GitHub, essa dinâmica ocorre primordialmente através de Pull Requests (PRs). Neles, as submissões são debatidas e julgadas por revisores, resultando em sua integração (MERGED) ou rejeição (CLOSED), frequentemente com o auxílio de checagens automatizadas. O presente laboratório tem como finalidade realizar uma caracterização empírica dessa prática em repositórios de destaque no GitHub. Para isso, investiga-se de que maneira fatores como tamanho da alteração, tempo de duração, riqueza da descrição e nível de interação afetam o desfecho do PR e a quantidade de revisões exigidas, evidenciando o impacto dessas variáveis no esforço analítico e na chance de aprovação.").FontSize(12);
-
-                    box.Item().PaddingTop(8).Text("1.1 Contexto").SemiBold().FontSize(13).FontColor(Colors.Orange.Darken2);
-                    box.Item().PaddingTop(2).Text("No GitHub, o PR atua como a unidade central para a análise de code review, pois congrega tanto as alterações técnicas quanto o histórico social do processo. Ele funciona, por um lado, como um \"pacote de código\" que deve ser validado quanto à sua exatidão e compatibilidade. Por outro, age como um fórum de negociação que registra comentários, exigências de correção, aprovações e o diálogo entre os envolvidos com diferentes atribuições.").FontSize(12);
-                    box.Item().PaddingTop(4).Text("A teoria e a prática indicam que os atributos do PR impactam diretamente a carga de trabalho da revisão e as chances de aceitação. Modificações extensas costumam exigir mais tempo de leitura e aumentam o risco de erros passarem despercebidos, enquanto envios menores tendem a ser assimilados rapidamente. O intervalo entre a abertura e o fechamento de um PR pode revelar tanto a sua complexidade técnica quanto a necessidade de muito retrabalho. Além disso, a qualidade da descrição dita o ritmo da revisão, pois esclarece motivações, limites, riscos e métodos de teste, facilitando ou travando o trabalho do revisor. Por fim, o volume de interações (como o número de participantes e comentários) aponta para processos mais colaborativos, rigorosos ou polêmicos, influenciando o sucesso da integração.").FontSize(12);
-                    box.Item().PaddingTop(4).Text("Como os repositórios populares variam drasticamente em termos de linguagem, governança, políticas de aceite e nível de automação, é crucial validar essas hipóteses intuitivas de forma empírica e em larga escala. Dessa forma, caracterizar o code review através de dados extraídos de PRs possibilita a identificação objetiva de padrões, gerando insights valiosos para colaboradores e mantenedores de projetos.").FontSize(12);
-
-                    box.Item().PaddingTop(8).Text("1.2 Definição do Problema").SemiBold().FontSize(13).FontColor(Colors.Orange.Darken2);
-                    box.Item().PaddingTop(2).Text("O foco deste experimento é investigar a relação entre as características observáveis dos PRs revisados e o desfecho do processo de revisão. De forma específica, analisa-se como as variáveis de tamanho, duração da análise, detalhamento da descrição e engajamento social determinam se um PR será efetivamente incorporado (MERGED) ou encerrado sem aprovação (CLOSED).").FontSize(12);
-                    box.Item().PaddingTop(4).Text("Para além do status final, o estudo também mede o impacto dessas mesmas características na intensidade da revisão, utilizando o total de revisões executadas no PR como métrica. Para garantir que os dados reflitam predominantemente o esforço humano — e para mitigar o viés de encerramentos automatizados —, o conjunto de dados foi filtrado para incluir exclusivamente PRs que possuam ao menos uma avaliação registrada e cujo tempo de vida (da abertura ao desfecho) ultrapasse uma hora.").FontSize(12);
-
-                    box.Item().PaddingTop(8).Text("1.3 Questões de Pesquisa e Hipóteses").SemiBold().FontSize(13).FontColor(Colors.Orange.Darken2);
-                    box.Item().PaddingTop(2).Text("Abaixo estão as perguntas que norteiam a pesquisa e as hipóteses informais elaboradas a partir das expectativas do comportamento em repositórios Java populares no GitHub.").FontSize(12);
-                    box.Item().PaddingTop(4).Text("• RQ01 (Tamanho vs Status): Estima-se que PRs com um volume massivo de modificações tenham menores chances de aprovação (MERGED). Alterações muito grandes sobrecarregam o revisor cognitivamente, elevam a probabilidade de falhas e complicam a análise de impacto, o que geralmente resulta em mais exigências de refatoração ou descarte.").FontSize(11);
-                    box.Item().PaddingTop(2).Text("• RQ02 (Tempo vs Status): PRs que demoram longos períodos em análise tendem a ser finalizados como CLOSED. Prazos extensos indicam atritos no processo, fazendo com que o código fique obsoleto frente à branch principal (envelhecimento do PR).").FontSize(11);
-                    box.Item().PaddingTop(2).Text("• RQ03 (Descrição vs Status): Textos descritivos mais robustos (maior body length) aumentam a probabilidade de um PR ser MERGED. Explicações minuciosas clarificam a intenção da mudança e métodos de teste, mitigando as dúvidas dos revisores.").FontSize(11);
-                    box.Item().PaddingTop(2).Text("• RQ04 (Interações vs Status): PRs com altos índices de comentários e participantes tendem a ser CLOSED. O alto engajamento frequentemente sinaliza polêmicas, identificação de falhas ou longos debates sobre arquitetura e estilo, gerando um desgaste que pode culminar na rejeição.").FontSize(11);
-                    box.Item().PaddingTop(2).Text("• RQ05 (Tamanho vs Revisões): Existe uma correlação positiva entre o tamanho do PR e a quantidade de revisões. Submissões extensas naturalmente demandam inspeções mais longas e são mais suscetíveis a apontamentos em diferentes módulos do código.").FontSize(11);
-                    box.Item().PaddingTop(2).Text("• RQ06 (Tempo vs Revisões): Quanto mais revisões um PR sofre, maior o seu tempo total de tramitação. Cada novo ciclo exige leitura, debate, codificação de correções e reexecução de testes automatizados (CI), alongando o período.").FontSize(11);
-                    box.Item().PaddingTop(2).Text("• RQ07 (Descrição vs Revisões): Antecipa-se uma correlação negativa, em que descrições mais ricas resultam em menos revisões. Quando a motivação e a lógica da mudança são bem expostas desde o princípio, o revisor tem menos dúvidas estruturais, encurtando rodadas de feedback.").FontSize(11);
-                    box.Item().PaddingTop(2).Text("• RQ08 (Interações vs Revisões): Prevê-se uma associação positiva entre as métricas de interação e a quantidade de revisões. Conversas e discussões densas geralmente geram a necessidade de ajustes complementares. Assim, o feedback resulta em novas validações formais.").FontSize(11);
-
-                    box.Item().PaddingTop(8).Text("1.4 Objetivo Principal").SemiBold().FontSize(13).FontColor(Colors.Orange.Darken2);
-                    box.Item().PaddingTop(2).Text($"Realizar uma caracterização empírica da dinâmica de code review em repositórios de grande circulação no GitHub. O intuito é mapear como as métricas relativas a tamanho, duração temporal, qualidade do texto descritivo e engajamento social estão atreladas ao desfecho do processo e à quantidade de revisões recebidas. O fim último da pesquisa é extrair evidências quantitativas consistentes através da modelagem estatística de {totalPrs} PRs.").FontSize(12);
-                });
-
+                ReportNarrativeContent.ComposeIntroducaoCompleta(col, totalPrs);
                 col.Item().PageBreak();
 
-                // Flowcharts (Box 2)
+                // Flowcharts — secção 2 (após índice e introdução)
                 col.Item().Border(1).BorderColor(Colors.Blue.Lighten3).Padding(10).Background(Colors.Blue.Lighten5).Column(box =>
                 {
-                    box.Item().Text("2. Planejamento e execução do experimento").Bold().FontSize(15).FontColor(Colors.Blue.Darken3);
-                    box.Item().PaddingTop(4).Text("As figuras abaixo documentam o planejamento experimental (desenho inicial, etapas e organização da análise).").FontSize(12);
+                    box.Item().Text("2. Planejamento e execução do experimento").Bold().FontSize(13).FontColor(Colors.Blue.Darken3);
+                    box.Item().Text("As figuras abaixo documentam o planejamento experimental (desenho inicial, etapas e organização da análise).").FontSize(10);
 
-                    string flow1Path = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(results[0].ChartPath)), "charts", "fluxograma_etapas_1_2.png");
+                    string flow1Path = Path.Combine(chartsDir, "fluxograma_etapas_1_2.png");
                     if (File.Exists(flow1Path))
                     {
                         box.Item().PaddingTop(8).AlignCenter().Height(400).Image(flow1Path).FitArea();
@@ -159,8 +106,8 @@ namespace Lab03S03.Report
                 col.Item().Column(x =>
                 {
                     x.Spacing(6);
-                    x.Item().Text("2.1 Evidência visual do planejamento - Parte 2").SemiBold().FontSize(12);
-                    string flow2Path = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(results[0].ChartPath)), "charts", "fluxograma_etapas_3_4.png");
+                    x.Item().Text("2.1 Evidência visual do planejamento — Parte 2").SemiBold().FontSize(10);
+                    string flow2Path = Path.Combine(chartsDir, "fluxograma_etapas_3_4.png");
                     if (File.Exists(flow2Path))
                     {
                          x.Item().AlignCenter().Height(400).Image(flow2Path).FitArea();
@@ -222,14 +169,60 @@ namespace Lab03S03.Report
                 }
 
                 col.Item().PageBreak();
+
+                // Sumarização global (estilo Lab02 — antes da discussão final)
+                col.Item().Border(1).BorderColor(Colors.Teal.Lighten3).Padding(10).Background(Colors.Teal.Lighten5).Column(box =>
+                {
+                    box.Item().Text("5. Sumarização global das métricas (processo)").Bold().FontSize(15).FontColor(Colors.Teal.Darken3);
+                    box.Item().PaddingTop(4).Text("Tabela com estatísticas descritivas (média, mediana e desvio padrão) sobre todo o dataset de PRs, no mesmo espírito do relatório do Laboratório 02 — visão agregada antes das correlações por RQ.").FontSize(10);
+                    box.Item().PaddingTop(8).Element(c => ComposeGlobalMetricsTable(c, globalRows, pt));
+                    box.Item().PaddingTop(10).Text("5.1 Interpretação (processo):").SemiBold().FontSize(11);
+                    box.Item().PaddingTop(2).Text(interpretacaoGlobal).FontSize(10);
+                });
+
+                col.Item().PageBreak();
+
                 // Conclusion Box
                 col.Item().Border(1).BorderColor(Colors.Grey.Lighten2).Padding(10).Column(box =>
                 {
-                    box.Item().Text("5. Discussão Geral e Conclusão").Bold().FontSize(15).FontColor(Colors.Blue.Darken2);
+                    box.Item().Text("6. Discussão Geral e Conclusão").Bold().FontSize(15).FontColor(Colors.Blue.Darken2);
                     box.Item().PaddingTop(4).Text("Analisando as 8 Questões de Pesquisa, observamos que 5 de 8 hipóteses foram confirmadas (RQ02, RQ05, RQ06, RQ07, RQ08) e apenas 3 foram refutadas (RQ01, RQ03, RQ04). Dentre os achados confirmados, o relacionamento de interações dita positivamente a cadência e número de revisões com a maior força do relatório (RQ08). Curiosamente, outras hipóteses formuladas apresentaram resultados inesperados: a RQ01 surpreendeu ao mostrar levemente que PRs MAIORES tendem a ser aceitos; a RQ03 não apresentou significância estatística (p-valor > 0,05), evidenciando que o comprimento da descrição não influencia diretamente na aprovação; e a RQ04, embora estatisticamente significativa (p-valor < 0,05), revelou uma correlação negativa, indicando que um maior volume de comentários está associado à rejeição do PR, possivelmente devido a discussões extensas geradas por códigos problemáticos antes de seu fechamento definitivo.").FontSize(12);
                     box.Item().PaddingTop(8).Text("Limitações do estudo e Trabalhos Futuros:").SemiBold().FontSize(13);
                     box.Item().PaddingTop(2).Text("Observa-se que em variáveis como 'Review Count' a mediana massivamente se assenta em torno de 1,00, apontando que variabilidades altas acontecem fundamentalmente em PRs contendo grandes distorções, com as correlações em geral não ultrapassando a limitação de tendências fracas e moderadas. Para trabalhos futuros, sugere-se analisar isoladamente apenas PRs com review_count ≥ 2 para verificar se os padrões se mantêm ou fortalecem em revisões mais elaboradas.").FontSize(12);
                 });
+            });
+        }
+
+        private static void ComposeGlobalMetricsTable(IContainer container, List<GlobalMetricSummary> rows, CultureInfo pt)
+        {
+            container.Table(table =>
+            {
+                table.ColumnsDefinition(c =>
+                {
+                    c.RelativeColumn(3);
+                    c.ConstantColumn(50);
+                    c.ConstantColumn(70);
+                    c.ConstantColumn(70);
+                    c.ConstantColumn(80);
+                });
+
+                table.Header(h =>
+                {
+                    h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Métrica").Bold();
+                    h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("n").Bold();
+                    h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Média").Bold();
+                    h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Mediana").Bold();
+                    h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Desvio padrão").Bold();
+                });
+
+                foreach (var r in rows)
+                {
+                    table.Cell().Padding(2).Text(r.Label).FontSize(9);
+                    table.Cell().Padding(2).Text(r.N.ToString("N0", pt)).FontSize(9);
+                    table.Cell().Padding(2).Text(r.Mean.ToString("N2", pt)).FontSize(9);
+                    table.Cell().Padding(2).Text(r.Median.ToString("N2", pt)).FontSize(9);
+                    table.Cell().Padding(2).Text(r.StdDev.ToString("N2", pt)).FontSize(9);
+                }
             });
         }
 
