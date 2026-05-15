@@ -38,151 +38,153 @@ namespace Lab03S03.Visualization
 
                     if (mergedVals.Length > 0 && closedVals.Length > 0)
                     {
-                        double medMerged = Statistics.Median(mergedVals);
-                        double medClosed = Statistics.Median(closedVals);
+                        var boxes = new List<ScottPlot.Box>();
+                        var positionsList = new double[] { 0, 1 };
+                        var labelsList = new string[] { $"MERGED\n(n={mergedVals.Length})", $"CLOSED\n(n={closedVals.Length})" };
 
-                        var barPlot = plt.Add.Bars(new double[] { medMerged, medClosed });
-                        barPlot.Bars[0].FillColor = Colors.Blue.WithAlpha(0.85);
-                        barPlot.Bars[1].FillColor = Colors.Red.WithAlpha(0.75);
+                        // Process merged vals (Position 0)
+                        double minM = mergedVals.Min();
+                        double maxValM = mergedVals.Max();
+                        double q1M = Statistics.QuantileCustom(mergedVals, 0.25, QuantileDefinition.R8);
+                        double medianM = Statistics.Median(mergedVals);
+                        double q3M = Statistics.QuantileCustom(mergedVals, 0.75, QuantileDefinition.R8);
 
-                        // Add Interquartile Range (IQR) as Error Lines
-                        double q1m = Statistics.QuantileCustom(mergedVals, 0.25, QuantileDefinition.R8);
-                        double q3m = Statistics.QuantileCustom(mergedVals, 0.75, QuantileDefinition.R8);
-                        var err1 = plt.Add.Line(0, q1m, 0, q3m);
-                        err1.LineStyle.Color = ScottPlot.Colors.Black;
-                        err1.LineStyle.Width = 2;
+                        double iqrM = q3M - q1M;
+                        double lowerWhiskerM = mergedVals.Where(x => x >= q1M - 1.5 * iqrM).DefaultIfEmpty(minM).Min();
+                        double upperWhiskerM = mergedVals.Where(x => x <= q3M + 1.5 * iqrM).DefaultIfEmpty(maxValM).Max();
 
-                        double q1c = Statistics.QuantileCustom(closedVals, 0.25, QuantileDefinition.R8);
-                        double q3c = Statistics.QuantileCustom(closedVals, 0.75, QuantileDefinition.R8);
-                        var err2 = plt.Add.Line(1, q1c, 1, q3c);
-                        err2.LineStyle.Color = ScottPlot.Colors.Black;
-                        err2.LineStyle.Width = 2;
+                        boxes.Add(new ScottPlot.Box
+                        {
+                            Position = 0,
+                            BoxMin = q1M,
+                            BoxMax = q3M,
+                            BoxMiddle = medianM,
+                            WhiskerMin = lowerWhiskerM,
+                            WhiskerMax = upperWhiskerM
+                        });
 
-                        // Add Caps to error lines
-                        var err1Top = plt.Add.Line(-0.05, q3m, 0.05, q3m); err1Top.LineStyle.Color = ScottPlot.Colors.Black; err1Top.LineStyle.Width = 2;
-                        var err1Bot = plt.Add.Line(-0.05, q1m, 0.05, q1m); err1Bot.LineStyle.Color = ScottPlot.Colors.Black; err1Bot.LineStyle.Width = 2;
+                        // Process closed vals (Position 1)
+                        double minC = closedVals.Min();
+                        double maxValC = closedVals.Max();
+                        double q1C = Statistics.QuantileCustom(closedVals, 0.25, QuantileDefinition.R8);
+                        double medianC = Statistics.Median(closedVals);
+                        double q3C = Statistics.QuantileCustom(closedVals, 0.75, QuantileDefinition.R8);
 
-                        var err2Top = plt.Add.Line(0.95, q3c, 1.05, q3c); err2Top.LineStyle.Color = ScottPlot.Colors.Black; err2Top.LineStyle.Width = 2;
-                        var err2Bot = plt.Add.Line(0.95, q1c, 1.05, q1c); err2Bot.LineStyle.Color = ScottPlot.Colors.Black; err2Bot.LineStyle.Width = 2;
+                        double iqrC = q3C - q1C;
+                        double lowerWhiskerC = closedVals.Where(x => x >= q1C - 1.5 * iqrC).DefaultIfEmpty(minC).Min();
+                        double upperWhiskerC = closedVals.Where(x => x <= q3C + 1.5 * iqrC).DefaultIfEmpty(maxValC).Max();
 
-                        // Basic config
-                        plt.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(
-                            new double[] { 0, 1 },
-                            new string[] { "MERGED", "CLOSED" });
+                        boxes.Add(new ScottPlot.Box
+                        {
+                            Position = 1,
+                            BoxMin = q1C,
+                            BoxMax = q3C,
+                            BoxMiddle = medianC,
+                            WhiskerMin = lowerWhiskerC,
+                            WhiskerMax = upperWhiskerC
+                        });
 
-                        // Limita Y: mostra o IQR completo com pequena margem, sem o espaço vazio dos outliers extremos
-                        double q3Max = System.Math.Max(q3m, q3c);
-                        double medMax = System.Math.Max(medMerged, medClosed);
-                        double maxLim = System.Math.Max(q3Max * 1.25, medMax * 4.0);
-                        if (maxLim < 2) maxLim = 2;
-                        plt.Axes.SetLimitsY(0, maxLim);
+                        var bp = plt.Add.Boxes(boxes);
 
-                        plt.YLabel($"{yLabel} (Mediana e IQR/Q1-Q3)");
+                        plt.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(positionsList, labelsList);
+
+                        double yMaxData = boxes.Max(b => b.WhiskerMax ?? b.BoxMax);
+                        double yLim = System.Math.Max(yMaxData * 1.1, 2);
+                        plt.Axes.SetLimitsY(0, yLim);
+
+                        plt.Axes.Bottom.TickLabelStyle.FontSize = 26;
+                        plt.Axes.Left.TickLabelStyle.FontSize = 20;
+                        plt.YLabel($"{yLabel} (Boxplot)");
+                        plt.Axes.Left.Label.FontSize = 32;
                     }
                 }
             }
             else
             {
-                // Gráfico de barras por faixas (bins) da variável independente
-                // Mostra a MEDIANA de revisões por faixa - muito mais legível que scatter
-                // quando a variável dependente (review_count) é discreta e concentrada
+                // Scatter plot bruto com dados exatos (sem binning) e Regressão Linear
                 System.Func<PullRequest, double> xSelector = null;
                 string xLabel = "";
-                (double max, string label)[] bins = null;
 
                 switch (result.RQCode)
                 {
                     case "RQ05":
                         xSelector = p => p.FilesChanged;
                         fileName = "rq05_tamanho_revisoes.png";
-                        xLabel = "Faixa de Tamanho (Arquivos Alterados)";
-                        bins = new (double, string)[] {
-                            (1, "1"), (3, "2-3"), (5, "4-5"), (10, "6-10"),
-                            (20, "11-20"), (50, "21-50"), (double.MaxValue, "50+")
-                        };
+                        xLabel = "Tamanho (Arquivos Alterados)";
                         break;
                     case "RQ06":
                         xSelector = p => p.AnalysisTimeH;
                         fileName = "rq06_tempo_revisoes.png";
-                        xLabel = "Faixa de Tempo de Análise (Horas)";
-                        bins = new (double, string)[] {
-                            (6, "≤ 6h"), (24, "6-24h"), (72, "1-3 dias"), (168, "3-7 dias"),
-                            (720, "1-4 semanas"), (double.MaxValue, "> 1 mês")
-                        };
+                        xLabel = "Tempo de Análise (Horas)";
                         break;
                     case "RQ07":
                         xSelector = p => p.BodyLength;
                         fileName = "rq07_descricao_revisoes.png";
-                        xLabel = "Faixa de Tamanho da Descrição (Caracteres)";
-                        bins = new (double, string)[] {
-                            (0, "Vazia"), (200, "1-200"), (500, "201-500"), (1000, "501-1k"),
-                            (2000, "1k-2k"), (5000, "2k-5k"), (double.MaxValue, "5k+")
-                        };
+                        xLabel = "Tamanho da Descrição (Caracteres)";
                         break;
                     case "RQ08":
                         xSelector = p => p.Comments;
                         fileName = "rq08_interacoes_revisoes.png";
-                        xLabel = "Faixa de Interações (Total de Comentários)";
-                        bins = new (double, string)[] {
-                            (1, "≤ 1"), (3, "2-3"), (5, "4-5"), (10, "6-10"),
-                            (20, "11-20"), (double.MaxValue, "20+")
-                        };
+                        xLabel = "Total de Interações (Comentários)";
                         break;
                 }
 
-                if (xSelector != null && bins != null)
+                if (xSelector != null)
                 {
-                    // Agrupar PRs em faixas e calcular mediana e contagem em cada uma
-                    var groups = new List<(string Label, double MedianReviews, int Count)>();
-                    double prevMax = double.MinValue;
+                    var xData = prs.Select(xSelector).ToArray();
+                    var yData = prs.Select(p => (double)p.ReviewCount).ToArray();
 
-                    foreach (var (binMax, binLabel) in bins)
+                    if (xData.Length > 0 && yData.Length > 0)
                     {
-                        var max = binMax;
-                        var lower = prevMax;
-                        var bucket = prs
-                            .Where(p =>
-                            {
-                                double v = xSelector(p);
-                                return v > lower && v <= max;
-                            })
-                            .Select(p => (double)p.ReviewCount)
-                            .ToArray();
+                        // Plot scatter (dados brutos) com alta transparência
+                        var sp = plt.Add.Scatter(xData, yData);
+                        sp.LineStyle.Width = 0; // Desabilita as linhas que conectam os pontos e gera apenas um scatter
+                        sp.MarkerStyle.Shape = ScottPlot.MarkerShape.FilledCircle;
+                        sp.MarkerStyle.Size = 4;
+                        sp.MarkerStyle.FillColor = Colors.Blue.WithAlpha(0.15); // Transparência de 15% para suportar overplotting
+                        sp.MarkerStyle.LineColor = Colors.Transparent;
 
-                        double med = bucket.Length > 0 ? Statistics.Median(bucket) : 0;
-                        groups.Add((binLabel, med, bucket.Length));
-                        prevMax = max;
-                    }
+                        // Linear Regression
+                        ScottPlot.Statistics.LinearRegression reg = new(xData, yData);
 
-                    // Remover faixas vazias para não poluir o gráfico
-                    var nonEmpty = groups.Where(g => g.Count > 0).ToList();
+                        // Obter limites reais (min e max) de X
+                        double xMin = xData.Min();
+                        double xMax = xData.Max();
 
-                    if (nonEmpty.Count > 0)
-                    {
-                        double[] medians = nonEmpty.Select(g => g.MedianReviews).ToArray();
-                        string[] labels = nonEmpty.Select(g => $"{g.Label}\n(n={g.Count})").ToArray();
-                        double[] positions = Enumerable.Range(0, nonEmpty.Count).Select(i => (double)i).ToArray();
+                        // Calcular Ys para a linha de tendência com base na regressão
+                        double yOut1 = reg.GetValue(xMin);
+                        double yOut2 = reg.GetValue(xMax);
 
-                        var barPlot = plt.Add.Bars(medians);
-                        for (int i = 0; i < barPlot.Bars.Count; i++)
-                        {
-                            barPlot.Bars[i].FillColor = Colors.Blue.WithAlpha(0.4 + 0.55 * ((double)i / System.Math.Max(1, barPlot.Bars.Count - 1)));
-                        }
+                        // Plotar a trendline sobre os dados brutos com alta densidade
+                        var lineInfo = plt.Add.Line(xMin, yOut1, xMax, yOut2);
+                        lineInfo.LineStyle.Color = Colors.Red;
+                        lineInfo.LineStyle.Width = 3;
 
-                        plt.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(positions, labels);
-
-                        // Eixo Y com margem confortável acima da maior mediana
-                        double yMaxData = medians.Max();
-                        double yLim = System.Math.Max(yMaxData * 1.4, 2);
-                        plt.Axes.SetLimitsY(0, yLim);
+                        // Configurações e Fontes 
+                        plt.Axes.Bottom.TickLabelStyle.FontSize = 18;
+                        plt.Axes.Left.TickLabelStyle.FontSize = 20;
 
                         plt.XLabel(xLabel);
-                        plt.YLabel("Mediana de Revisões");
+                        plt.Axes.Bottom.Label.FontSize = 30;
+
+                        plt.YLabel("Revisões (Scatter)");
+                        plt.Axes.Left.Label.FontSize = 30;
+
+                        // Limitadores dinâmicos Y baseados nos quartis e regressão pra não quebrar a visualização,
+                        // cortando outliers vazios ultra extremos no eixo Y.
+                        double maxLimY = MathNet.Numerics.Statistics.Statistics.QuantileCustom(yData, 0.99, MathNet.Numerics.Statistics.QuantileDefinition.R8) * 1.5;
+                        if (maxLimY < 3) maxLimY = 3;
+                        plt.Axes.SetLimitsY(-0.5, maxLimY);
+
+                        double maxLimX = MathNet.Numerics.Statistics.Statistics.QuantileCustom(xData, 0.95, MathNet.Numerics.Statistics.QuantileDefinition.R8) * 2;
+                        if (maxLimX < 2) maxLimX = 2;
+                        plt.Axes.SetLimitsX(-maxLimX * 0.05, maxLimX);
                     }
                 }
             }
 
             plt.Title(result.Title);
+            plt.Axes.Title.Label.FontSize = 34;
 
             if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);

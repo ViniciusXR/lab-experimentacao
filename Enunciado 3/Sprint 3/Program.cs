@@ -24,7 +24,7 @@ namespace Enunciado3.Sprint3
             }
             if (!File.Exists(datasetPath))
             {
-                 Console.WriteLine("Dataset não encontrado! Dataser esperado em: " + datasetPath);
+                 Console.WriteLine("Dataset não encontrado! Dataset esperado em: " + datasetPath);
                  return;
             }
 

@@ -57,13 +57,8 @@ namespace Lab03S03.Report
                 col.Item().Text("Professor: Danilo de Quadros Maia Filho")
                     .FontSize(8.5f).FontColor(Colors.Grey.Darken2);
 
-                col.Item().PaddingTop(5).PaddingBottom(3)
-                    .Background(Colors.Orange.Lighten4)
-                    .Border(1).BorderColor(Colors.Orange.Lighten2)
-                    .Padding(6)
-                    .AlignCenter()
-                    .Text("Sthel Felipe Torres  ·  Vinicius Xavier Ramalho")
-                    .FontSize(12).Bold().FontColor(Colors.Orange.Darken3);
+                col.Item().Text("Alunos: Sthel Felipe Torres e Vinicius Xavier Ramalho")
+                    .FontSize(8.5f).Bold().FontColor(Colors.Grey.Darken2);
 
                 col.Item().LineHorizontal(2).LineColor(Colors.Orange.Medium);
             });
@@ -140,41 +135,45 @@ namespace Lab03S03.Report
                 });
 
                 // Resultados — título da seção
-                col.Item().PaddingTop(4).Text("4. Resultados (RQs)").Bold().FontSize(13).FontColor(Colors.Blue.Darken2);
+                col.Item().PaddingTop(4).Text("4. Resultados (RQs)").Bold().FontSize(15).FontColor(Colors.Blue.Darken2);
 
                 // Cada RQ em sua própria caixa para permitir quebras de página limpas e gráficos maiores
                 foreach (var res in results)
                 {
+                    col.Item().PageBreak();
                     col.Item().Border(1).BorderColor(Colors.Blue.Lighten3).Padding(10).Column(box =>
                     {
-                        box.Item().Text($"{res.RQCode} — {res.Title}").FontSize(12).Bold().FontColor(Colors.Blue.Darken3);
-                        box.Item().PaddingTop(2).Text($"Hipótese: {res.Hypothesis}").Italic().FontSize(10).FontColor(Colors.Grey.Darken2);
+                        box.Item().Text($"{res.RQCode} — {res.Title}").FontSize(14).Bold().FontColor(Colors.Blue.Darken3);
+                        box.Item().PaddingTop(2).Text($"Hipótese: {res.Hypothesis}").Italic().FontSize(12).FontColor(Colors.Grey.Darken2);
 
                         box.Item().PaddingVertical(5).Element(c => ComposeMedianTable(c, res));
 
                         if (!string.IsNullOrEmpty(res.ChartPath) && File.Exists(res.ChartPath))
                         {
-                            box.Item().PaddingVertical(4).AlignCenter().Height(420).Image(res.ChartPath).FitArea();
+                            box.Item().PaddingVertical(8).AlignCenter().Image(res.ChartPath).FitArea();
                         }
 
-                        box.Item().PaddingTop(4).Text($"Correlação [{res.PrimaryLabel}]: {res.Interpretation} (ρ = {res.SpearmanRho:F3}, p = {res.PValue:e3}{(res.PValue > 0.05 ? " — sem significância estatística" : "")})").FontSize(10);
+                        string pValLabel = res.PValue < 0.001 ? "< 0,001" : $"= {res.PValue:e3}";
+                        box.Item().PaddingTop(10).Text($"Correlação [{res.PrimaryLabel}]: {res.Interpretation} (ρ = {res.SpearmanRho:F3}, p {pValLabel}{(res.PValue > 0.05 ? " — sem significância estatística" : "")})").FontSize(12).SemiBold();
 
                         if (res.HasSecondaryMetric)
                         {
-                            box.Item().Text($"  ↳ [{res.SecondaryLabel}]: {res.SecondaryInterpretation} (ρ = {res.SecondarySpearmanRho:F3}, p = {res.SecondaryPValue:e3}{(res.SecondaryPValue > 0.05 ? " — sem significância estatística" : "")})").FontSize(9).FontColor(Colors.Grey.Darken1);
+                            string secPValLabel = res.SecondaryPValue < 0.001 ? "< 0,001" : $"= {res.SecondaryPValue:e3}";
+                            box.Item().PaddingTop(2).Text($"  ↳ [{res.SecondaryLabel}]: {res.SecondaryInterpretation} (ρ = {res.SecondarySpearmanRho:F3}, p {secPValLabel}{(res.SecondaryPValue > 0.05 ? " — sem significância estatística" : "")})").FontSize(11).FontColor(Colors.Grey.Darken1);
                         }
 
-                        box.Item().PaddingTop(4).Text($"Discussão: {res.Discussion}").FontSize(10);
+                        box.Item().PaddingTop(8).Text($"Discussão: {res.Discussion}").FontSize(12);
                     });
                 }
 
+                col.Item().PageBreak();
                 // Conclusion Box
                 col.Item().Border(1).BorderColor(Colors.Grey.Lighten2).Padding(10).Column(box =>
                 {
-                    box.Item().Text("5. Discussão Geral e Conclusão").Bold().FontSize(13).FontColor(Colors.Blue.Darken2);
-                    box.Item().Text("Analisando as 8 Questões de Pesquisa, observamos que 5 de 8 hipóteses foram confirmadas (RQ02, RQ05, RQ06, RQ07, RQ08) e apenas 3 foram refutadas (RQ01, RQ03, RQ04). Dentre os achados confirmados, o relacionamento de interações dita positivamente a cadência e número de revisões com a maior força do relatório (RQ08). Curiosamente, outras hipóteses formuladas apresentaram resultados inesperados: a RQ01 surpreendeu ao mostrar levemente que PRs MAIORES tendem a ser aceitos; já a RQ03 e a RQ04 não apresentaram significância estatística, evidenciando que maiores descrições ou alto volume de interações não garantem aprovação (P-Valor > 0.05).");
-                    box.Item().PaddingTop(4).Text("Limitações do estudo e Trabalhos Futuros:").SemiBold();
-                    box.Item().Text("Observa-se que em variáveis como 'Review Count' a mediana massivamente se assenta em torno de 1,00, apontando que variabilidades altas acontecem fundamentalmente em PRs contendo grandes distorções, com as correlações em geral não ultrapassando a limitação de tendências fracas e moderadas. Para trabalhos futuros, sugere-se analisar isoladamente apenas PRs com review_count ≥ 2 para verificar se os padrões se mantêm ou fortalecem em revisões mais elaboradas.");
+                    box.Item().Text("5. Discussão Geral e Conclusão").Bold().FontSize(15).FontColor(Colors.Blue.Darken2);
+                    box.Item().PaddingTop(4).Text("Analisando as 8 Questões de Pesquisa, observamos que 5 de 8 hipóteses foram confirmadas (RQ02, RQ05, RQ06, RQ07, RQ08) e apenas 3 foram refutadas (RQ01, RQ03, RQ04). Dentre os achados confirmados, o relacionamento de interações dita positivamente a cadência e número de revisões com a maior força do relatório (RQ08). Curiosamente, outras hipóteses formuladas apresentaram resultados inesperados: a RQ01 surpreendeu ao mostrar levemente que PRs MAIORES tendem a ser aceitos; a RQ03 não apresentou significância estatística (p-valor > 0,05), evidenciando que o comprimento da descrição não influencia diretamente na aprovação; e a RQ04, embora estatisticamente significativa (p-valor < 0,05), revelou uma correlação negativa, indicando que um maior volume de comentários está associado à rejeição do PR, possivelmente devido a discussões extensas geradas por códigos problemáticos antes de seu fechamento definitivo.").FontSize(12);
+                    box.Item().PaddingTop(8).Text("Limitações do estudo e Trabalhos Futuros:").SemiBold().FontSize(13);
+                    box.Item().PaddingTop(2).Text("Observa-se que em variáveis como 'Review Count' a mediana massivamente se assenta em torno de 1,00, apontando que variabilidades altas acontecem fundamentalmente em PRs contendo grandes distorções, com as correlações em geral não ultrapassando a limitação de tendências fracas e moderadas. Para trabalhos futuros, sugere-se analisar isoladamente apenas PRs com review_count ≥ 2 para verificar se os padrões se mantêm ou fortalecem em revisões mais elaboradas.").FontSize(12);
                 });
             });
         }
