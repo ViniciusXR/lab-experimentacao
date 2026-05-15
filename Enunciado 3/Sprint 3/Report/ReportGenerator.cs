@@ -40,11 +40,32 @@ namespace Lab03S03.Report
         {
             container.Column(col =>
             {
-                col.Item().Text("Enunciado 3 — Caracterizando a Atividade de Code Review").FontSize(16).Bold().FontColor(Colors.Orange.Darken2);
-                col.Item().Text("Relatório final").FontSize(12).SemiBold();
-                col.Item().Text("Laboratório de Experimentação de Software").FontSize(10).FontColor(Colors.Grey.Darken2);
-                col.Item().Text("PUC Minas | Período: 6º | Alunos: Sthel Felipe Torres, Vinicius Xavier Ramalho").FontSize(10).Bold();
-                col.Item().PaddingTop(6).LineHorizontal(1).LineColor(Colors.Grey.Lighten2);
+                col.Item().Text("Laboratório 03 — Caracterizando a Atividade de Code Review no GitHub")
+                    .FontSize(15).Bold().FontColor(Colors.Orange.Darken2);
+
+                col.Item().Text("Relatório Final · Lab03S03 · Análise, Visualização e Síntese")
+                    .FontSize(11).SemiBold().FontColor(Colors.Blue.Darken2);
+
+                col.Item().PaddingTop(3).Row(row =>
+                {
+                    row.RelativeItem().Text("Engenharia de Software  ·  Laboratório de Experimentação de Software  ·  6º Período  ·  PUC Minas")
+                        .FontSize(8.5f).FontColor(Colors.Grey.Darken2);
+                    row.AutoItem().Text($"Gerado em: {System.DateTime.Now:dd/MM/yyyy}")
+                        .FontSize(8.5f).FontColor(Colors.Grey.Darken2);
+                });
+
+                col.Item().Text("Professor: Danilo de Quadros Maia Filho")
+                    .FontSize(8.5f).FontColor(Colors.Grey.Darken2);
+
+                col.Item().PaddingTop(5).PaddingBottom(3)
+                    .Background(Colors.Orange.Lighten4)
+                    .Border(1).BorderColor(Colors.Orange.Lighten2)
+                    .Padding(6)
+                    .AlignCenter()
+                    .Text("Sthel Felipe Torres  ·  Vinicius Xavier Ramalho")
+                    .FontSize(12).Bold().FontColor(Colors.Orange.Darken3);
+
+                col.Item().LineHorizontal(2).LineColor(Colors.Orange.Medium);
             });
         }
 
@@ -102,45 +123,50 @@ namespace Lab03S03.Report
                 col.Item().Border(1).BorderColor(Colors.Grey.Lighten2).Padding(10).Column(box =>
                 {
                     box.Item().Text("3. Metodologia").Bold().FontSize(13).FontColor(Colors.Blue.Darken2);
-                    box.Item().Text("Os dados foram coletados dos 200 repositórios mais populares. Foram selecionados PRs fechados ou mergeados com estado de revisão. Usamos o coeficiente de correlação de Spearman devido à natureza não-paramétrica dos dados (assimetria severa e outliers extremos em métricas como linhas de código e tempo de análise, onde a média e distribuição normal falham para modelar a realidade adequadamente).");
+
+                    box.Item().PaddingTop(4).Text("3.1 Criação do Dataset").SemiBold().FontSize(11);
+                    box.Item().Text($"Os dados foram coletados via API GraphQL do GitHub. O dataset é composto pelos {totalPrs} PRs que satisfazem todos os critérios abaixo:");
+                    box.Item().PaddingTop(3).Text("• Repositórios: 200 repositórios mais populares do GitHub (ordenados por número de estrelas).").FontSize(10);
+                    box.Item().Text("• Requisito mínimo por repositório: pelo menos 100 PRs com status MERGED ou CLOSED.").FontSize(10);
+                    box.Item().Text("• Status do PR: apenas MERGED ou CLOSED (PRs abertos foram excluídos).").FontSize(10);
+                    box.Item().Text("• Revisões: apenas PRs com pelo menos uma revisão registrada (campo reviews.totalCount ≥ 1).").FontSize(10);
+                    box.Item().Text("• Filtro anti-bot: apenas PRs cujo intervalo entre a criação e o fechamento/merge é superior a 1 hora — eliminando revisões automáticas realizadas por bots ou ferramentas de CI/CD.").FontSize(10);
+
+                    box.Item().PaddingTop(6).Text("3.2 Teste Estatístico").SemiBold().FontSize(11);
+                    box.Item().Text("Utilizamos o coeficiente de correlação de Spearman para todas as análises. A escolha é justificada pela natureza não-paramétrica dos dados: as métricas coletadas (linhas de código, tempo de análise, número de comentários) apresentam assimetria severa e outliers extremos, tornando a distribuição normal inviável e o teste de Pearson inadequado. O Spearman opera sobre postos (ranks), sendo robusto a essas distorções. Para cada correlação, calculamos também o p-valor (aproximação t-Student bilateral) com limiar de significância α = 0,05.");
+
+                    box.Item().PaddingTop(6).Text("3.3 Sumarização dos Resultados").SemiBold().FontSize(11);
+                    box.Item().Text("Conforme indicado no enunciado, as análises utilizam os valores medianos calculados sobre todos os PRs do dataset — sem divisão por repositório. Para a Dimensão A (Status do PR), a variável dependente é binária: MERGED = 1, CLOSED = 0. Para a Dimensão B (Número de Revisões), a variável dependente é o campo reviews_count.");
                 });
 
-                // Resultados
-                col.Item().Border(1).BorderColor(Colors.Grey.Lighten2).Padding(10).Column(box =>
+                // Resultados — título da seção
+                col.Item().PaddingTop(4).Text("4. Resultados (RQs)").Bold().FontSize(13).FontColor(Colors.Blue.Darken2);
+
+                // Cada RQ em sua própria caixa para permitir quebras de página limpas e gráficos maiores
+                foreach (var res in results)
                 {
-                    box.Item().Text("4. Resultados (RQs)").Bold().FontSize(13).FontColor(Colors.Blue.Darken2);
-
-                    for (int i = 0; i < results.Count; i++)
+                    col.Item().Border(1).BorderColor(Colors.Blue.Lighten3).Padding(10).Column(box =>
                     {
-                        var res = results[i];
-                        box.Item().PaddingTop(10).Text($"{res.RQCode} - {res.Title}").FontSize(11).Bold();
-                        box.Item().Text($"Hipótese: {res.Hypothesis}").Italic().FontSize(10).FontColor(Colors.Grey.Darken2);
+                        box.Item().Text($"{res.RQCode} — {res.Title}").FontSize(12).Bold().FontColor(Colors.Blue.Darken3);
+                        box.Item().PaddingTop(2).Text($"Hipótese: {res.Hypothesis}").Italic().FontSize(10).FontColor(Colors.Grey.Darken2);
 
-                        // Table
-                        string unit = "";
-                        if (res.RQCode == "RQ01" || res.RQCode == "RQ05") unit = " (Arquivos)";
-                        if (res.RQCode == "RQ02" || res.RQCode == "RQ06") unit = " (Horas)";
-                        if (res.RQCode == "RQ03" || res.RQCode == "RQ07") unit = " (Caracteres)";
-                        if (res.RQCode == "RQ04" || res.RQCode == "RQ08") unit = " (Interações)";
+                        box.Item().PaddingVertical(5).Element(c => ComposeMedianTable(c, res));
 
-                        box.Item().PaddingVertical(5).Element(c => ComposeMedianTable(c, res, unit));
-
-                        // Image
                         if (!string.IsNullOrEmpty(res.ChartPath) && File.Exists(res.ChartPath))
                         {
-                            box.Item().AlignCenter().Height(300).Image(res.ChartPath).FitArea();
+                            box.Item().PaddingVertical(4).AlignCenter().Height(420).Image(res.ChartPath).FitArea();
                         }
 
-                        // Discusion
-                        box.Item().PaddingTop(5).Text($"Interpretação da correlação: {res.Interpretation} (rho = {res.SpearmanRho:F3}, p = {res.PValue:e3}{(res.PValue > 0.05 ? " - Sem significância estatística" : "")})").FontSize(10);
-                        box.Item().Text($"Discussão: {res.Discussion}").FontSize(10);
+                        box.Item().PaddingTop(4).Text($"Correlação [{res.PrimaryLabel}]: {res.Interpretation} (ρ = {res.SpearmanRho:F3}, p = {res.PValue:e3}{(res.PValue > 0.05 ? " — sem significância estatística" : "")})").FontSize(10);
 
-                        if (i < results.Count - 1)
+                        if (res.HasSecondaryMetric)
                         {
-                            box.Item().PaddingTop(10).LineHorizontal(1).LineColor(Colors.Grey.Lighten3);
+                            box.Item().Text($"  ↳ [{res.SecondaryLabel}]: {res.SecondaryInterpretation} (ρ = {res.SecondarySpearmanRho:F3}, p = {res.SecondaryPValue:e3}{(res.SecondaryPValue > 0.05 ? " — sem significância estatística" : "")})").FontSize(9).FontColor(Colors.Grey.Darken1);
                         }
-                    }
-                });
+
+                        box.Item().PaddingTop(4).Text($"Discussão: {res.Discussion}").FontSize(10);
+                    });
+                }
 
                 // Conclusion Box
                 col.Item().Border(1).BorderColor(Colors.Grey.Lighten2).Padding(10).Column(box =>
@@ -153,9 +179,10 @@ namespace Lab03S03.Report
             });
         }
 
-        private static void ComposeMedianTable(IContainer container, AnalysisResult r, string unit)
+        private static void ComposeMedianTable(IContainer container, AnalysisResult r)
         {
-            bool isStatusVsMetric = r.RQCode.StartsWith("RQ01") || r.RQCode.StartsWith("RQ02") || r.RQCode.StartsWith("RQ03") || r.RQCode.StartsWith("RQ04");
+            bool isStatusVsMetric = r.RQCode == "RQ01" || r.RQCode == "RQ02" || r.RQCode == "RQ03" || r.RQCode == "RQ04";
+            string primaryLabel = string.IsNullOrEmpty(r.PrimaryLabel) ? r.Title : r.PrimaryLabel;
 
             container.Table(table =>
             {
@@ -171,19 +198,28 @@ namespace Lab03S03.Report
                     h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Métrica").Bold();
                     if (isStatusVsMetric)
                     {
-                        h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text($"Mediana MERGED{unit}").Bold();
-                        h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text($"Mediana CLOSED{unit}").Bold();
+                        h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Mediana MERGED").Bold();
+                        h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Mediana CLOSED").Bold();
                     }
                     else
                     {
-                        h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text($"Med. Variável Indep.{unit}").Bold();
-                        h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Mediana Global Revisões").Bold();
+                        h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Med. Variável Indep.").Bold();
+                        h.Cell().BorderBottom(1).BorderColor(Colors.Grey.Medium).Padding(2).Text("Mediana Revisões").Bold();
                     }
                 });
 
-                table.Cell().Padding(2).Text(r.Title);
+                // Linha da métrica primária
+                table.Cell().Padding(2).Text(primaryLabel);
                 table.Cell().Padding(2).Text(r.MedianMerged.ToString("F2"));
                 table.Cell().Padding(2).Text(r.MedianClosed.ToString("F2"));
+
+                // Linha da métrica secundária (Tamanho: total de linhas; Interações: participantes)
+                if (r.HasSecondaryMetric)
+                {
+                    table.Cell().Padding(2).Text(r.SecondaryLabel).FontColor(Colors.Grey.Darken2);
+                    table.Cell().Padding(2).Text(r.SecondaryMedianMerged.ToString("F2")).FontColor(Colors.Grey.Darken2);
+                    table.Cell().Padding(2).Text(r.SecondaryMedianClosed.ToString("F2")).FontColor(Colors.Grey.Darken2);
+                }
             });
         }
     }
