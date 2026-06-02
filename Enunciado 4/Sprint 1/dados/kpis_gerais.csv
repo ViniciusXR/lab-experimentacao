@@ -1,0 +1,2 @@
+﻿total_cves_distintos,total_relacoes_cve_cwe,total_cwes_distintas,cves_com_cvss,cobertura_cvss_pct,cvss_medio_global,cvss_mediana_global,cvss_desvio_padrao,ano_inicio,ano_fim,anos_cobertos,gini_frequencia,cwes_pareto_80pct,pct_cves_top20pct_cwes,cwes_dupla_ameaca,spearman_rho,spearman_p_value
+253802,278912,749,278880,99.99,6.88,7.0,1.83,1999,2025,27,0.9223,38,96.5,53,-0.018,0.6211

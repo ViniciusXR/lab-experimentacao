@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sprint 2</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--accent:#38bdf8;--muted:#94a3b8}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:1.5rem 2rem;border-bottom:1px solid #334155}header h1{margin:0 0 .4rem;font-size:1.5rem}header p{margin:0;color:var(--muted)}
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;padding:1rem 2rem;background:#1e293b;position:sticky;top:0;z-index:10}
+.tabs a{color:var(--accent);text-decoration:none;padding:.4rem .8rem;border:1px solid #334155;border-radius:6px;font-size:.85rem}
+.page{padding:1.5rem 2rem;border-bottom:2px solid #334155;page-break-after:always}
+.page h2{font-size:1.2rem;margin:0 0 1rem}
+.page h3{font-size:1rem;margin:1.5rem 0 .75rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;margin-bottom:1rem}
+.kpis.mini{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.kpi{background:var(--card);border:1px solid #334155;border-radius:10px;padding:.75rem}
+.kpi span{display:block;font-size:.75rem;color:var(--muted);text-transform:uppercase}
+.kpi strong{display:block;font-size:1.3rem;color:var(--accent);margin-top:.25rem}
+.question,.note{padding:1rem;border-radius:8px;margin-bottom:1rem;line-height:1.5}
+.question{background:#172554;border-left:4px solid var(--accent)}
+.note{background:#1a2e1a;border-left:4px solid #3B8C3F;color:#cbd5e1}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;margin-bottom:1rem;font-size:.85rem}
+th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid #334155}
+th{background:#334155}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:1rem}
+figure{background:var(--card);border:1px solid #334155;border-radius:10px;padding:.75rem;margin:0}
+figure h3{margin:0 0 .5rem;font-size:.9rem;color:var(--muted)}
+figure img{width:100%;height:auto;border-radius:6px;background:#fff}
+@media print{
+  .tabs{display:none}
+  body{background:#fff;color:#000}
+  .page,.kpi,figure,table{background:#fff;border-color:#ccc}
+  .kpi strong{color:#000}
+}
+</style>
+</head><body>
+<header><h1>Sprint 2</h1>
+<p>TI6 — Priorização estratégica de CWEs · NIST NVD 1999–2025</p></header>
+<nav class="tabs">
+<a href="#p1">P1 · Caracterização</a>
+<a href="#p2">P2 · RQ1</a>
+<a href="#p3">P3 · RQ2</a>
+</nav>
+<section id="p1" class="page">
+<h2>Caracterização do Dataset — Vulnerabilidades NVD (1999–2025)</h2>
+<div class="kpis">
+  <div class="kpi"><span>CVEs distintos</span><strong>253.802</strong></div>
+  <div class="kpi"><span>Relações CVE↔CWE</span><strong>278.912</strong></div>
+  <div class="kpi"><span>CWEs distintas</span><strong>749</strong></div>
+  <div class="kpi"><span>Cobertura CVSS</span><strong>99,99%</strong></div>
+  <div class="kpi"><span>CVSS médio</span><strong>6,88</strong></div>
+  <div class="kpi"><span>CVSS mediana</span><strong>7,00</strong></div>
+  <div class="kpi"><span>Gini</span><strong>0,9223</strong></div>
+  <div class="kpi"><span>Período</span><strong>1999–2025</strong></div>
+</div>
+<div class="note">Fonte: NIST NVD. Unidade: relação CVE↔CWE. Relações (278.912) > CVEs distintos (253.802) pois cada CVE pode ter múltiplas CWEs.</div>
+<table><thead><tr><th>Severidade</th><th>Nº CVEs</th><th>%</th><th>CVSS médio</th><th>CVSS mediana</th></tr></thead>
+<tbody><tr><td>LOW</td><td>10.897</td><td>3,91%</td><td>2,62</td><td>2,30</td></tr>
+<tr><td>MEDIUM</td><td>127.021</td><td>45,54%</td><td>5,58</td><td>5,50</td></tr>
+<tr><td>HIGH</td><td>108.894</td><td>39,04%</td><td>7,98</td><td>7,80</td></tr>
+<tr><td>CRITICAL</td><td>32.057</td><td>11,49%</td><td>9,72</td><td>9,80</td></tr></tbody></table>
+<div class="charts"><figure><h3>01 cves por ano</h3><img src="../graficos/p1_caracterizacao/01_cves_por_ano.png" alt="01 cves por ano"/></figure>
+<figure><h3>02 severidade donut</h3><img src="../graficos/p1_caracterizacao/02_severidade_donut.png" alt="02 severidade donut"/></figure>
+<figure><h3>03 severidade por ano 100pct</h3><img src="../graficos/p1_caracterizacao/03_severidade_por_ano_100pct.png" alt="03 severidade por ano 100pct"/></figure>
+<figure><h3>04 distribuicao cvss</h3><img src="../graficos/p1_caracterizacao/04_distribuicao_cvss.png" alt="04 distribuicao cvss"/></figure>
+</div>
+
+</section>
+<section id="p2" class="page">
+<h2>RQ1 — Quais CWEs concentram a maior parte das vulnerabilidades?</h2>
+<div class="question">Hipótese: distribuição não-uniforme (Pareto). Veredito: 38 CWEs = 80%; Gini = 0,92.</div>
+<div class="kpis mini"><div class="kpi"><span>CWEs Pareto 80%: 38</span></div><div class="kpi"><span>Gini: 0,9223</span></div></div>
+<div class="charts"><figure><h3>01 pareto top30</h3><img src="../graficos/p2_rq1/01_pareto_top30.png" alt="01 pareto top30"/></figure>
+<figure><h3>02 tendencia top10</h3><img src="../graficos/p2_rq1/02_tendencia_top10.png" alt="02 tendencia top10"/></figure>
+<figure><h3>03 curva lorenz</h3><img src="../graficos/p2_rq1/03_curva_lorenz.png" alt="03 curva lorenz"/></figure>
+<figure><h3>04 persistencia jaccard</h3><img src="../graficos/p2_rq1/04_persistencia_jaccard.png" alt="04 persistencia jaccard"/></figure>
+</div>
+
+</section>
+<section id="p3" class="page">
+<h2>RQ2 — Quais CWEs têm maior potencial técnico de dano (CVSS)?</h2>
+<div class="question">Hipótese: severidade varia entre CWEs. Veredito: Kruskal-Wallis p < 0,001; cluster CVSS ≈ 9,8.</div>
+<div class="kpis mini"><div class="kpi"><span>CVSS médio global: 6,88</span></div><div class="kpi"><span>Mediana: 7,00</span></div></div>
+<div class="charts"><figure><h3>01 top30 cvss medio</h3><img src="../graficos/p3_rq2/01_top30_cvss_medio.png" alt="01 top30 cvss medio"/></figure>
+<figure><h3>02 top30 high critical</h3><img src="../graficos/p3_rq2/02_top30_high_critical.png" alt="02 top30 high critical"/></figure>
+</div>
+
+</section>
+</body></html>

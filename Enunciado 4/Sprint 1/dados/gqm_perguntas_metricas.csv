@@ -1,0 +1,4 @@
+﻿pergunta,titulo,hipotese,metricas,veredito,evidencia
+P1,Frequência: quais CWEs mais se repetem?,H1/H2 — distribuição não uniforme (Pareto),"M1, M2, M7, M9, M10",CONFIRMADA,"38 CWEs cobrem 80% das CVEs; Gini = 0,92"
+P2,Severidade: quais CWEs têm maior potencial de dano?,H3/H4 — a severidade varia entre as CWEs,"M3, M4, Kruskal-Wallis",CONFIRMADA,"Cluster de ~15 CWEs com CVSS médio ≈ 9,8 (100% CRITICAL); Kruskal-Wallis p < 0,001"
+P3,Interação: frequência e severidade andam juntas?,H5/H6 — risco bimodal,"M5, M6, M8, M11, Mann-Whitney",CONFIRMADA (com nuance),"Spearman ρ ≈ -0,02 (independentes), mas 53 CWEs em Dupla Ameaça"

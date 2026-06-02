@@ -1,0 +1,64 @@
+﻿cwe_id,cwe_nome_curto,cwe_label,criterio,presente
+CWE-1,CWE-1,CWE-1,Frequencia (M1),0
+CWE-1,CWE-1,CWE-1,Risco Composto (M5),0
+CWE-1,CWE-1,CWE-1,Severidade (M3),1
+CWE-1056,CWE-1056,CWE-1056,Frequencia (M1),0
+CWE-1056,CWE-1056,CWE-1056,Risco Composto (M5),0
+CWE-1056,CWE-1056,CWE-1056,Severidade (M3),1
+CWE-119,Buffer Overflow,CWE-119 - Buffer Overflow,Frequencia (M1),1
+CWE-119,Buffer Overflow,CWE-119 - Buffer Overflow,Risco Composto (M5),1
+CWE-119,Buffer Overflow,CWE-119 - Buffer Overflow,Severidade (M3),0
+CWE-125,Out-of-bounds Read,CWE-125 - Out-of-bounds Read,Frequencia (M1),1
+CWE-125,Out-of-bounds Read,CWE-125 - Out-of-bounds Read,Risco Composto (M5),1
+CWE-125,Out-of-bounds Read,CWE-125 - Out-of-bounds Read,Severidade (M3),0
+CWE-1301,CWE-1301,CWE-1301,Frequencia (M1),0
+CWE-1301,CWE-1301,CWE-1301,Risco Composto (M5),0
+CWE-1301,CWE-1301,CWE-1301,Severidade (M3),1
+CWE-20,Improper Input Validation,CWE-20 - Improper Input Validation,Frequencia (M1),1
+CWE-20,Improper Input Validation,CWE-20 - Improper Input Validation,Risco Composto (M5),1
+CWE-20,Improper Input Validation,CWE-20 - Improper Input Validation,Severidade (M3),0
+CWE-200,Information Exposure,CWE-200 - Information Exposure,Frequencia (M1),1
+CWE-200,Information Exposure,CWE-200 - Information Exposure,Risco Composto (M5),1
+CWE-200,Information Exposure,CWE-200 - Information Exposure,Severidade (M3),0
+CWE-22,Path Traversal,CWE-22 - Path Traversal,Frequencia (M1),1
+CWE-22,Path Traversal,CWE-22 - Path Traversal,Risco Composto (M5),1
+CWE-22,Path Traversal,CWE-22 - Path Traversal,Severidade (M3),0
+CWE-352,CSRF,CWE-352 - CSRF,Frequencia (M1),1
+CWE-352,CSRF,CWE-352 - CSRF,Risco Composto (M5),1
+CWE-352,CSRF,CWE-352 - CSRF,Severidade (M3),0
+CWE-370,CWE-370,CWE-370,Frequencia (M1),0
+CWE-370,CWE-370,CWE-370,Risco Composto (M5),0
+CWE-370,CWE-370,CWE-370,Severidade (M3),1
+CWE-416,Use After Free,CWE-416 - Use After Free,Frequencia (M1),0
+CWE-416,Use After Free,CWE-416 - Use After Free,Risco Composto (M5),1
+CWE-416,Use After Free,CWE-416 - Use After Free,Severidade (M3),0
+CWE-44,CWE-44,CWE-44,Frequencia (M1),0
+CWE-44,CWE-44,CWE-44,Risco Composto (M5),0
+CWE-44,CWE-44,CWE-44,Severidade (M3),1
+CWE-468,CWE-468,CWE-468,Frequencia (M1),0
+CWE-468,CWE-468,CWE-468,Risco Composto (M5),0
+CWE-468,CWE-468,CWE-468,Severidade (M3),1
+CWE-507,CWE-507,CWE-507,Frequencia (M1),0
+CWE-507,CWE-507,CWE-507,Risco Composto (M5),0
+CWE-507,CWE-507,CWE-507,Severidade (M3),1
+CWE-509,CWE-509,CWE-509,Frequencia (M1),0
+CWE-509,CWE-509,CWE-509,Risco Composto (M5),0
+CWE-509,CWE-509,CWE-509,Severidade (M3),1
+CWE-621,CWE-621,CWE-621,Frequencia (M1),0
+CWE-621,CWE-621,CWE-621,Risco Composto (M5),0
+CWE-621,CWE-621,CWE-621,Severidade (M3),1
+CWE-730,CWE-730,CWE-730,Frequencia (M1),0
+CWE-730,CWE-730,CWE-730,Risco Composto (M5),0
+CWE-730,CWE-730,CWE-730,Severidade (M3),1
+CWE-787,Out-of-bounds Write,CWE-787 - Out-of-bounds Write,Frequencia (M1),1
+CWE-787,Out-of-bounds Write,CWE-787 - Out-of-bounds Write,Risco Composto (M5),1
+CWE-787,Out-of-bounds Write,CWE-787 - Out-of-bounds Write,Severidade (M3),0
+CWE-79,XSS,CWE-79 - XSS,Frequencia (M1),1
+CWE-79,XSS,CWE-79 - XSS,Risco Composto (M5),1
+CWE-79,XSS,CWE-79 - XSS,Severidade (M3),0
+CWE-862,Missing Authorization,CWE-862 - Missing Authorization,Frequencia (M1),1
+CWE-862,Missing Authorization,CWE-862 - Missing Authorization,Risco Composto (M5),0
+CWE-862,Missing Authorization,CWE-862 - Missing Authorization,Severidade (M3),0
+CWE-89,SQL Injection,CWE-89 - SQL Injection,Frequencia (M1),1
+CWE-89,SQL Injection,CWE-89 - SQL Injection,Risco Composto (M5),1
+CWE-89,SQL Injection,CWE-89 - SQL Injection,Severidade (M3),0
