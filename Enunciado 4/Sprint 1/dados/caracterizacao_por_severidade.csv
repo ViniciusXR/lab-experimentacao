@@ -1,0 +1,5 @@
+﻿severidade,n_cves,cvss_media,cvss_mediana,pct,ordem
+LOW,10897,2.625,2.3,3.91,1
+MEDIUM,127021,5.58,5.5,45.54,2
+HIGH,108894,7.979,7.8,39.04,3
+CRITICAL,32057,9.716,9.8,11.49,4

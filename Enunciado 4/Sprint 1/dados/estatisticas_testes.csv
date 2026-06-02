@@ -1,0 +1,5 @@
+﻿teste,hipotese,o_que_testa,estatistica,p_valor,resultado
+Pareto (M2),H1/H2,Poucas CWEs concentram a maioria das CVEs,38 CWEs = 80%,—,CONFIRMA concentração (Pareto)
+Kruskal-Wallis,H3/H4,A distribuição de CVSS difere entre as CWEs,H grande (>500 grupos com n≥5),"< 0,001",CONFIRMA variação de severidade
+Spearman (M6),H5/H6,Correlação entre frequência e severidade,"ρ = -0,018","0,621",CONFIRMA independência (risco bimodal)
+Mann-Whitney U,H5/H6 (sanity),CVSS difere entre grupos HIGH/CRITICAL e LOW/MEDIUM,U (2 grupos),"< 0,001",CONFIRMA distinção entre grupos

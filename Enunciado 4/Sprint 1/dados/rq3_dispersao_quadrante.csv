@@ -1,0 +1,750 @@
+﻿cwe_id,cves_count,cvss_medio,quadrante,score_risco,high_critical_pct,rank_freq,rank_severity,cwe_nome_curto,cwe_label,faixa_risco,in_top10_risco,quadrante_ordem
+CWE-79,41171,5.53,Frequente,0.5534,6.59,1,690,XSS,CWE-79 - XSS,Critico,True,3
+CWE-89,17467,7.71,Dupla Ameaca,0.327,71.84,2,142,SQL Injection,CWE-89 - SQL Injection,Alto,True,1
+CWE-787,13192,7.94,Dupla Ameaca,0.2543,81.27,4,87,Out-of-bounds Write,CWE-787 - Out-of-bounds Write,Alto,True,1
+CWE-119,13229,7.9,Dupla Ameaca,0.254,75.92,3,95,Buffer Overflow,CWE-119 - Buffer Overflow,Alto,True,1
+CWE-20,11653,6.9,Frequente,0.1954,53.09,5,384,Improper Input Validation,CWE-20 - Improper Input Validation,Moderado/Baixo,True,3
+CWE-352,8744,6.94,Frequente,0.1474,49.03,7,375,CSRF,CWE-352 - CSRF,Moderado/Baixo,True,3
+CWE-22,7952,7.04,Frequente,0.1359,56.59,9,345,Path Traversal,CWE-22 - Path Traversal,Moderado/Baixo,True,3
+CWE-125,8030,6.76,Frequente,0.1319,51.62,8,428,Out-of-bounds Read,CWE-125 - Out-of-bounds Read,Moderado/Baixo,True,3
+CWE-200,9468,5.62,Frequente,0.1293,23.95,6,679,Information Exposure,CWE-200 - Information Exposure,Moderado/Baixo,True,3
+CWE-416,6418,7.81,Dupla Ameaca,0.1217,82.81,11,110,Use After Free,CWE-416 - Use After Free,Moderado/Baixo,True,1
+CWE-78,5035,8.42,Dupla Ameaca,0.103,87.81,14,49,OS Command Injection,CWE-78 - OS Command Injection,Moderado/Baixo,False,1
+CWE-94,5579,7.41,Frequente,0.1004,65.94,12,244,Code Injection,CWE-94 - Code Injection,Moderado/Baixo,False,3
+CWE-862,6482,6.14,Frequente,0.0966,30.95,10,590,Missing Authorization,CWE-862 - Missing Authorization,Moderado/Baixo,False,3
+CWE-264,5469,6.31,Frequente,0.0838,43.35,13,553,Permissions/Privileges,CWE-264 - Permissions/Privileges,Moderado/Baixo,False,3
+CWE-287,3974,7.59,Dupla Ameaca,0.0733,65.1,17,168,Improper Authentication,CWE-287 - Improper Authentication,Moderado/Baixo,False,1
+CWE-434,3692,8.15,Dupla Ameaca,0.0731,80.93,20,67,Unrestricted File Upload,CWE-434 - Unrestricted File Upload,Moderado/Baixo,False,1
+CWE-476,4723,6.17,Frequente,0.0707,27.91,15,586,NULL Pointer Dereference,CWE-476 - NULL Pointer Dereference,Moderado/Baixo,False,3
+CWE-120,3697,7.87,Dupla Ameaca,0.0707,77.14,19,101,Classic Buffer Overflow,CWE-120 - Classic Buffer Overflow,Moderado/Baixo,False,1
+CWE-284,4265,6.59,Frequente,0.0683,45.98,16,479,Improper Access Control,CWE-284 - Improper Access Control,Moderado/Baixo,False,3
+CWE-77,2883,7.85,Dupla Ameaca,0.055,73.88,21,105,Command Injection,CWE-77 - Command Injection,Moderado/Baixo,False,1
+CWE-74,3814,5.74,Frequente,0.0532,19.51,18,663,Injection (umbrella),CWE-74 - Injection (umbrella),Moderado/Baixo,False,3
+CWE-190,2882,7.58,Dupla Ameaca,0.0531,75.47,22,174,Integer Overflow,CWE-190 - Integer Overflow,Moderado/Baixo,False,1
+CWE-121,2687,8.01,Dupla Ameaca,0.0523,85.11,24,79,Stack-based Buffer Overflow,CWE-121 - Stack-based Buffer Overflow,Moderado/Baixo,False,1
+CWE-502,2280,8.55,Dupla Ameaca,0.0474,90.13,29,39,Deserialization,CWE-502 - Deserialization,Moderado/Baixo,False,1
+CWE-269,2473,7.61,Dupla Ameaca,0.0457,75.78,27,165,Improper Privilege Management,CWE-269 - Improper Privilege Management,Moderado/Baixo,False,1
+CWE-399,2694,6.61,Frequente,0.0432,48.33,23,474,Resource Management Errors,CWE-399 - Resource Management Errors,Moderado/Baixo,False,3
+CWE-400,2641,6.72,Frequente,0.0431,54.45,25,441,Uncontrolled Resource Consumption,CWE-400 - Uncontrolled Resource Consumption,Moderado/Baixo,False,3
+CWE-863,2422,6.68,Frequente,0.0393,46.53,28,453,Incorrect Authorization,CWE-863 - Incorrect Authorization,Moderado/Baixo,False,3
+CWE-306,1871,7.98,Dupla Ameaca,0.0363,75.47,32,83,Missing Authentication,CWE-306 - Missing Authentication,Moderado/Baixo,False,1
+CWE-122,1829,7.81,Dupla Ameaca,0.0347,84.53,33,108,Heap-based Buffer Overflow,CWE-122 - Heap-based Buffer Overflow,Moderado/Baixo,False,1
+CWE-310,2500,5.58,Frequente,0.0339,14.32,26,684,Cryptographic Issues,CWE-310 - Cryptographic Issues,Moderado/Baixo,False,3
+CWE-918,1922,6.97,Frequente,0.0325,51.61,31,367,SSRF,CWE-918 - SSRF,Moderado/Baixo,False,3
+CWE-798,1570,8.38,Dupla Ameaca,0.032,82.61,34,53,Hard-coded Credentials,CWE-798 - Hard-coded Credentials,Moderado/Baixo,False,1
+CWE-362,2080,6.23,Frequente,0.0315,44.57,30,573,Race Condition,CWE-362 - Race Condition,Moderado/Baixo,False,3
+CWE-732,1544,7.03,Frequente,0.0264,60.69,35,347,Incorrect Permission Assignment,CWE-732 - Incorrect Permission Assignment,Moderado/Baixo,False,3
+CWE-276,1420,7.04,Frequente,0.0243,60.77,37,346,Incorrect Default Permissions,CWE-276 - Incorrect Default Permissions,Moderado/Baixo,False,3
+CWE-770,1417,6.7,Frequente,0.0231,50.46,38,445,Allocation Without Limits,CWE-770 - Allocation Without Limits,Moderado/Baixo,False,3
+CWE-611,1188,7.58,Dupla Ameaca,0.0219,69.28,45,171,XXE,CWE-611 - XXE,Moderado/Baixo,False,1
+CWE-401,1524,5.9,Frequente,0.0218,18.96,36,643,Memory Leak,CWE-401 - Memory Leak,Moderado/Baixo,False,3
+CWE-59,1375,6.5,Frequente,0.0217,48.65,39,513,Link Following,CWE-59 - Link Following,Moderado/Baixo,False,3
+CWE-522,1246,7.1,Frequente,0.0215,53.21,41,331,Insufficiently Protected Credentials,CWE-522 - Insufficiently Protected Credentials,Moderado/Baixo,False,3
+CWE-189,1229,7.16,Frequente,0.0214,53.3,42,307,Numeric Errors,CWE-189 - Numeric Errors,Moderado/Baixo,False,3
+CWE-295,1229,6.87,Frequente,0.0205,50.37,43,400,Improper Certificate Validation,CWE-295 - Improper Certificate Validation,Moderado/Baixo,False,3
+CWE-601,1326,5.96,Frequente,0.0192,7.32,40,632,Open Redirect,CWE-601 - Open Redirect,Moderado/Baixo,False,3
+CWE-427,1043,7.43,Frequente,0.0188,80.54,46,237,DLL Hijacking,CWE-427 - DLL Hijacking,Moderado/Baixo,False,3
+CWE-639,1189,6.36,Frequente,0.0184,36.75,44,543,IDOR,CWE-639 - IDOR,Moderado/Baixo,False,3
+CWE-285,1019,6.35,Frequente,0.0157,41.51,48,548,Improper Authorization,CWE-285 - Improper Authorization,Moderado/Baixo,False,3
+CWE-532,1024,5.99,Frequente,0.0149,28.61,47,629,Sensitive Info in Log,CWE-532 - Sensitive Info in Log,Moderado/Baixo,False,3
+CWE-98,721,8.05,Dupla Ameaca,0.0141,96.26,53,77,CWE-98,CWE-98,Moderado/Baixo,False,1
+CWE-843,680,8.06,Dupla Ameaca,0.0133,83.53,57,76,CWE-843,CWE-843,Moderado/Baixo,False,1
+CWE-319,798,6.83,Frequente,0.0132,52.88,49,411,Cleartext Transmission,CWE-319 - Cleartext Transmission,Moderado/Baixo,False,3
+CWE-415,699,7.66,Dupla Ameaca,0.013,78.68,56,152,CWE-415,CWE-415,Moderado/Baixo,False,1
+CWE-255,773,6.52,Frequente,0.0122,46.83,50,498,Credentials Management Errors,CWE-255 - Credentials Management Errors,Moderado/Baixo,False,3
+CWE-835,722,6.62,Frequente,0.0116,46.95,52,471,CWE-835,CWE-835,Moderado/Baixo,False,3
+CWE-312,744,6.41,Frequente,0.0116,41.26,51,528,CWE-312,CWE-312,Moderado/Baixo,False,3
+CWE-908,700,6.58,Frequente,0.0112,38.86,55,483,CWE-908,CWE-908,Moderado/Baixo,False,3
+CWE-426,582,7.62,Dupla Ameaca,0.0108,88.83,63,164,CWE-426,CWE-426,Moderado/Baixo,False,1
+CWE-668,672,6.57,Frequente,0.0107,43.9,58,485,CWE-668,CWE-668,Moderado/Baixo,False,3
+CWE-617,651,6.59,Frequente,0.0104,48.69,59,480,CWE-617,CWE-617,Moderado/Baixo,False,3
+CWE-347,571,7.33,Frequente,0.0102,62.52,64,258,CWE-347,CWE-347,Moderado/Baixo,False,3
+CWE-266,648,6.36,Frequente,0.01,44.14,60,544,CWE-266,CWE-266,Moderado/Baixo,False,3
+CWE-327,587,6.98,Frequente,0.0099,60.48,62,362,CWE-327,CWE-327,Moderado/Baixo,False,3
+CWE-129,517,7.72,Dupla Ameaca,0.0097,81.43,67,140,CWE-129,CWE-129,Moderado/Baixo,False,1
+CWE-203,703,5.63,Frequente,0.0096,16.93,54,678,CWE-203,CWE-203,Moderado/Baixo,False,3
+CWE-307,491,7.74,Dupla Ameaca,0.0092,68.43,71,134,CWE-307,CWE-307,Moderado/Baixo,False,1
+CWE-755,547,6.75,Frequente,0.009,53.02,66,433,CWE-755,CWE-755,Moderado/Baixo,False,3
+CWE-667,614,5.83,Frequente,0.0087,14.82,61,653,CWE-667,CWE-667,Moderado/Baixo,False,3
+CWE-1321,423,8.45,Dupla Ameaca,0.0087,81.8,79,45,CWE-1321,CWE-1321,Moderado/Baixo,False,1
+CWE-288,421,8.44,Dupla Ameaca,0.0086,82.19,81,46,CWE-288,CWE-288,Moderado/Baixo,False,1
+CWE-311,497,6.99,Frequente,0.0084,59.96,68,357,CWE-311,CWE-311,Moderado/Baixo,False,3
+CWE-345,485,7.1,Frequente,0.0084,56.49,72,325,CWE-345,CWE-345,Moderado/Baixo,False,3
+CWE-404,553,6.06,Frequente,0.0081,41.41,65,605,CWE-404,CWE-404,Moderado/Baixo,False,3
+CWE-367,494,6.64,Frequente,0.008,59.31,69,466,CWE-367,CWE-367,Moderado/Baixo,False,3
+CWE-754,482,6.75,Frequente,0.0079,49.79,73,432,CWE-754,CWE-754,Moderado/Baixo,False,3
+CWE-290,472,6.86,Frequente,0.0079,45.13,74,401,CWE-290,CWE-290,Moderado/Baixo,False,3
+CWE-613,438,7.11,Frequente,0.0076,56.39,76,324,CWE-613,CWE-613,Moderado/Baixo,False,3
+CWE-326,431,6.97,Frequente,0.0073,55.22,78,368,CWE-326,CWE-326,Moderado/Baixo,False,3
+CWE-772,435,6.59,Frequente,0.007,36.09,77,481,CWE-772,CWE-772,Moderado/Baixo,False,3
+CWE-552,421,6.8,Frequente,0.007,51.54,80,418,CWE-552,CWE-552,Moderado/Baixo,False,3
+CWE-346,413,6.93,Frequente,0.007,49.15,83,380,CWE-346,CWE-346,Moderado/Baixo,False,3
+CWE-191,375,7.46,Frequente,0.0068,70.4,86,227,CWE-191,CWE-191,Moderado/Baixo,False,3
+CWE-134,366,7.57,Dupla Ameaca,0.0067,69.4,90,176,CWE-134,CWE-134,Moderado/Baixo,False,1
+CWE-209,493,5.6,Frequente,0.0067,19.47,70,682,CWE-209,CWE-209,Moderado/Baixo,False,3
+CWE-126,397,6.88,Frequente,0.0066,60.71,85,391,CWE-126,CWE-126,Moderado/Baixo,False,3
+CWE-384,369,7.33,Frequente,0.0066,60.7,88,260,CWE-384,CWE-384,Moderado/Baixo,False,3
+CWE-80,451,5.86,Frequente,0.0064,11.09,75,649,CWE-80,CWE-80,Moderado/Baixo,False,3
+CWE-254,414,6.35,Frequente,0.0064,39.86,82,547,CWE-254,CWE-254,Moderado/Baixo,False,3
+CWE-693,370,6.88,Frequente,0.0062,49.19,87,392,CWE-693,CWE-693,Moderado/Baixo,False,3
+CWE-23,350,7.24,Frequente,0.0062,61.71,93,280,CWE-23,CWE-23,Moderado/Baixo,False,3
+CWE-1333,368,6.84,Frequente,0.0061,63.59,89,410,CWE-1333,CWE-1333,Moderado/Baixo,False,3
+CWE-330,343,7.17,Frequente,0.006,58.02,95,305,CWE-330,CWE-330,Moderado/Baixo,False,3
+CWE-369,403,6.09,Frequente,0.006,21.34,84,601,CWE-369,CWE-369,Moderado/Baixo,False,3
+CWE-116,347,6.88,Frequente,0.0058,47.55,94,393,CWE-116,CWE-116,Moderado/Baixo,False,3
+CWE-88,282,7.84,Dupla Ameaca,0.0054,74.47,101,107,CWE-88,CWE-88,Moderado/Baixo,False,1
+CWE-73,304,7.24,Frequente,0.0053,59.54,100,281,CWE-73,CWE-73,Moderado/Baixo,False,3
+CWE-665,338,6.5,Frequente,0.0053,44.97,96,515,CWE-665,CWE-665,Moderado/Baixo,False,3
+CWE-281,315,6.87,Frequente,0.0053,57.14,98,399,CWE-281,CWE-281,Moderado/Baixo,False,3
+CWE-1021,361,5.98,Frequente,0.0052,25.48,91,630,CWE-1021,CWE-1021,Moderado/Baixo,False,3
+CWE-674,325,6.62,Frequente,0.0052,49.23,97,470,CWE-674,CWE-674,Moderado/Baixo,False,3
+CWE-1236,274,7.81,Dupla Ameaca,0.0052,76.64,103,111,CWE-1236,CWE-1236,Moderado/Baixo,False,1
+CWE-922,358,5.87,Frequente,0.0051,27.37,92,648,CWE-922,CWE-922,Moderado/Baixo,False,3
+CWE-250,265,7.76,Dupla Ameaca,0.005,78.11,104,127,CWE-250,CWE-250,Moderado/Baixo,False,1
+CWE-444,277,7.2,Frequente,0.0048,58.84,102,297,CWE-444,CWE-444,Moderado/Baixo,False,3
+CWE-16,315,6.3,Frequente,0.0048,40.63,99,554,CWE-16,CWE-16,Moderado/Baixo,False,3
+CWE-704,244,8.07,Dupla Ameaca,0.0048,86.89,108,74,CWE-704,CWE-704,Moderado/Baixo,False,1
+CWE-521,243,7.93,Dupla Ameaca,0.0047,73.66,109,91,CWE-521,CWE-521,Moderado/Baixo,False,1
+CWE-824,264,7.2,Frequente,0.0046,68.94,105,289,CWE-824,CWE-824,Moderado/Baixo,False,3
+CWE-428,248,7.5,Frequente,0.0045,76.61,107,191,CWE-428,CWE-428,Moderado/Baixo,False,3
+CWE-640,231,8.0,Dupla Ameaca,0.0045,77.49,113,80,CWE-640,CWE-640,Moderado/Baixo,False,1
+CWE-1188,232,7.7,Dupla Ameaca,0.0043,67.67,112,143,CWE-1188,CWE-1188,Moderado/Baixo,False,1
+CWE-321,230,7.21,Frequente,0.004,59.13,115,288,CWE-321,CWE-321,Moderado/Baixo,False,3
+CWE-19,233,7.06,Frequente,0.004,60.52,111,338,CWE-19,CWE-19,Moderado/Baixo,False,3
+CWE-1284,236,6.83,Frequente,0.0039,54.24,110,413,CWE-1284,CWE-1284,Moderado/Baixo,False,3
+CWE-707,229,6.78,Frequente,0.0038,31.44,116,425,CWE-707,CWE-707,Moderado/Baixo,False,3
+CWE-917,173,8.92,Dupla Ameaca,0.0037,94.22,124,20,CWE-917,CWE-917,Moderado/Baixo,False,1
+CWE-497,253,5.76,Frequente,0.0035,22.13,106,660,CWE-497,CWE-497,Moderado/Baixo,False,3
+CWE-829,184,7.89,Dupla Ameaca,0.0035,77.72,120,97,CWE-829,CWE-829,Moderado/Baixo,False,1
+CWE-201,231,6.17,Frequente,0.0035,30.74,114,584,CWE-201,CWE-201,Moderado/Baixo,False,3
+CWE-425,208,6.83,Frequente,0.0034,50.0,118,414,CWE-425,CWE-425,Moderado/Baixo,False,3
+CWE-294,187,7.5,Frequente,0.0034,67.38,119,192,CWE-294,CWE-294,Moderado/Baixo,False,3
+CWE-610,209,6.67,Frequente,0.0034,50.72,117,459,CWE-610,CWE-610,Moderado/Baixo,False,3
+CWE-494,177,7.81,Dupla Ameaca,0.0034,77.97,121,109,CWE-494,CWE-494,Moderado/Baixo,False,1
+CWE-259,168,7.42,Frequente,0.003,65.48,125,238,CWE-259,CWE-259,Moderado/Baixo,False,3
+CWE-822,163,7.58,Dupla Ameaca,0.003,82.82,127,175,CWE-822,CWE-822,Moderado/Baixo,False,1
+CWE-256,177,6.58,Frequente,0.0028,36.72,122,482,CWE-256,CWE-256,Moderado/Baixo,False,3
+CWE-131,153,7.58,Dupla Ameaca,0.0028,71.9,131,172,CWE-131,CWE-131,Moderado/Baixo,False,1
+CWE-193,158,7.29,Frequente,0.0028,63.29,129,270,CWE-193,CWE-193,Moderado/Baixo,False,3
+CWE-248,160,6.96,Frequente,0.0027,59.38,128,369,CWE-248,CWE-248,Moderado/Baixo,False,3
+CWE-788,143,7.63,Dupla Ameaca,0.0027,90.91,134,161,CWE-788,CWE-788,Moderado/Baixo,False,1
+CWE-459,175,6.23,Frequente,0.0026,36.57,123,575,CWE-459,CWE-459,Moderado/Baixo,False,3
+CWE-749,138,7.85,Dupla Ameaca,0.0026,74.64,137,106,CWE-749,CWE-749,Moderado/Baixo,False,1
+CWE-338,148,7.17,Frequente,0.0026,64.19,132,304,CWE-338,CWE-338,Moderado/Baixo,False,3
+CWE-35,139,7.31,Frequente,0.0025,62.59,136,263,CWE-35,CWE-35,Moderado/Baixo,False,3
+CWE-697,138,7.08,Frequente,0.0024,55.07,138,333,CWE-697,CWE-697,Moderado/Baixo,False,3
+CWE-252,145,6.72,Frequente,0.0024,47.59,133,440,CWE-252,CWE-252,Moderado/Baixo,False,3
+CWE-17,165,5.85,Frequente,0.0023,34.55,126,652,CWE-17,CWE-17,Moderado/Baixo,False,3
+CWE-354,140,6.83,Frequente,0.0023,52.86,135,412,CWE-354,CWE-354,Moderado/Baixo,False,3
+CWE-359,158,6.02,Frequente,0.0023,34.18,130,621,CWE-359,CWE-359,Moderado/Baixo,False,3
+CWE-305,116,7.65,Dupla Ameaca,0.0022,68.97,142,159,CWE-305,CWE-305,Moderado/Baixo,False,1
+CWE-91,111,7.68,Dupla Ameaca,0.0021,75.68,147,149,CWE-91,CWE-91,Moderado/Baixo,False,1
+CWE-703,130,6.54,Frequente,0.0021,48.46,140,496,CWE-703,CWE-703,Moderado/Baixo,False,3
+CWE-680,101,8.23,Dupla Ameaca,0.002,90.1,154,60,CWE-680,CWE-680,Moderado/Baixo,False,1
+CWE-95,98,8.43,Dupla Ameaca,0.002,88.78,161,48,CWE-95,CWE-95,Moderado/Baixo,False,1
+CWE-331,113,7.29,Frequente,0.002,61.06,145,271,CWE-331,CWE-331,Moderado/Baixo,False,3
+CWE-682,115,6.97,Frequente,0.0019,58.26,144,365,CWE-682,CWE-682,Moderado/Baixo,False,3
+CWE-1336,103,7.59,Dupla Ameaca,0.0019,71.84,152,169,CWE-1336,CWE-1336,Moderado/Baixo,False,1
+CWE-280,120,6.42,Frequente,0.0019,47.5,141,527,CWE-280,CWE-280,Moderado/Baixo,False,3
+CWE-670,112,6.85,Frequente,0.0019,57.14,146,404,CWE-670,CWE-670,Moderado/Baixo,False,3
+CWE-451,138,5.53,Frequente,0.0019,13.77,139,691,CWE-451,CWE-451,Moderado/Baixo,False,3
+CWE-457,110,6.85,Frequente,0.0018,60.91,148,409,CWE-457,CWE-457,Moderado/Baixo,False,3
+CWE-681,100,7.48,Frequente,0.0018,72.0,158,221,CWE-681,CWE-681,Moderado/Baixo,False,3
+CWE-1287,109,6.86,Frequente,0.0018,46.79,149,402,CWE-1287,CWE-1287,Moderado/Baixo,False,3
+CWE-916,107,6.94,Frequente,0.0018,56.07,150,377,CWE-916,CWE-916,Moderado/Baixo,False,3
+CWE-36,101,7.27,Frequente,0.0018,66.34,153,275,CWE-36,CWE-36,Moderado/Baixo,False,3
+CWE-24,98,6.88,Frequente,0.0016,47.96,160,394,CWE-24,CWE-24,Moderado/Baixo,False,3
+CWE-275,105,6.36,Frequente,0.0016,43.81,151,542,CWE-275,CWE-275,Moderado/Baixo,False,3
+CWE-61,99,6.7,Frequente,0.0016,48.48,159,446,CWE-61,CWE-61,Moderado/Baixo,False,3
+CWE-834,100,6.55,Frequente,0.0016,37.0,155,494,CWE-834,CWE-834,Moderado/Baixo,False,3
+CWE-204,115,5.68,Frequente,0.0016,10.43,143,669,CWE-204,CWE-204,Moderado/Baixo,False,3
+CWE-358,100,6.48,Frequente,0.0016,49.0,157,519,CWE-358,CWE-358,Moderado/Baixo,False,3
+CWE-706,89,7.18,Frequente,0.0016,58.43,165,302,CWE-706,CWE-706,Moderado/Baixo,False,3
+CWE-602,91,6.82,Frequente,0.0015,49.45,164,416,CWE-602,CWE-602,Moderado/Baixo,False,3
+CWE-823,83,7.42,Frequente,0.0015,74.7,169,243,CWE-823,CWE-823,Moderado/Baixo,False,3
+CWE-763,85,7.19,Frequente,0.0015,63.53,167,298,CWE-763,CWE-763,Moderado/Baixo,False,3
+CWE-909,100,6.05,Frequente,0.0015,34.0,156,612,CWE-909,CWE-909,Moderado/Baixo,False,3
+CWE-93,92,6.43,Frequente,0.0014,32.61,163,524,CWE-93,CWE-93,Moderado/Baixo,False,3
+CWE-212,95,6.11,Frequente,0.0014,34.74,162,596,CWE-212,CWE-212,Moderado/Baixo,False,3
+CWE-506,73,7.94,Dupla Ameaca,0.0014,95.89,177,88,CWE-506,CWE-506,Moderado/Baixo,False,1
+CWE-1392,75,7.57,Dupla Ameaca,0.0014,70.67,175,179,CWE-1392,CWE-1392,Moderado/Baixo,False,1
+CWE-913,73,7.72,Dupla Ameaca,0.0014,75.34,176,138,CWE-913,CWE-913,Moderado/Baixo,False,1
+CWE-591,77,7.32,Frequente,0.0014,81.82,171,261,CWE-591,CWE-591,Moderado/Baixo,False,3
+CWE-436,79,7.12,Frequente,0.0014,56.96,170,322,CWE-436,CWE-436,Moderado/Baixo,False,3
+CWE-489,71,7.74,Dupla Ameaca,0.0013,67.61,179,135,CWE-489,CWE-489,Moderado/Baixo,False,1
+CWE-303,70,7.7,Dupla Ameaca,0.0013,65.71,180,146,CWE-303,CWE-303,Moderado/Baixo,False,1
+CWE-789,77,6.99,Frequente,0.0013,55.84,172,355,CWE-789,CWE-789,Moderado/Baixo,False,3
+CWE-912,67,7.75,Dupla Ameaca,0.0013,67.16,186,129,CWE-912,CWE-912,Moderado/Baixo,False,1
+CWE-620,67,7.75,Dupla Ameaca,0.0013,67.16,184,130,CWE-620,CWE-620,Moderado/Baixo,False,1
+CWE-208,89,5.7,Frequente,0.0012,17.98,166,666,CWE-208,CWE-208,Moderado/Baixo,False,3
+CWE-117,85,5.89,Frequente,0.0012,18.82,168,644,CWE-117,CWE-117,Moderado/Baixo,False,3
+CWE-565,66,7.54,Dupla Ameaca,0.0012,62.12,190,185,CWE-565,CWE-565,Moderado/Baixo,False,1
+CWE-130,69,7.16,Frequente,0.0012,68.12,182,310,CWE-130,CWE-130,Moderado/Baixo,False,3
+CWE-377,76,6.42,Frequente,0.0012,46.05,173,526,CWE-377,CWE-377,Moderado/Baixo,False,3
+CWE-669,71,6.7,Frequente,0.0012,53.52,178,447,CWE-669,CWE-669,Moderado/Baixo,False,3
+CWE-776,66,7.04,Frequente,0.0011,54.55,188,344,CWE-776,CWE-776,Moderado/Baixo,False,3
+CWE-29,57,8.09,Severa,0.0011,91.23,196,73,CWE-29,CWE-29,Moderado/Baixo,False,2
+CWE-1390,59,7.69,Severa,0.0011,72.88,194,148,CWE-1390,CWE-1390,Moderado/Baixo,False,2
+CWE-113,68,6.57,Frequente,0.0011,32.35,183,484,CWE-113,CWE-113,Moderado/Baixo,False,3
+CWE-277,65,6.85,Baixo Risco,0.0011,53.85,191,405,CWE-277,CWE-277,Moderado/Baixo,False,4
+CWE-184,61,7.13,Baixo Risco,0.0011,55.74,193,320,CWE-184,CWE-184,Moderado/Baixo,False,4
+CWE-1220,66,6.56,Frequente,0.0011,50.0,187,490,CWE-1220,CWE-1220,Moderado/Baixo,False,3
+CWE-672,64,6.65,Baixo Risco,0.001,54.69,192,461,CWE-672,CWE-672,Moderado/Baixo,False,4
+CWE-840,69,6.02,Frequente,0.001,30.43,181,622,CWE-840,CWE-840,Moderado/Baixo,False,3
+CWE-538,67,6.07,Frequente,0.001,25.37,185,603,CWE-538,CWE-538,Moderado/Baixo,False,3
+CWE-441,57,6.98,Baixo Risco,0.001,57.89,195,361,CWE-441,CWE-441,Moderado/Baixo,False,4
+CWE-472,53,7.39,Baixo Risco,0.001,56.6,203,246,CWE-472,CWE-472,Moderado/Baixo,False,4
+CWE-942,56,6.95,Baixo Risco,0.0009,51.79,198,371,CWE-942,CWE-942,Moderado/Baixo,False,4
+CWE-267,53,7.28,Baixo Risco,0.0009,66.04,202,274,CWE-267,CWE-267,Moderado/Baixo,False,4
+CWE-648,51,7.47,Baixo Risco,0.0009,68.63,207,222,CWE-648,CWE-648,Moderado/Baixo,False,4
+CWE-320,66,5.67,Frequente,0.0009,39.39,189,670,CWE-320,CWE-320,Moderado/Baixo,False,3
+CWE-178,49,7.55,Severa,0.0009,69.39,210,180,CWE-178,CWE-178,Moderado/Baixo,False,2
+CWE-662,56,6.57,Baixo Risco,0.0009,44.64,199,486,CWE-662,CWE-662,Moderado/Baixo,False,4
+CWE-1286,54,6.8,Baixo Risco,0.0009,50.0,200,422,CWE-1286,CWE-1286,Moderado/Baixo,False,4
+CWE-598,57,6.4,Baixo Risco,0.0009,38.6,197,529,CWE-598,CWE-598,Moderado/Baixo,False,4
+CWE-470,44,8.17,Severa,0.0009,81.82,215,66,CWE-470,CWE-470,Moderado/Baixo,False,2
+CWE-407,53,6.63,Baixo Risco,0.0009,62.26,205,469,CWE-407,CWE-407,Moderado/Baixo,False,4
+CWE-257,54,6.46,Baixo Risco,0.0008,44.44,201,520,CWE-257,CWE-257,Moderado/Baixo,False,4
+CWE-300,50,6.98,Baixo Risco,0.0008,64.0,209,360,CWE-300,CWE-300,Moderado/Baixo,False,4
+CWE-123,43,7.93,Severa,0.0008,72.09,216,92,CWE-123,CWE-123,Moderado/Baixo,False,2
+CWE-328,51,6.56,Baixo Risco,0.0008,43.14,208,487,CWE-328,CWE-328,Moderado/Baixo,False,4
+CWE-379,49,6.71,Baixo Risco,0.0008,53.06,211,443,CWE-379,CWE-379,Moderado/Baixo,False,4
+CWE-15,44,7.37,Baixo Risco,0.0008,75.0,214,249,CWE-15,CWE-15,Moderado/Baixo,False,4
+CWE-548,51,6.34,Baixo Risco,0.0008,35.29,206,549,CWE-548,CWE-548,Moderado/Baixo,False,4
+CWE-388,40,7.77,Severa,0.0008,70.0,221,126,CWE-388,CWE-388,Moderado/Baixo,False,2
+CWE-799,53,5.77,Baixo Risco,0.0007,26.42,204,659,CWE-799,CWE-799,Moderado/Baixo,False,4
+CWE-90,39,7.63,Severa,0.0007,64.1,223,162,CWE-90,CWE-90,Moderado/Baixo,False,2
+CWE-335,38,7.79,Severa,0.0007,78.95,229,123,CWE-335,CWE-335,Moderado/Baixo,False,2
+CWE-923,43,6.87,Baixo Risco,0.0007,46.51,217,396,CWE-923,CWE-923,Moderado/Baixo,False,4
+CWE-915,38,7.75,Severa,0.0007,71.05,227,131,CWE-915,CWE-915,Moderado/Baixo,False,2
+CWE-807,42,6.94,Baixo Risco,0.0007,54.76,219,378,CWE-807,CWE-807,Moderado/Baixo,False,4
+CWE-1391,38,7.65,Severa,0.0007,71.05,228,153,CWE-1391,CWE-1391,Moderado/Baixo,False,2
+CWE-614,48,6.03,Baixo Risco,0.0007,25.0,212,618,CWE-614,CWE-614,Moderado/Baixo,False,4
+CWE-274,39,7.36,Baixo Risco,0.0007,66.67,224,252,CWE-274,CWE-274,Moderado/Baixo,False,4
+CWE-197,37,7.74,Severa,0.0007,81.08,233,133,CWE-197,CWE-197,Moderado/Baixo,False,2
+CWE-297,43,6.65,Baixo Risco,0.0007,44.19,218,464,CWE-297,CWE-297,Moderado/Baixo,False,4
+CWE-653,42,6.62,Baixo Risco,0.0007,45.24,220,473,CWE-653,CWE-653,Moderado/Baixo,False,4
+CWE-1285,37,7.42,Baixo Risco,0.0007,72.97,234,239,CWE-1285,CWE-1285,Moderado/Baixo,False,4
+CWE-99,45,6.06,Baixo Risco,0.0007,40.0,213,606,CWE-99,CWE-99,Moderado/Baixo,False,4
+CWE-926,75,3.48,Frequente,0.0006,6.67,174,745,CWE-926,CWE-926,Moderado/Baixo,False,3
+CWE-805,35,7.33,Baixo Risco,0.0006,80.0,237,259,CWE-805,CWE-805,Moderado/Baixo,False,4
+CWE-940,37,6.87,Baixo Risco,0.0006,43.24,232,397,CWE-940,CWE-940,Moderado/Baixo,False,4
+CWE-378,39,6.49,Baixo Risco,0.0006,56.41,225,517,CWE-378,CWE-378,Moderado/Baixo,False,4
+CWE-273,34,7.44,Baixo Risco,0.0006,70.59,239,236,CWE-273,CWE-273,Moderado/Baixo,False,4
+CWE-170,34,7.31,Baixo Risco,0.0006,64.71,242,262,CWE-170,CWE-170,Moderado/Baixo,False,4
+CWE-664,39,6.28,Baixo Risco,0.0006,43.59,222,561,CWE-664,CWE-664,Moderado/Baixo,False,4
+CWE-471,33,7.37,Baixo Risco,0.0006,57.58,245,251,CWE-471,CWE-471,Moderado/Baixo,False,4
+CWE-150,36,6.73,Baixo Risco,0.0006,52.78,236,437,CWE-150,CWE-150,Moderado/Baixo,False,4
+CWE-325,37,6.49,Baixo Risco,0.0006,40.54,231,516,CWE-325,CWE-325,Moderado/Baixo,False,4
+CWE-75,31,7.73,Severa,0.0006,67.74,248,137,CWE-75,CWE-75,Moderado/Baixo,False,2
+CWE-1393,29,8.13,Severa,0.0006,68.97,261,68,CWE-1393,CWE-1393,Moderado/Baixo,False,2
+CWE-302,30,7.81,Severa,0.0006,70.0,253,112,CWE-302,CWE-302,Moderado/Baixo,False,2
+CWE-644,37,6.3,Baixo Risco,0.0006,27.03,230,555,CWE-644,CWE-644,Moderado/Baixo,False,4
+CWE-261,33,6.92,Baixo Risco,0.0006,45.45,246,381,CWE-261,CWE-261,Moderado/Baixo,False,4
+CWE-353,31,7.34,Baixo Risco,0.0006,58.06,249,256,CWE-353,CWE-353,Moderado/Baixo,False,4
+CWE-385,36,6.27,Baixo Risco,0.0005,36.11,235,563,CWE-385,CWE-385,Moderado/Baixo,False,4
+CWE-405,32,6.97,Baixo Risco,0.0005,65.62,247,364,CWE-405,CWE-405,Moderado/Baixo,False,4
+CWE-420,30,7.26,Baixo Risco,0.0005,60.0,252,277,CWE-420,CWE-420,Moderado/Baixo,False,4
+CWE-87,38,5.61,Baixo Risco,0.0005,5.26,226,681,CWE-87,CWE-87,Moderado/Baixo,False,4
+CWE-440,34,6.23,Baixo Risco,0.0005,29.41,238,574,CWE-440,CWE-440,Moderado/Baixo,False,4
+CWE-356,29,7.29,Baixo Risco,0.0005,68.97,258,269,CWE-356,CWE-356,Moderado/Baixo,False,4
+CWE-92,34,6.09,Baixo Risco,0.0005,26.47,241,602,CWE-92,CWE-92,Moderado/Baixo,False,4
+CWE-348,34,6.03,Baixo Risco,0.0005,26.47,240,619,CWE-348,CWE-348,Moderado/Baixo,False,4
+CWE-304,27,7.57,Severa,0.0005,70.37,266,177,CWE-304,CWE-304,Moderado/Baixo,False,2
+CWE-691,31,6.56,Baixo Risco,0.0005,45.16,251,488,CWE-691,CWE-691,Moderado/Baixo,False,4
+CWE-924,30,6.75,Baixo Risco,0.0005,50.0,256,431,CWE-924,CWE-924,Moderado/Baixo,False,4
+CWE-286,29,6.94,Baixo Risco,0.0005,51.72,257,374,CWE-286,CWE-286,Moderado/Baixo,False,4
+CWE-782,26,7.72,Severa,0.0005,76.92,268,139,CWE-782,CWE-782,Moderado/Baixo,False,2
+CWE-841,34,5.9,Baixo Risco,0.0005,38.24,243,641,CWE-841,CWE-841,Moderado/Baixo,False,4
+CWE-124,25,7.91,Severa,0.0005,68.0,272,94,CWE-124,CWE-124,Moderado/Baixo,False,2
+CWE-349,29,6.78,Baixo Risco,0.0005,55.17,260,424,CWE-349,CWE-349,Moderado/Baixo,False,4
+CWE-825,26,7.54,Severa,0.0005,53.85,270,183,CWE-825,CWE-825,Moderado/Baixo,False,2
+CWE-1004,30,6.5,Baixo Risco,0.0005,33.33,255,514,CWE-1004,CWE-1004,Moderado/Baixo,False,4
+CWE-391,23,8.43,Severa,0.0005,73.91,280,47,CWE-391,CWE-391,Moderado/Baixo,False,2
+CWE-241,31,6.25,Baixo Risco,0.0005,38.71,250,568,CWE-241,CWE-241,Moderado/Baixo,False,4
+CWE-316,33,5.82,Baixo Risco,0.0005,24.24,244,654,CWE-316,CWE-316,Moderado/Baixo,False,4
+CWE-118,24,7.99,Severa,0.0005,70.83,277,81,CWE-118,CWE-118,Moderado/Baixo,False,2
+CWE-424,28,6.73,Baixo Risco,0.0005,50.0,264,438,CWE-424,CWE-424,Moderado/Baixo,False,4
+CWE-409,29,6.46,Baixo Risco,0.0005,31.03,259,521,CWE-409,CWE-409,Moderado/Baixo,False,4
+CWE-114,24,7.75,Severa,0.0005,70.83,274,128,CWE-114,CWE-114,Moderado/Baixo,False,2
+CWE-592,23,7.95,Severa,0.0004,73.91,278,86,CWE-592,CWE-592,Moderado/Baixo,False,2
+CWE-323,27,6.55,Baixo Risco,0.0004,25.93,265,491,CWE-323,CWE-323,Moderado/Baixo,False,4
+CWE-202,28,6.28,Baixo Risco,0.0004,32.14,263,562,CWE-202,CWE-202,Moderado/Baixo,False,4
+CWE-185,25,6.98,Baixo Risco,0.0004,56.0,271,359,CWE-185,CWE-185,Moderado/Baixo,False,4
+CWE-27,24,7.25,Baixo Risco,0.0004,58.33,276,278,CWE-27,CWE-27,Moderado/Baixo,False,4
+CWE-96,22,7.87,Severa,0.0004,68.18,285,102,CWE-96,CWE-96,Moderado/Baixo,False,2
+CWE-233,24,7.2,Baixo Risco,0.0004,54.17,275,292,CWE-233,CWE-233,Moderado/Baixo,False,4
+CWE-289,22,7.78,Severa,0.0004,77.27,284,125,CWE-289,CWE-289,Moderado/Baixo,False,2
+CWE-524,30,5.55,Baixo Risco,0.0004,23.33,254,687,CWE-524,CWE-524,Moderado/Baixo,False,4
+CWE-115,26,6.39,Baixo Risco,0.0004,34.62,267,535,CWE-115,CWE-115,Moderado/Baixo,False,4
+CWE-260,23,7.23,Baixo Risco,0.0004,56.52,283,284,CWE-260,CWE-260,Moderado/Baixo,False,4
+CWE-270,23,7.18,Baixo Risco,0.0004,56.52,282,303,CWE-270,CWE-270,Moderado/Baixo,False,4
+CWE-272,21,7.48,Baixo Risco,0.0004,66.67,292,220,CWE-272,CWE-272,Moderado/Baixo,False,4
+CWE-213,28,5.54,Baixo Risco,0.0004,28.57,262,689,CWE-213,CWE-213,Moderado/Baixo,False,4
+CWE-540,26,5.95,Baixo Risco,0.0004,26.92,269,634,CWE-540,CWE-540,Moderado/Baixo,False,4
+CWE-402,23,6.71,Baixo Risco,0.0004,52.17,279,442,CWE-402,CWE-402,Moderado/Baixo,False,4
+CWE-690,22,7.0,Baixo Risco,0.0004,77.27,286,354,CWE-690,CWE-690,Moderado/Baixo,False,4
+CWE-501,21,7.31,Baixo Risco,0.0004,66.67,288,264,CWE-501,CWE-501,Moderado/Baixo,False,4
+CWE-282,25,6.05,Baixo Risco,0.0004,28.0,273,611,CWE-282,CWE-282,Moderado/Baixo,False,4
+CWE-757,20,7.46,Baixo Risco,0.0004,70.0,294,229,CWE-757,CWE-757,Moderado/Baixo,False,4
+CWE-1385,20,7.37,Baixo Risco,0.0004,55.0,296,250,CWE-1385,CWE-1385,Moderado/Baixo,False,4
+CWE-268,20,7.35,Baixo Risco,0.0004,70.0,295,253,CWE-268,CWE-268,Moderado/Baixo,False,4
+CWE-279,21,6.74,Baixo Risco,0.0003,57.14,291,434,CWE-279,CWE-279,Moderado/Baixo,False,4
+CWE-340,21,6.65,Baixo Risco,0.0003,47.62,290,462,CWE-340,CWE-340,Moderado/Baixo,False,4
+CWE-791,23,5.86,Baixo Risco,0.0003,34.78,281,650,CWE-791,CWE-791,Moderado/Baixo,False,4
+CWE-523,18,7.47,Baixo Risco,0.0003,77.78,306,223,CWE-523,CWE-523,Moderado/Baixo,False,4
+CWE-488,19,7.05,Baixo Risco,0.0003,63.16,299,341,CWE-488,CWE-488,Moderado/Baixo,False,4
+CWE-1104,16,8.34,Severa,0.0003,87.5,324,54,CWE-1104,CWE-1104,Moderado/Baixo,False,2
+CWE-603,16,8.34,Severa,0.0003,81.25,327,55,CWE-603,CWE-603,Moderado/Baixo,False,2
+CWE-1288,19,6.91,Baixo Risco,0.0003,57.89,298,383,CWE-1288,CWE-1288,Moderado/Baixo,False,4
+CWE-477,15,8.57,Severa,0.0003,86.67,334,38,CWE-477,CWE-477,Moderado/Baixo,False,2
+CWE-943,18,7.1,Baixo Risco,0.0003,50.0,309,329,CWE-943,CWE-943,Moderado/Baixo,False,4
+CWE-410,18,7.02,Baixo Risco,0.0003,66.67,302,349,CWE-410,CWE-410,Moderado/Baixo,False,4
+CWE-833,19,6.64,Baixo Risco,0.0003,52.63,300,468,CWE-833,CWE-833,Moderado/Baixo,False,4
+CWE-41,21,5.96,Baixo Risco,0.0003,28.57,289,631,CWE-41,CWE-41,Moderado/Baixo,False,4
+CWE-195,16,7.64,Severa,0.0003,81.25,325,160,CWE-195,CWE-195,Moderado/Baixo,False,2
+CWE-158,17,7.19,Baixo Risco,0.0003,52.94,315,300,CWE-158,CWE-158,Moderado/Baixo,False,4
+CWE-783,17,7.19,Baixo Risco,0.0003,76.47,318,299,CWE-783,CWE-783,Moderado/Baixo,False,4
+CWE-313,21,5.73,Baixo Risco,0.0003,28.57,293,664,CWE-313,CWE-313,Moderado/Baixo,False,4
+CWE-708,18,6.66,Baixo Risco,0.0003,38.89,312,460,CWE-708,CWE-708,Moderado/Baixo,False,4
+CWE-590,16,7.45,Baixo Risco,0.0003,75.0,322,233,CWE-590,CWE-590,Moderado/Baixo,False,4
+CWE-324,18,6.54,Baixo Risco,0.0003,38.89,303,495,CWE-324,CWE-324,Moderado/Baixo,False,4
+CWE-684,18,6.39,Baixo Risco,0.0003,38.89,311,536,CWE-684,CWE-684,Moderado/Baixo,False,4
+CWE-453,16,7.19,Baixo Risco,0.0003,56.25,326,301,CWE-453,CWE-453,Moderado/Baixo,False,4
+CWE-322,16,7.16,Baixo Risco,0.0003,68.75,320,308,CWE-322,CWE-322,Moderado/Baixo,False,4
+CWE-1191,18,6.32,Baixo Risco,0.0003,27.78,308,552,CWE-1191,CWE-1191,Moderado/Baixo,False,4
+CWE-406,15,7.46,Baixo Risco,0.0003,80.0,336,228,CWE-406,CWE-406,Moderado/Baixo,False,4
+CWE-1230,19,5.88,Baixo Risco,0.0003,26.32,301,646,CWE-1230,CWE-1230,Moderado/Baixo,False,4
+CWE-696,18,6.18,Baixo Risco,0.0003,27.78,305,581,CWE-696,CWE-696,Moderado/Baixo,False,4
+CWE-417,15,7.34,Baixo Risco,0.0003,66.67,328,255,CWE-417,CWE-417,Moderado/Baixo,False,4
+CWE-1295,19,5.71,Baixo Risco,0.0003,26.32,297,665,CWE-1295,CWE-1295,Moderado/Baixo,False,4
+CWE-214,17,6.27,Baixo Risco,0.0003,41.18,317,564,CWE-214,CWE-214,Moderado/Baixo,False,4
+CWE-253,15,7.08,Baixo Risco,0.0003,66.67,331,334,CWE-253,CWE-253,Moderado/Baixo,False,4
+CWE-26,14,7.54,Severa,0.0003,71.43,346,182,CWE-26,CWE-26,Moderado/Baixo,False,2
+CWE-84,18,5.74,Baixo Risco,0.0003,11.11,307,662,CWE-84,CWE-84,Moderado/Baixo,False,4
+CWE-357,17,6.05,Baixo Risco,0.0002,35.29,314,610,CWE-357,CWE-357,Moderado/Baixo,False,4
+CWE-460,17,6.05,Baixo Risco,0.0002,41.18,316,615,CWE-460,CWE-460,Moderado/Baixo,False,4
+CWE-642,15,6.77,Baixo Risco,0.0002,40.0,333,426,CWE-642,CWE-642,Moderado/Baixo,False,4
+CWE-657,17,5.94,Baixo Risco,0.0002,29.41,319,635,CWE-657,CWE-657,Moderado/Baixo,False,4
+CWE-525,22,4.58,Baixo Risco,0.0002,13.64,287,732,CWE-525,CWE-525,Moderado/Baixo,False,4
+CWE-350,15,6.68,Baixo Risco,0.0002,40.0,335,454,CWE-350,CWE-350,Moderado/Baixo,False,4
+CWE-155,14,7.16,Baixo Risco,0.0002,35.71,344,309,CWE-155,CWE-155,Moderado/Baixo,False,4
+CWE-836,12,8.34,Severa,0.0002,91.67,365,56,CWE-836,CWE-836,Moderado/Baixo,False,2
+CWE-226,18,5.53,Baixo Risco,0.0002,22.22,310,692,CWE-226,CWE-226,Moderado/Baixo,False,4
+CWE-140,14,7.08,Baixo Risco,0.0002,42.86,345,335,CWE-140,CWE-140,Moderado/Baixo,False,4
+CWE-779,16,6.18,Baixo Risco,0.0002,31.25,321,582,CWE-779,CWE-779,Moderado/Baixo,False,4
+CWE-395,16,6.18,Baixo Risco,0.0002,25.0,323,583,CWE-395,CWE-395,Moderado/Baixo,False,4
+CWE-778,18,5.42,Baixo Risco,0.0002,27.78,313,702,CWE-778,CWE-778,Moderado/Baixo,False,4
+CWE-636,13,7.45,Baixo Risco,0.0002,53.85,348,234,CWE-636,CWE-636,Moderado/Baixo,False,4
+CWE-83,15,6.37,Baixo Risco,0.0002,26.67,332,539,CWE-83,CWE-83,Moderado/Baixo,False,4
+CWE-183,15,6.29,Baixo Risco,0.0002,40.0,329,560,CWE-183,CWE-183,Moderado/Baixo,False,4
+CWE-927,18,5.18,Baixo Risco,0.0002,22.22,304,713,CWE-927,CWE-927,Moderado/Baixo,False,4
+CWE-228,13,7.15,Baixo Risco,0.0002,61.54,357,316,CWE-228,CWE-228,Moderado/Baixo,False,4
+CWE-390,13,7.14,Baixo Risco,0.0002,46.15,353,317,CWE-390,CWE-390,Moderado/Baixo,False,4
+CWE-172,15,6.09,Baixo Risco,0.0002,33.33,330,600,CWE-172,CWE-172,Moderado/Baixo,False,4
+CWE-599,12,7.46,Baixo Risco,0.0002,66.67,362,230,CWE-599,CWE-599,Moderado/Baixo,False,4
+CWE-606,14,6.37,Baixo Risco,0.0002,35.71,341,540,CWE-606,CWE-606,Moderado/Baixo,False,4
+CWE-394,13,6.85,Baixo Risco,0.0002,53.85,349,403,CWE-394,CWE-394,Moderado/Baixo,False,4
+CWE-244,14,6.36,Baixo Risco,0.0002,35.71,343,545,CWE-244,CWE-244,Moderado/Baixo,False,4
+CWE-1394,12,7.28,Baixo Risco,0.0002,66.67,360,273,CWE-1394,CWE-1394,Moderado/Baixo,False,4
+CWE-830,12,7.28,Baixo Risco,0.0002,58.33,369,272,CWE-830,CWE-830,Moderado/Baixo,False,4
+CWE-283,14,6.24,Baixo Risco,0.0002,35.71,342,570,CWE-283,CWE-283,Moderado/Baixo,False,4
+CWE-229,13,6.72,Baixo Risco,0.0002,46.15,356,439,CWE-229,CWE-229,Moderado/Baixo,False,4
+CWE-366,13,6.71,Baixo Risco,0.0002,61.54,358,444,CWE-366,CWE-366,Moderado/Baixo,False,4
+CWE-698,10,8.67,Severa,0.0002,80.0,392,35,CWE-698,CWE-698,Moderado/Baixo,False,2
+CWE-351,12,7.15,Baixo Risco,0.0002,58.33,366,315,CWE-351,CWE-351,Moderado/Baixo,False,4
+CWE-911,12,7.07,Baixo Risco,0.0002,75.0,363,337,CWE-911,CWE-911,Moderado/Baixo,False,4
+CWE-334,12,7.07,Baixo Risco,0.0002,58.33,368,336,CWE-334,CWE-334,Moderado/Baixo,False,4
+CWE-215,14,6.03,Baixo Risco,0.0002,35.71,339,620,CWE-215,CWE-215,Moderado/Baixo,False,4
+CWE-1386,13,6.37,Baixo Risco,0.0002,53.85,352,541,CWE-1386,CWE-1386,Moderado/Baixo,False,4
+CWE-419,11,7.51,Baixo Risco,0.0002,72.73,375,190,CWE-419,CWE-419,Moderado/Baixo,False,4
+CWE-1259,13,6.34,Baixo Risco,0.0002,15.38,351,551,CWE-1259,CWE-1259,Moderado/Baixo,False,4
+CWE-31,11,7.48,Baixo Risco,0.0002,72.73,374,219,CWE-31,CWE-31,Moderado/Baixo,False,4
+CWE-25,11,7.38,Baixo Risco,0.0002,81.82,371,247,CWE-25,CWE-25,Moderado/Baixo,False,4
+CWE-258,10,8.11,Severa,0.0002,70.0,383,69,CWE-258,CWE-258,Moderado/Baixo,False,2
+CWE-1327,13,6.21,Baixo Risco,0.0002,38.46,350,577,CWE-1327,CWE-1327,Moderado/Baixo,False,4
+CWE-1242,10,7.99,Severa,0.0002,70.0,386,82,CWE-1242,CWE-1242,Moderado/Baixo,False,2
+CWE-176,13,6.13,Baixo Risco,0.0002,23.08,354,592,CWE-176,CWE-176,Moderado/Baixo,False,4
+CWE-762,11,7.23,Baixo Risco,0.0002,72.73,379,283,CWE-762,CWE-762,Moderado/Baixo,False,4
+CWE-547,10,7.93,Severa,0.0002,80.0,390,90,CWE-547,CWE-547,Moderado/Baixo,False,2
+CWE-837,14,5.66,Baixo Risco,0.0002,14.29,337,673,CWE-837,CWE-837,Moderado/Baixo,False,4
+CWE-526,13,6.05,Baixo Risco,0.0002,23.08,355,609,CWE-526,CWE-526,Moderado/Baixo,False,4
+CWE-838,12,6.56,Baixo Risco,0.0002,41.67,359,489,CWE-838,CWE-838,Moderado/Baixo,False,4
+CWE-1240,11,7.12,Baixo Risco,0.0002,54.55,370,321,CWE-1240,CWE-1240,Moderado/Baixo,False,4
+CWE-641,11,7.11,Baixo Risco,0.0002,54.55,378,323,CWE-641,CWE-641,Moderado/Baixo,False,4
+CWE-1263,12,6.51,Baixo Risco,0.0002,33.33,367,499,CWE-1263,CWE-1263,Moderado/Baixo,False,4
+CWE-413,11,6.94,Baixo Risco,0.0002,63.64,373,379,CWE-413,CWE-413,Moderado/Baixo,False,4
+CWE-337,11,6.87,Baixo Risco,0.0002,63.64,376,395,CWE-337,CWE-337,Moderado/Baixo,False,4
+CWE-242,9,8.39,Severa,0.0002,100.0,401,52,CWE-242,CWE-242,Moderado/Baixo,False,2
+CWE-759,12,6.24,Baixo Risco,0.0002,33.33,364,571,CWE-759,CWE-759,Moderado/Baixo,False,4
+CWE-475,11,6.79,Baixo Risco,0.0002,45.45,372,423,CWE-475,CWE-475,Moderado/Baixo,False,4
+CWE-138,10,7.38,Baixo Risco,0.0002,70.0,387,248,CWE-138,CWE-138,Moderado/Baixo,False,4
+CWE-549,14,5.27,Baixo Risco,0.0002,7.14,340,711,CWE-549,CWE-549,Moderado/Baixo,False,4
+CWE-939,13,5.65,Baixo Risco,0.0002,23.08,347,674,CWE-939,CWE-939,Moderado/Baixo,False,4
+CWE-449,14,5.24,Baixo Risco,0.0002,0.0,338,712,CWE-449,CWE-449,Moderado/Baixo,False,4
+CWE-790,10,7.34,Baixo Risco,0.0002,50.0,393,254,CWE-790,CWE-790,Moderado/Baixo,False,4
+CWE-842,9,7.86,Severa,0.0002,88.89,402,104,CWE-842,CWE-842,Moderado/Baixo,False,2
+CWE-296,10,6.97,Baixo Risco,0.0002,60.0,394,366,CWE-296,CWE-296,Moderado/Baixo,False,4
+CWE-341,10,6.94,Baixo Risco,0.0002,50.0,389,376,CWE-341,CWE-341,Moderado/Baixo,False,4
+CWE-141,8,8.51,Severa,0.0002,75.0,423,41,CWE-141,CWE-141,Moderado/Baixo,False,2
+CWE-1022,12,5.66,Baixo Risco,0.0002,8.33,361,672,CWE-1022,CWE-1022,Moderado/Baixo,False,4
+CWE-232,10,6.67,Baixo Risco,0.0002,50.0,382,457,CWE-232,CWE-232,Moderado/Baixo,False,4
+CWE-363,10,6.67,Baixo Risco,0.0002,60.0,391,458,CWE-363,CWE-363,Moderado/Baixo,False,4
+CWE-804,11,6.05,Baixo Risco,0.0002,27.27,377,608,CWE-804,CWE-804,Moderado/Baixo,False,4
+CWE-392,10,6.64,Baixo Risco,0.0002,60.0,388,467,CWE-392,CWE-392,Moderado/Baixo,False,4
+CWE-820,9,7.22,Baixo Risco,0.0002,55.56,409,286,CWE-820,CWE-820,Moderado/Baixo,False,4
+CWE-76,9,7.21,Baixo Risco,0.0002,55.56,406,287,CWE-76,CWE-76,Moderado/Baixo,False,4
+CWE-1326,9,7.04,Baixo Risco,0.0002,77.78,395,342,CWE-1326,CWE-1326,Moderado/Baixo,False,4
+CWE-271,9,6.99,Baixo Risco,0.0002,66.67,405,356,CWE-271,CWE-271,Moderado/Baixo,False,4
+CWE-64,9,6.96,Baixo Risco,0.0002,66.67,396,370,CWE-64,CWE-64,Moderado/Baixo,False,4
+CWE-230,8,7.74,Severa,0.0002,62.5,414,136,CWE-230,CWE-230,Moderado/Baixo,False,2
+CWE-646,8,7.7,Severa,0.0001,62.5,417,145,CWE-646,CWE-646,Moderado/Baixo,False,2
+CWE-146,8,7.69,Severa,0.0001,87.5,411,147,CWE-146,CWE-146,Moderado/Baixo,False,2
+CWE-332,9,6.82,Baixo Risco,0.0001,77.78,398,417,CWE-332,CWE-332,Moderado/Baixo,False,4
+CWE-1244,10,6.13,Baixo Risco,0.0001,40.0,385,593,CWE-1244,CWE-1244,Moderado/Baixo,False,4
+CWE-159,10,6.12,Baixo Risco,0.0001,50.0,384,594,CWE-159,CWE-159,Moderado/Baixo,False,4
+CWE-701,9,6.8,Baixo Risco,0.0001,55.56,407,419,CWE-701,CWE-701,Moderado/Baixo,False,4
+CWE-786,8,7.51,Baixo Risco,0.0001,87.5,416,189,CWE-786,CWE-786,Moderado/Baixo,False,4
+CWE-14,8,7.5,Baixo Risco,0.0001,100.0,410,204,CWE-14,CWE-14,Moderado/Baixo,False,4
+CWE-643,10,5.99,Baixo Risco,0.0001,20.0,380,628,CWE-643,CWE-643,Moderado/Baixo,False,4
+CWE-1275,9,6.64,Baixo Risco,0.0001,44.44,397,465,CWE-1275,CWE-1275,Moderado/Baixo,False,4
+CWE-821,10,5.79,Baixo Risco,0.0001,40.0,381,656,CWE-821,CWE-821,Moderado/Baixo,False,4
+CWE-1325,9,6.42,Baixo Risco,0.0001,44.44,403,525,CWE-1325,CWE-1325,Moderado/Baixo,False,4
+CWE-364,9,6.27,Baixo Risco,0.0001,33.33,408,565,CWE-364,CWE-364,Moderado/Baixo,False,4
+CWE-921,9,6.24,Baixo Risco,0.0001,44.44,399,569,CWE-921,CWE-921,Moderado/Baixo,False,4
+CWE-456,8,6.91,Baixo Risco,0.0001,50.0,421,382,CWE-456,CWE-456,Moderado/Baixo,False,4
+CWE-82,7,7.9,Severa,0.0001,85.71,436,96,CWE-82,CWE-82,Moderado/Baixo,False,2
+CWE-361,7,7.89,Severa,0.0001,71.43,435,98,CWE-361,CWE-361,Moderado/Baixo,False,2
+CWE-650,8,6.89,Baixo Risco,0.0001,50.0,419,390,CWE-650,CWE-650,Moderado/Baixo,False,4
+CWE-656,8,6.85,Baixo Risco,0.0001,50.0,425,407,CWE-656,CWE-656,Moderado/Baixo,False,4
+CWE-551,7,7.79,Severa,0.0001,71.43,432,124,CWE-551,CWE-551,Moderado/Baixo,False,2
+CWE-1258,8,6.68,Baixo Risco,0.0001,50.0,418,455,CWE-1258,CWE-1258,Moderado/Baixo,False,4
+CWE-86,8,6.6,Baixo Risco,0.0001,37.5,420,478,CWE-86,CWE-86,Moderado/Baixo,False,4
+CWE-1299,9,5.86,Baixo Risco,0.0001,11.11,400,651,CWE-1299,CWE-1299,Moderado/Baixo,False,4
+CWE-97,7,7.47,Baixo Risco,0.0001,85.71,438,224,CWE-97,CWE-97,Moderado/Baixo,False,4
+CWE-371,7,7.44,Baixo Risco,0.0001,71.43,428,235,CWE-371,CWE-371,Moderado/Baixo,False,4
+CWE-308,7,7.13,Baixo Risco,0.0001,57.14,430,319,CWE-308,CWE-308,Moderado/Baixo,False,4
+CWE-561,8,6.22,Baixo Risco,0.0001,37.5,424,576,CWE-561,CWE-561,Moderado/Baixo,False,4
+CWE-941,7,7.06,Baixo Risco,0.0001,71.43,427,339,CWE-941,CWE-941,Moderado/Baixo,False,4
+CWE-1050,7,7.04,Baixo Risco,0.0001,71.43,444,343,CWE-1050,CWE-1050,Moderado/Baixo,False,4
+CWE-1319,6,8.22,Severa,0.0001,66.67,448,61,CWE-1319,CWE-1319,Moderado/Baixo,False,2
+CWE-616,7,6.99,Baixo Risco,0.0001,42.86,429,358,CWE-616,CWE-616,Moderado/Baixo,False,4
+CWE-421,8,6.04,Baixo Risco,0.0001,25.0,412,616,CWE-421,CWE-421,Moderado/Baixo,False,4
+CWE-299,7,6.9,Baixo Risco,0.0001,57.14,439,387,CWE-299,CWE-299,Moderado/Baixo,False,4
+CWE-1270,6,7.97,Severa,0.0001,66.67,447,84,CWE-1270,CWE-1270,Moderado/Baixo,False,2
+CWE-249,6,7.97,Severa,0.0001,100.0,449,85,CWE-249,CWE-249,Moderado/Baixo,False,2
+CWE-1320,6,7.93,Severa,0.0001,100.0,463,89,CWE-1320,CWE-1320,Moderado/Baixo,False,2
+CWE-342,6,7.92,Severa,0.0001,66.67,452,93,CWE-342,CWE-342,Moderado/Baixo,False,2
+CWE-710,6,7.75,Severa,0.0001,66.67,466,132,CWE-710,CWE-710,Moderado/Baixo,False,2
+CWE-65,6,7.72,Severa,0.0001,100.0,453,141,CWE-65,CWE-65,Moderado/Baixo,False,2
+CWE-372,6,7.65,Severa,0.0001,66.67,455,158,CWE-372,CWE-372,Moderado/Baixo,False,2
+CWE-1173,6,7.58,Severa,0.0001,66.67,446,170,CWE-1173,CWE-1173,Moderado/Baixo,False,2
+CWE-1289,7,6.49,Baixo Risco,0.0001,42.86,442,518,CWE-1289,CWE-1289,Moderado/Baixo,False,4
+CWE-265,6,7.53,Severa,0.0001,66.67,454,187,CWE-265,CWE-265,Moderado/Baixo,False,2
+CWE-81,8,5.65,Baixo Risco,0.0001,0.0,413,676,CWE-81,CWE-81,Moderado/Baixo,False,4
+CWE-298,6,7.52,Severa,0.0001,50.0,459,188,CWE-298,CWE-298,Moderado/Baixo,False,2
+CWE-694,8,5.61,Baixo Risco,0.0001,25.0,422,680,CWE-694,CWE-694,Moderado/Baixo,False,4
+CWE-329,8,5.59,Baixo Risco,0.0001,12.5,415,683,CWE-329,CWE-329,Moderado/Baixo,False,4
+CWE-612,7,6.39,Baixo Risco,0.0001,28.57,441,537,CWE-612,CWE-612,Moderado/Baixo,False,4
+CWE-1274,6,7.42,Baixo Risco,0.0001,66.67,450,242,CWE-1274,CWE-1274,Moderado/Baixo,False,4
+CWE-199,8,5.41,Baixo Risco,0.0001,12.5,426,703,CWE-199,CWE-199,Moderado/Baixo,False,4
+CWE-315,7,6.16,Baixo Risco,0.0001,57.14,433,587,CWE-315,CWE-315,Moderado/Baixo,False,4
+CWE-760,7,6.11,Baixo Risco,0.0001,28.57,443,595,CWE-760,CWE-760,Moderado/Baixo,False,4
+CWE-112,6,7.13,Baixo Risco,0.0001,66.67,467,318,CWE-112,CWE-112,Moderado/Baixo,False,4
+CWE-1262,7,6.07,Baixo Risco,0.0001,42.86,431,604,CWE-1262,CWE-1262,Moderado/Baixo,False,4
+CWE-291,6,7.08,Baixo Risco,0.0001,66.67,468,332,CWE-291,CWE-291,Moderado/Baixo,False,4
+CWE-474,7,6.06,Baixo Risco,0.0001,28.57,434,607,CWE-474,CWE-474,Moderado/Baixo,False,4
+CWE-180,6,6.95,Baixo Risco,0.0001,66.67,458,372,CWE-180,CWE-180,Moderado/Baixo,False,4
+CWE-544,7,5.89,Baixo Risco,0.0001,14.29,440,645,CWE-544,CWE-544,Moderado/Baixo,False,4
+CWE-219,6,6.85,Baixo Risco,0.0001,50.0,462,406,CWE-219,CWE-219,Moderado/Baixo,False,4
+CWE-127,6,6.73,Baixo Risco,0.0001,50.0,456,436,CWE-127,CWE-127,Moderado/Baixo,False,4
+CWE-1260,5,8.06,Severa,0.0001,100.0,483,75,CWE-1260,CWE-1260,Moderado/Baixo,False,2
+CWE-21,6,6.7,Baixo Risco,0.0001,33.33,465,449,CWE-21,CWE-21,Moderado/Baixo,False,4
+CWE-368,5,8.02,Severa,0.0001,80.0,487,78,CWE-368,CWE-368,Moderado/Baixo,False,2
+CWE-37,6,6.62,Baixo Risco,0.0001,33.33,451,472,CWE-37,CWE-37,Moderado/Baixo,False,4
+CWE-1025,6,6.55,Baixo Risco,0.0001,33.33,460,492,CWE-1025,CWE-1025,Moderado/Baixo,False,4
+CWE-393,5,7.7,Severa,0.0001,80.0,477,144,CWE-393,CWE-393,Moderado/Baixo,False,2
+CWE-278,5,7.66,Severa,0.0001,80.0,470,151,CWE-278,CWE-278,Moderado/Baixo,False,2
+CWE-194,5,7.58,Severa,0.0001,80.0,488,173,CWE-194,CWE-194,Moderado/Baixo,False,2
+CWE-240,5,7.54,Severa,0.0001,80.0,474,184,CWE-240,CWE-240,Moderado/Baixo,False,2
+CWE-530,9,4.14,Baixo Risco,0.0001,33.33,404,741,CWE-530,CWE-530,Moderado/Baixo,False,4
+CWE-733,5,7.42,Baixo Risco,0.0001,80.0,486,240,CWE-733,CWE-733,Moderado/Baixo,False,4
+CWE-562,5,7.42,Baixo Risco,0.0001,60.0,492,241,CWE-562,CWE-562,Moderado/Baixo,False,4
+CWE-18,6,6.0,Baixo Risco,0.0001,50.0,464,627,CWE-18,CWE-18,Moderado/Baixo,False,4
+CWE-223,7,5.13,Baixo Risco,0.0001,14.29,437,716,CWE-223,CWE-223,Moderado/Baixo,False,4
+CWE-187,4,8.95,Severa,0.0001,75.0,516,18,CWE-187,CWE-187,Moderado/Baixo,False,2
+CWE-1038,6,5.95,Baixo Risco,0.0001,33.33,445,633,CWE-1038,CWE-1038,Moderado/Baixo,False,4
+CWE-153,4,8.9,Severa,0.0001,100.0,525,21,CWE-153,CWE-153,Moderado/Baixo,False,2
+CWE-1125,4,8.52,Severa,0.0001,75.0,505,40,CWE-1125,CWE-1125,Moderado/Baixo,False,2
+CWE-403,4,8.48,Severa,0.0001,100.0,527,43,CWE-403,CWE-403,Moderado/Baixo,False,2
+CWE-1300,5,6.76,Baixo Risco,0.0001,40.0,469,429,CWE-1300,CWE-1300,Moderado/Baixo,False,4
+CWE-649,5,6.76,Baixo Risco,0.0001,40.0,481,430,CWE-649,CWE-649,Moderado/Baixo,False,4
+CWE-156,5,6.6,Baixo Risco,0.0001,20.0,471,477,CWE-156,CWE-156,Moderado/Baixo,False,4
+CWE-1357,4,8.25,Severa,0.0001,100.0,507,59,CWE-1357,CWE-1357,Moderado/Baixo,False,2
+CWE-491,4,8.18,Severa,0.0001,75.0,515,65,CWE-491,CWE-491,Moderado/Baixo,False,2
+CWE-167,5,6.38,Baixo Risco,0.0001,40.0,478,538,CWE-167,CWE-167,Moderado/Baixo,False,4
+CWE-1023,5,6.34,Baixo Risco,0.0001,40.0,472,550,CWE-1023,CWE-1023,Moderado/Baixo,False,4
+CWE-792,5,6.3,Baixo Risco,0.0001,20.0,496,557,CWE-792,CWE-792,Moderado/Baixo,False,4
+CWE-216,4,7.88,Severa,0.0001,75.0,498,99,CWE-216,CWE-216,Moderado/Baixo,False,2
+CWE-196,4,7.88,Severa,0.0001,100.0,504,100,CWE-196,CWE-196,Moderado/Baixo,False,2
+CWE-794,4,7.8,Severa,0.0001,75.0,518,117,CWE-794,CWE-794,Moderado/Baixo,False,2
+CWE-676,5,6.2,Baixo Risco,0.0001,40.0,476,579,CWE-676,CWE-676,Moderado/Baixo,False,4
+CWE-534,5,6.2,Baixo Risco,0.0001,40.0,490,580,CWE-534,CWE-534,Moderado/Baixo,False,4
+CWE-647,5,6.2,Baixo Risco,0.0001,40.0,491,578,CWE-647,CWE-647,Moderado/Baixo,False,4
+CWE-177,6,5.15,Baixo Risco,0.0001,16.67,457,715,CWE-177,CWE-177,Moderado/Baixo,False,4
+CWE-826,5,6.14,Baixo Risco,0.0001,60.0,475,589,CWE-826,CWE-826,Moderado/Baixo,False,4
+CWE-1256,4,7.62,Severa,0.0001,75.0,522,163,CWE-1256,CWE-1256,Moderado/Baixo,False,2
+CWE-539,4,7.6,Severa,0.0001,75.0,499,167,CWE-539,CWE-539,Moderado/Baixo,False,2
+CWE-784,4,7.55,Severa,0.0001,75.0,521,181,CWE-784,CWE-784,Moderado/Baixo,False,2
+CWE-1281,5,6.02,Baixo Risco,0.0001,40.0,493,623,CWE-1281,CWE-1281,Moderado/Baixo,False,4
+CWE-645,5,5.94,Baixo Risco,0.0001,20.0,484,636,CWE-645,CWE-645,Moderado/Baixo,False,4
+CWE-1335,4,7.4,Baixo Risco,0.0001,50.0,503,245,CWE-1335,CWE-1335,Moderado/Baixo,False,4
+CWE-775,5,5.88,Baixo Risco,0.0001,60.0,494,647,CWE-775,CWE-775,Moderado/Baixo,False,4
+CWE-1250,5,5.82,Baixo Risco,0.0001,20.0,480,655,CWE-1250,CWE-1250,Moderado/Baixo,False,4
+CWE-767,4,7.22,Baixo Risco,0.0001,75.0,506,285,CWE-767,CWE-767,Moderado/Baixo,False,4
+CWE-149,4,7.2,Baixo Risco,0.0001,75.0,512,291,CWE-149,CWE-149,Moderado/Baixo,False,4
+CWE-192,4,7.15,Baixo Risco,0.0001,75.0,511,311,CWE-192,CWE-192,Moderado/Baixo,False,4
+CWE-920,4,7.15,Baixo Risco,0.0001,50.0,528,312,CWE-920,CWE-920,Moderado/Baixo,False,4
+CWE-1241,4,7.1,Baixo Risco,0.0001,75.0,524,330,CWE-1241,CWE-1241,Moderado/Baixo,False,4
+CWE-1088,5,5.66,Baixo Risco,0.0001,40.0,482,671,CWE-1088,CWE-1088,Moderado/Baixo,False,4
+CWE-914,5,5.64,Baixo Risco,0.0001,60.0,495,677,CWE-914,CWE-914,Moderado/Baixo,False,4
+CWE-412,4,7.02,Baixo Risco,0.0001,75.0,500,348,CWE-412,CWE-412,Moderado/Baixo,False,4
+CWE-1116,4,6.98,Baixo Risco,0.0001,50.0,502,363,CWE-1116,CWE-1116,Moderado/Baixo,False,4
+CWE-771,4,6.95,Baixo Risco,0.0001,50.0,517,373,CWE-771,CWE-771,Moderado/Baixo,False,4
+CWE-1037,5,5.52,Baixo Risco,0.0001,0.0,479,693,CWE-1037,CWE-1037,Moderado/Baixo,False,4
+CWE-769,4,6.82,Baixo Risco,0.0001,75.0,526,415,CWE-769,CWE-769,Moderado/Baixo,False,4
+CWE-262,5,5.36,Baixo Risco,0.0001,20.0,497,705,CWE-262,CWE-262,Moderado/Baixo,False,4
+CWE-758,4,6.68,Baixo Risco,0.0001,25.0,513,456,CWE-758,CWE-758,Moderado/Baixo,False,4
+CWE-671,4,6.55,Baixo Risco,0.0001,50.0,520,493,CWE-671,CWE-671,Moderado/Baixo,False,4
+CWE-692,6,4.3,Baixo Risco,0.0001,0.0,461,740,CWE-692,CWE-692,Moderado/Baixo,False,4
+CWE-1245,4,6.4,Baixo Risco,0.0001,25.0,523,534,CWE-1245,CWE-1245,Moderado/Baixo,False,4
+CWE-597,3,8.5,Severa,0.0001,66.67,529,42,CWE-597,CWE-597,Moderado/Baixo,False,2
+CWE-231,4,6.35,Baixo Risco,0.0001,50.0,501,546,CWE-231,CWE-231,Moderado/Baixo,False,4
+CWE-437,4,6.25,Baixo Risco,0.0001,50.0,509,567,CWE-437,CWE-437,Moderado/Baixo,False,4
+CWE-1328,5,4.96,Baixo Risco,0.0001,20.0,473,722,CWE-1328,CWE-1328,Moderado/Baixo,False,4
+CWE-566,5,4.76,Baixo Risco,0.0001,20.0,489,726,CWE-566,CWE-566,Moderado/Baixo,False,4
+CWE-1233,4,5.9,Baixo Risco,0.0001,25.0,514,642,CWE-1233,CWE-1233,Moderado/Baixo,False,4
+CWE-626,3,7.87,Severa,0.0001,66.67,545,103,CWE-626,CWE-626,Moderado/Baixo,False,2
+CWE-1257,3,7.67,Severa,0.0001,100.0,535,150,CWE-1257,CWE-1257,Moderado/Baixo,False,2
+CWE-1279,3,7.57,Severa,0.0001,66.67,558,178,CWE-1279,CWE-1279,Moderado/Baixo,False,2
+CWE-473,3,7.53,Severa,0.0001,66.67,552,186,CWE-473,CWE-473,Moderado/Baixo,False,2
+CWE-839,3,7.5,Baixo Risco,0.0001,100.0,565,209,CWE-839,CWE-839,Moderado/Baixo,False,4
+CWE-1332,3,7.47,Baixo Risco,0.0001,33.33,567,225,CWE-1332,CWE-1332,Moderado/Baixo,False,4
+CWE-467,3,7.47,Baixo Risco,0.0001,66.67,544,226,CWE-467,CWE-467,Moderado/Baixo,False,4
+CWE-573,4,5.58,Baixo Risco,0.0001,25.0,508,685,CWE-573,CWE-573,Moderado/Baixo,False,4
+CWE-1077,4,5.5,Baixo Risco,0.0001,0.0,519,694,CWE-1077,CWE-1077,Moderado/Baixo,False,4
+CWE-1032,3,7.33,Baixo Risco,0.0001,33.33,568,257,CWE-1032,CWE-1032,Moderado/Baixo,False,4
+CWE-1189,3,7.27,Baixo Risco,0.0001,100.0,536,276,CWE-1189,CWE-1189,Moderado/Baixo,False,4
+CWE-147,5,4.34,Baixo Risco,0.0001,0.0,485,734,CWE-147,CWE-147,Moderado/Baixo,False,4
+CWE-463,3,7.23,Baixo Risco,0.0001,66.67,561,282,CWE-463,CWE-463,Moderado/Baixo,False,4
+CWE-179,3,7.2,Baixo Risco,0.0001,66.67,539,295,CWE-179,CWE-179,Moderado/Baixo,False,4
+CWE-550,3,7.2,Baixo Risco,0.0001,66.67,542,290,CWE-550,CWE-550,Moderado/Baixo,False,4
+CWE-1049,3,7.17,Baixo Risco,0.0001,66.67,548,306,CWE-1049,CWE-1049,Moderado/Baixo,False,4
+CWE-1068,3,7.0,Baixo Risco,0.0001,66.67,559,352,CWE-1068,CWE-1068,Moderado/Baixo,False,4
+CWE-625,3,6.9,Baixo Risco,0.0001,33.33,563,385,CWE-625,CWE-625,Moderado/Baixo,False,4
+CWE-686,3,6.9,Baixo Risco,0.0001,33.33,538,389,CWE-686,CWE-686,Moderado/Baixo,False,4
+CWE-705,3,6.9,Baixo Risco,0.0001,33.33,575,388,CWE-705,CWE-705,Moderado/Baixo,False,4
+CWE-1187,3,6.87,Baixo Risco,0.0001,33.33,551,398,CWE-1187,CWE-1187,Moderado/Baixo,False,4
+CWE-687,3,6.77,Baixo Risco,0.0,33.33,571,427,CWE-687,CWE-687,Moderado/Baixo,False,4
+CWE-1039,3,6.73,Baixo Risco,0.0,33.33,530,435,CWE-1039,CWE-1039,Moderado/Baixo,False,4
+CWE-343,3,6.7,Baixo Risco,0.0,33.33,564,450,CWE-343,CWE-343,Moderado/Baixo,False,4
+CWE-317,4,5.0,Baixo Risco,0.0,0.0,510,720,CWE-317,CWE-317,Moderado/Baixo,False,4
+CWE-730,2,10.0,Severa,0.0,100.0,576,1,CWE-730,CWE-730,Moderado/Baixo,False,2
+CWE-446,3,6.6,Baixo Risco,0.0,33.33,554,475,CWE-446,CWE-446,Moderado/Baixo,False,4
+CWE-447,3,6.6,Baixo Risco,0.0,33.33,574,476,CWE-447,CWE-447,Moderado/Baixo,False,4
+CWE-210,3,6.53,Baixo Risco,0.0,33.33,546,497,CWE-210,CWE-210,Moderado/Baixo,False,4
+CWE-1,2,9.8,Severa,0.0,100.0,597,8,CWE-1,CWE-1,Moderado/Baixo,False,2
+CWE-468,2,9.8,Severa,0.0,100.0,607,10,CWE-468,CWE-468,Moderado/Baixo,False,2
+CWE-1204,3,6.5,Baixo Risco,0.0,33.33,537,508,CWE-1204,CWE-1204,Moderado/Baixo,False,4
+CWE-40,3,6.5,Baixo Risco,0.0,33.33,550,506,CWE-40,CWE-40,Moderado/Baixo,False,4
+CWE-628,3,6.43,Baixo Risco,0.0,66.67,532,523,CWE-628,CWE-628,Moderado/Baixo,False,4
+CWE-239,3,6.43,Baixo Risco,0.0,66.67,543,522,CWE-239,CWE-239,Moderado/Baixo,False,4
+CWE-689,3,6.27,Baixo Risco,0.0,33.33,555,566,CWE-689,CWE-689,Moderado/Baixo,False,4
+CWE-480,3,6.23,Baixo Risco,0.0,0.0,549,572,CWE-480,CWE-480,Moderado/Baixo,False,4
+CWE-69,2,9.3,Severa,0.0,100.0,635,16,CWE-69,CWE-69,Moderado/Baixo,False,2
+CWE-623,3,6.17,Baixo Risco,0.0,33.33,560,585,CWE-623,CWE-623,Moderado/Baixo,False,4
+CWE-1007,3,6.13,Baixo Risco,0.0,33.33,570,591,CWE-1007,CWE-1007,Moderado/Baixo,False,4
+CWE-567,3,6.03,Baixo Risco,0.0,33.33,557,617,CWE-567,CWE-567,Moderado/Baixo,False,4
+CWE-450,3,6.0,Baixo Risco,0.0,33.33,540,624,CWE-450,CWE-450,Moderado/Baixo,False,4
+CWE-111,2,8.95,Severa,0.0,100.0,622,19,CWE-111,CWE-111,Moderado/Baixo,False,2
+CWE-422,2,8.8,Severa,0.0,100.0,642,27,CWE-422,CWE-422,Moderado/Baixo,False,2
+CWE-588,2,8.65,Severa,0.0,100.0,601,36,CWE-588,CWE-588,Moderado/Baixo,False,2
+CWE-435,3,5.77,Baixo Risco,0.0,33.33,566,658,CWE-435,CWE-435,Moderado/Baixo,False,4
+CWE-1247,3,5.77,Baixo Risco,0.0,33.33,569,657,CWE-1247,CWE-1247,Moderado/Baixo,False,4
+CWE-235,2,8.45,Severa,0.0,100.0,613,44,CWE-235,CWE-235,Moderado/Baixo,False,2
+CWE-128,2,8.4,Severa,0.0,100.0,584,51,CWE-128,CWE-128,Moderado/Baixo,False,2
+CWE-465,2,8.4,Severa,0.0,100.0,611,50,CWE-465,CWE-465,Moderado/Baixo,False,2
+CWE-756,3,5.57,Baixo Risco,0.0,0.0,547,686,CWE-756,CWE-756,Moderado/Baixo,False,4
+CWE-1329,2,8.3,Severa,0.0,50.0,608,58,CWE-1329,CWE-1329,Moderado/Baixo,False,2
+CWE-675,2,8.2,Severa,0.0,100.0,638,64,CWE-675,CWE-675,Moderado/Baixo,False,2
+CWE-173,3,5.43,Baixo Risco,0.0,0.0,531,700,CWE-173,CWE-173,Moderado/Baixo,False,4
+CWE-237,3,5.43,Baixo Risco,0.0,33.33,534,701,CWE-237,CWE-237,Moderado/Baixo,False,4
+CWE-62,2,7.8,Severa,0.0,100.0,623,119,CWE-62,CWE-62,Moderado/Baixo,False,2
+CWE-148,2,7.8,Severa,0.0,100.0,643,120,CWE-148,CWE-148,Moderado/Baixo,False,2
+CWE-1303,3,5.17,Baixo Risco,0.0,0.0,573,714,CWE-1303,CWE-1303,Moderado/Baixo,False,4
+CWE-1103,2,7.65,Severa,0.0,50.0,577,156,CWE-1103,CWE-1103,Moderado/Baixo,False,2
+CWE-627,2,7.65,Severa,0.0,50.0,579,155,CWE-627,CWE-627,Moderado/Baixo,False,2
+CWE-1231,2,7.65,Severa,0.0,100.0,632,154,CWE-1231,CWE-1231,Moderado/Baixo,False,2
+CWE-652,2,7.65,Severa,0.0,50.0,634,157,CWE-652,CWE-652,Moderado/Baixo,False,2
+CWE-1255,3,5.03,Baixo Risco,0.0,33.33,553,718,CWE-1255,CWE-1255,Moderado/Baixo,False,4
+CWE-564,3,5.03,Baixo Risco,0.0,33.33,533,719,CWE-564,CWE-564,Moderado/Baixo,False,4
+CWE-227,2,7.5,Baixo Risco,0.0,100.0,581,203,CWE-227,CWE-227,Moderado/Baixo,False,4
+CWE-168,2,7.5,Baixo Risco,0.0,100.0,583,216,CWE-168,CWE-168,Moderado/Baixo,False,4
+CWE-408,2,7.5,Baixo Risco,0.0,100.0,609,210,CWE-408,CWE-408,Moderado/Baixo,False,4
+CWE-32,2,7.5,Baixo Risco,0.0,100.0,618,198,CWE-32,CWE-32,Moderado/Baixo,False,4
+CWE-1264,2,7.5,Baixo Risco,0.0,100.0,631,207,CWE-1264,CWE-1264,Moderado/Baixo,False,4
+CWE-466,2,7.45,Baixo Risco,0.0,100.0,595,232,CWE-466,CWE-466,Moderado/Baixo,False,4
+CWE-925,2,7.45,Baixo Risco,0.0,50.0,626,231,CWE-925,CWE-925,Moderado/Baixo,False,4
+CWE-1112,2,7.3,Baixo Risco,0.0,100.0,580,265,CWE-1112,CWE-1112,Moderado/Baixo,False,4
+CWE-527,2,7.3,Baixo Risco,0.0,50.0,633,268,CWE-527,CWE-527,Moderado/Baixo,False,4
+CWE-499,2,7.3,Baixo Risco,0.0,50.0,636,266,CWE-499,CWE-499,Moderado/Baixo,False,4
+CWE-774,2,7.25,Baixo Risco,0.0,100.0,646,279,CWE-774,CWE-774,Moderado/Baixo,False,4
+CWE-1384,2,7.15,Baixo Risco,0.0,50.0,647,314,CWE-1384,CWE-1384,Moderado/Baixo,False,4
+CWE-761,2,7.15,Baixo Risco,0.0,50.0,648,313,CWE-761,CWE-761,Moderado/Baixo,False,4
+CWE-144,2,7.1,Baixo Risco,0.0,50.0,598,328,CWE-144,CWE-144,Moderado/Baixo,False,4
+CWE-234,2,7.05,Baixo Risco,0.0,50.0,587,340,CWE-234,CWE-234,Moderado/Baixo,False,4
+CWE-780,3,4.67,Baixo Risco,0.0,0.0,562,728,CWE-780,CWE-780,Moderado/Baixo,False,4
+CWE-67,3,4.67,Baixo Risco,0.0,0.0,572,727,CWE-67,CWE-67,Moderado/Baixo,False,4
+CWE-1246,2,7.0,Baixo Risco,0.0,50.0,610,353,CWE-1246,CWE-1246,Moderado/Baixo,False,4
+CWE-205,2,6.9,Baixo Risco,0.0,50.0,600,386,CWE-205,CWE-205,Moderado/Baixo,False,4
+CWE-1100,2,6.85,Baixo Risco,0.0,50.0,605,408,CWE-1100,CWE-1100,Moderado/Baixo,False,4
+CWE-683,3,4.53,Baixo Risco,0.0,33.33,556,733,CWE-683,CWE-683,Moderado/Baixo,False,4
+CWE-1234,2,6.8,Baixo Risco,0.0,0.0,604,421,CWE-1234,CWE-1234,Moderado/Baixo,False,4
+CWE-1254,2,6.7,Baixo Risco,0.0,50.0,625,451,CWE-1254,CWE-1254,Moderado/Baixo,False,4
+CWE-431,2,6.7,Baixo Risco,0.0,50.0,640,448,CWE-431,CWE-431,Moderado/Baixo,False,4
+CWE-1107,2,6.65,Baixo Risco,0.0,50.0,603,463,CWE-1107,CWE-1107,Moderado/Baixo,False,4
+CWE-1342,2,6.5,Baixo Risco,0.0,0.0,586,512,CWE-1342,CWE-1342,Moderado/Baixo,False,4
+CWE-1024,2,6.5,Baixo Risco,0.0,50.0,596,509,CWE-1024,CWE-1024,Moderado/Baixo,False,4
+CWE-1076,2,6.5,Baixo Risco,0.0,0.0,612,510,CWE-1076,CWE-1076,Moderado/Baixo,False,4
+CWE-344,2,6.4,Baixo Risco,0.0,50.0,589,530,CWE-344,CWE-344,Moderado/Baixo,False,4
+CWE-182,2,6.4,Baixo Risco,0.0,50.0,616,533,CWE-182,CWE-182,Moderado/Baixo,False,4
+CWE-555,2,6.4,Baixo Risco,0.0,0.0,627,532,CWE-555,CWE-555,Moderado/Baixo,False,4
+CWE-1108,2,6.15,Baixo Risco,0.0,50.0,641,588,CWE-1108,CWE-1108,Moderado/Baixo,False,4
+CWE-142,2,6.1,Baixo Risco,0.0,0.0,585,597,CWE-142,CWE-142,Moderado/Baixo,False,4
+CWE-360,2,6.1,Baixo Risco,0.0,0.0,592,599,CWE-360,CWE-360,Moderado/Baixo,False,4
+CWE-1251,2,6.1,Baixo Risco,0.0,0.0,629,598,CWE-1251,CWE-1251,Moderado/Baixo,False,4
+CWE-1269,2,6.05,Baixo Risco,0.0,50.0,615,613,CWE-1269,CWE-1269,Moderado/Baixo,False,4
+CWE-1272,2,6.05,Baixo Risco,0.0,50.0,594,614,CWE-1272,CWE-1272,Moderado/Baixo,False,4
+CWE-828,2,6.0,Baixo Risco,0.0,0.0,645,626,CWE-828,CWE-828,Moderado/Baixo,False,4
+CWE-85,2,5.9,Baixo Risco,0.0,0.0,588,640,CWE-85,CWE-85,Moderado/Baixo,False,4
+CWE-11,2,5.9,Baixo Risco,0.0,0.0,591,638,CWE-11,CWE-11,Moderado/Baixo,False,4
+CWE-1223,2,5.75,Baixo Risco,0.0,50.0,619,661,CWE-1223,CWE-1223,Moderado/Baixo,False,4
+CWE-827,2,5.7,Baixo Risco,0.0,0.0,599,667,CWE-827,CWE-827,Moderado/Baixo,False,4
+CWE-1221,2,5.7,Baixo Risco,0.0,0.0,620,668,CWE-1221,CWE-1221,Moderado/Baixo,False,4
+CWE-164,2,5.65,Baixo Risco,0.0,0.0,614,675,CWE-164,CWE-164,Moderado/Baixo,False,4
+CWE-815,2,5.55,Baixo Risco,0.0,50.0,628,688,CWE-815,CWE-815,Moderado/Baixo,False,4
+CWE-622,2,5.5,Baixo Risco,0.0,0.0,606,699,CWE-622,CWE-622,Moderado/Baixo,False,4
+CWE-1389,2,5.5,Baixo Risco,0.0,0.0,630,697,CWE-1389,CWE-1389,Moderado/Baixo,False,4
+CWE-28,2,5.4,Baixo Risco,0.0,0.0,578,704,CWE-28,CWE-28,Moderado/Baixo,False,4
+CWE-531,2,5.35,Baixo Risco,0.0,0.0,593,706,CWE-531,CWE-531,Moderado/Baixo,False,4
+CWE-1283,3,3.57,Baixo Risco,0.0,0.0,541,744,CWE-1283,CWE-1283,Moderado/Baixo,False,4
+CWE-563,2,5.3,Baixo Risco,0.0,50.0,582,709,CWE-563,CWE-563,Moderado/Baixo,False,4
+CWE-1176,2,5.3,Baixo Risco,0.0,0.0,602,710,CWE-1176,CWE-1176,Moderado/Baixo,False,4
+CWE-414,2,5.1,Baixo Risco,0.0,0.0,617,717,CWE-414,CWE-414,Moderado/Baixo,False,4
+CWE-370,1,10.0,Severa,0.0,100.0,702,3,CWE-370,CWE-370,Moderado/Baixo,False,2
+CWE-1301,1,10.0,Severa,0.0,100.0,745,2,CWE-1301,CWE-1301,Moderado/Baixo,False,2
+CWE-528,2,4.95,Baixo Risco,0.0,0.0,639,723,CWE-528,CWE-528,Moderado/Baixo,False,4
+CWE-44,1,9.8,Severa,0.0,100.0,653,12,CWE-44,CWE-44,Moderado/Baixo,False,2
+CWE-621,1,9.8,Severa,0.0,100.0,668,9,CWE-621,CWE-621,Moderado/Baixo,False,2
+CWE-509,1,9.8,Severa,0.0,100.0,669,6,CWE-509,CWE-509,Moderado/Baixo,False,2
+CWE-507,1,9.8,Severa,0.0,100.0,689,4,CWE-507,CWE-507,Moderado/Baixo,False,2
+CWE-1056,1,9.8,Severa,0.0,100.0,693,11,CWE-1056,CWE-1056,Moderado/Baixo,False,2
+CWE-12,1,9.8,Severa,0.0,100.0,710,13,CWE-12,CWE-12,Moderado/Baixo,False,2
+CWE-1059,1,9.8,Severa,0.0,100.0,716,5,CWE-1059,CWE-1059,Moderado/Baixo,False,2
+CWE-66,1,9.8,Severa,0.0,100.0,719,14,CWE-66,CWE-66,Moderado/Baixo,False,2
+CWE-157,1,9.8,Severa,0.0,100.0,743,15,CWE-157,CWE-157,Moderado/Baixo,False,2
+CWE-293,1,9.8,Severa,0.0,100.0,749,7,CWE-293,CWE-293,Moderado/Baixo,False,2
+CWE-1323,2,4.8,Baixo Risco,0.0,0.0,624,724,CWE-1323,CWE-1323,Moderado/Baixo,False,4
+CWE-448,2,4.8,Baixo Risco,0.0,50.0,637,725,CWE-448,CWE-448,Moderado/Baixo,False,4
+CWE-43,1,9.3,Severa,0.0,100.0,658,17,CWE-43,CWE-43,Moderado/Baixo,False,2
+CWE-1298,2,4.6,Baixo Risco,0.0,0.0,621,729,CWE-1298,CWE-1298,Moderado/Baixo,False,4
+CWE-374,1,8.8,Severa,0.0,100.0,660,29,CWE-374,CWE-374,Moderado/Baixo,False,2
+CWE-1027,1,8.8,Severa,0.0,100.0,661,26,CWE-1027,CWE-1027,Moderado/Baixo,False,2
+CWE-485,1,8.8,Severa,0.0,100.0,679,25,CWE-485,CWE-485,Moderado/Baixo,False,2
+CWE-6,1,8.8,Severa,0.0,100.0,682,30,CWE-6,CWE-6,Moderado/Baixo,False,2
+CWE-263,1,8.8,Severa,0.0,100.0,690,24,CWE-263,CWE-263,Moderado/Baixo,False,2
+CWE-1055,1,8.8,Severa,0.0,100.0,692,31,CWE-1055,CWE-1055,Moderado/Baixo,False,2
+CWE-1265,1,8.8,Severa,0.0,100.0,703,23,CWE-1265,CWE-1265,Moderado/Baixo,False,2
+CWE-1222,1,8.8,Severa,0.0,100.0,713,22,CWE-1222,CWE-1222,Moderado/Baixo,False,2
+CWE-482,1,8.8,Severa,0.0,100.0,733,28,CWE-482,CWE-482,Moderado/Baixo,False,2
+CWE-702,1,8.7,Severa,0.0,100.0,705,32,CWE-702,CWE-702,Moderado/Baixo,False,2
+CWE-198,1,8.7,Severa,0.0,100.0,709,33,CWE-198,CWE-198,Moderado/Baixo,False,2
+CWE-1224,1,8.7,Severa,0.0,100.0,746,34,CWE-1224,CWE-1224,Moderado/Baixo,False,2
+CWE-535,2,4.3,Baixo Risco,0.0,0.0,644,735,CWE-535,CWE-535,Moderado/Baixo,False,4
+CWE-882,1,8.6,Severa,0.0,100.0,683,37,CWE-882,CWE-882,Moderado/Baixo,False,2
+CWE-1118,1,8.3,Severa,0.0,100.0,715,57,CWE-1118,CWE-1118,Moderado/Baixo,False,2
+CWE-1291,1,8.2,Severa,0.0,100.0,655,62,CWE-1291,CWE-1291,Moderado/Baixo,False,2
+CWE-430,1,8.2,Severa,0.0,100.0,732,63,CWE-430,CWE-430,Moderado/Baixo,False,2
+CWE-1352,1,8.1,Severa,0.0,100.0,666,72,CWE-1352,CWE-1352,Moderado/Baixo,False,2
+CWE-1083,1,8.1,Severa,0.0,100.0,711,71,CWE-1083,CWE-1083,Moderado/Baixo,False,2
+CWE-301,1,8.1,Severa,0.0,100.0,717,70,CWE-301,CWE-301,Moderado/Baixo,False,2
+CWE-1106,1,7.8,Severa,0.0,100.0,649,122,CWE-1106,CWE-1106,Moderado/Baixo,False,2
+CWE-587,1,7.8,Severa,0.0,100.0,670,118,CWE-587,CWE-587,Moderado/Baixo,False,2
+CWE-556,1,7.8,Severa,0.0,100.0,684,113,CWE-556,CWE-556,Moderado/Baixo,False,2
+CWE-102,1,7.8,Severa,0.0,100.0,686,121,CWE-102,CWE-102,Moderado/Baixo,False,2
+CWE-336,1,7.8,Severa,0.0,100.0,718,115,CWE-336,CWE-336,Moderado/Baixo,False,2
+CWE-479,1,7.8,Severa,0.0,100.0,734,116,CWE-479,CWE-479,Moderado/Baixo,False,2
+CWE-309,1,7.8,Severa,0.0,100.0,740,114,CWE-309,CWE-309,Moderado/Baixo,False,2
+CWE-962,1,7.6,Severa,0.0,100.0,700,166,CWE-962,CWE-962,Moderado/Baixo,False,2
+CWE-1018,2,3.75,Baixo Risco,0.0,0.0,590,743,CWE-1018,CWE-1018,Moderado/Baixo,False,4
+CWE-166,1,7.5,Baixo Risco,0.0,100.0,651,197,CWE-166,CWE-166,Moderado/Baixo,False,4
+CWE-952,1,7.5,Baixo Risco,0.0,100.0,656,193,CWE-952,CWE-952,Moderado/Baixo,False,4
+CWE-832,1,7.5,Baixo Risco,0.0,100.0,662,214,CWE-832,CWE-832,Moderado/Baixo,False,4
+CWE-624,1,7.5,Baixo Risco,0.0,100.0,664,201,CWE-624,CWE-624,Moderado/Baixo,False,4
+CWE-1218,1,7.5,Baixo Risco,0.0,100.0,671,195,CWE-1218,CWE-1218,Moderado/Baixo,False,4
+CWE-5,1,7.5,Baixo Risco,0.0,100.0,672,194,CWE-5,CWE-5,Moderado/Baixo,False,4
+CWE-154,1,7.5,Baixo Risco,0.0,100.0,673,215,CWE-154,CWE-154,Moderado/Baixo,False,4
+CWE-895,1,7.5,Baixo Risco,0.0,100.0,675,196,CWE-895,CWE-895,Moderado/Baixo,False,4
+CWE-50,1,7.5,Baixo Risco,0.0,100.0,678,212,CWE-50,CWE-50,Moderado/Baixo,False,4
+CWE-511,1,7.5,Baixo Risco,0.0,100.0,687,199,CWE-511,CWE-511,Moderado/Baixo,False,4
+CWE-34,1,7.5,Baixo Risco,0.0,100.0,688,217,CWE-34,CWE-34,Moderado/Baixo,False,4
+CWE-520,1,7.5,Baixo Risco,0.0,100.0,691,200,CWE-520,CWE-520,Moderado/Baixo,False,4
+CWE-1164,1,7.5,Baixo Risco,0.0,100.0,696,218,CWE-1164,CWE-1164,Moderado/Baixo,False,4
+CWE-39,1,7.5,Baixo Risco,0.0,100.0,697,205,CWE-39,CWE-39,Moderado/Baixo,False,4
+CWE-1026,1,7.5,Baixo Risco,0.0,100.0,723,206,CWE-1026,CWE-1026,Moderado/Baixo,False,4
+CWE-314,1,7.5,Baixo Risco,0.0,100.0,726,202,CWE-314,CWE-314,Moderado/Baixo,False,4
+CWE-910,1,7.5,Baixo Risco,0.0,100.0,728,211,CWE-910,CWE-910,Moderado/Baixo,False,4
+CWE-615,1,7.5,Baixo Risco,0.0,100.0,738,213,CWE-615,CWE-615,Moderado/Baixo,False,4
+CWE-386,1,7.5,Baixo Risco,0.0,100.0,747,208,CWE-386,CWE-386,Moderado/Baixo,False,4
+CWE-30,1,7.3,Baixo Risco,0.0,100.0,659,267,CWE-30,CWE-30,Moderado/Baixo,False,4
+CWE-333,1,7.2,Baixo Risco,0.0,100.0,708,296,CWE-333,CWE-333,Moderado/Baixo,False,4
+CWE-236,1,7.2,Baixo Risco,0.0,100.0,730,293,CWE-236,CWE-236,Moderado/Baixo,False,4
+CWE-1190,1,7.2,Baixo Risco,0.0,100.0,737,294,CWE-1190,CWE-1190,Moderado/Baixo,False,4
+CWE-1282,1,7.1,Baixo Risco,0.0,100.0,724,327,CWE-1282,CWE-1282,Moderado/Baixo,False,4
+CWE-318,1,7.1,Baixo Risco,0.0,100.0,744,326,CWE-318,CWE-318,Moderado/Baixo,False,4
+CWE-1313,1,7.0,Baixo Risco,0.0,100.0,654,351,CWE-1313,CWE-1313,Moderado/Baixo,False,4
+CWE-292,1,7.0,Baixo Risco,0.0,100.0,714,350,CWE-292,CWE-292,Moderado/Baixo,False,4
+CWE-1253,1,6.8,Baixo Risco,0.0,0.0,681,420,CWE-1253,CWE-1253,Moderado/Baixo,False,4
+CWE-1334,1,6.7,Baixo Risco,0.0,0.0,694,452,CWE-1334,CWE-1334,Moderado/Baixo,False,4
+CWE-355,1,6.5,Baixo Risco,0.0,0.0,667,501,CWE-355,CWE-355,Moderado/Baixo,False,4
+CWE-495,1,6.5,Baixo Risco,0.0,0.0,677,500,CWE-495,CWE-495,Moderado/Baixo,False,4
+CWE-1102,1,6.5,Baixo Risco,0.0,0.0,680,502,CWE-1102,CWE-1102,Moderado/Baixo,False,4
+CWE-1174,1,6.5,Baixo Risco,0.0,0.0,685,511,CWE-1174,CWE-1174,Moderado/Baixo,False,4
+CWE-1051,1,6.5,Baixo Risco,0.0,0.0,706,507,CWE-1051,CWE-1051,Moderado/Baixo,False,4
+CWE-605,1,6.5,Baixo Risco,0.0,0.0,727,503,CWE-605,CWE-605,Moderado/Baixo,False,4
+CWE-765,1,6.5,Baixo Risco,0.0,0.0,736,504,CWE-765,CWE-765,Moderado/Baixo,False,4
+CWE-714,1,6.5,Baixo Risco,0.0,0.0,741,505,CWE-714,CWE-714,Moderado/Baixo,False,4
+CWE-1278,1,6.4,Baixo Risco,0.0,0.0,707,531,CWE-1278,CWE-1278,Moderado/Baixo,False,4
+CWE-339,1,6.3,Baixo Risco,0.0,0.0,721,558,CWE-339,CWE-339,Moderado/Baixo,False,4
+CWE-1078,1,6.3,Baixo Risco,0.0,0.0,731,559,CWE-1078,CWE-1078,Moderado/Baixo,False,4
+CWE-143,1,6.3,Baixo Risco,0.0,0.0,739,556,CWE-143,CWE-143,Moderado/Baixo,False,4
+CWE-618,1,6.0,Baixo Risco,0.0,0.0,748,625,CWE-618,CWE-618,Moderado/Baixo,False,4
+CWE-600,1,5.9,Baixo Risco,0.0,0.0,676,639,CWE-600,CWE-600,Moderado/Baixo,False,4
+CWE-654,1,5.9,Baixo Risco,0.0,0.0,725,637,CWE-654,CWE-654,Moderado/Baixo,False,4
+CWE-454,1,5.5,Baixo Risco,0.0,0.0,663,698,CWE-454,CWE-454,Moderado/Baixo,False,4
+CWE-455,1,5.5,Baixo Risco,0.0,0.0,695,695,CWE-455,CWE-455,Moderado/Baixo,False,4
+CWE-688,1,5.5,Baixo Risco,0.0,0.0,729,696,CWE-688,CWE-688,Moderado/Baixo,False,4
+CWE-186,1,5.3,Baixo Risco,0.0,0.0,712,707,CWE-186,CWE-186,Moderado/Baixo,False,4
+CWE-541,1,5.3,Baixo Risco,0.0,0.0,742,708,CWE-541,CWE-541,Moderado/Baixo,False,4
+CWE-529,1,5.0,Baixo Risco,0.0,0.0,722,721,CWE-529,CWE-529,Moderado/Baixo,False,4
+CWE-1310,1,4.6,Baixo Risco,0.0,0.0,699,730,CWE-1310,CWE-1310,Moderado/Baixo,False,4
+CWE-1304,1,4.6,Baixo Risco,0.0,0.0,704,731,CWE-1304,CWE-1304,Moderado/Baixo,False,4
+CWE-57,1,4.3,Baixo Risco,0.0,0.0,657,738,CWE-57,CWE-57,Moderado/Baixo,False,4
+CWE-1057,1,4.3,Baixo Risco,0.0,0.0,665,736,CWE-1057,CWE-1057,Moderado/Baixo,False,4
+CWE-207,1,4.3,Baixo Risco,0.0,0.0,674,737,CWE-207,CWE-207,Moderado/Baixo,False,4
+CWE-508,1,4.3,Baixo Risco,0.0,0.0,698,739,CWE-508,CWE-508,Moderado/Baixo,False,4
+CWE-570,1,4.0,Baixo Risco,0.0,0.0,720,742,CWE-570,CWE-570,Moderado/Baixo,False,4
+CWE-571,1,2.6,Baixo Risco,0.0,0.0,650,746,CWE-571,CWE-571,Moderado/Baixo,False,4
+CWE-673,1,2.2,Baixo Risco,0.0,0.0,735,747,CWE-673,CWE-673,Moderado/Baixo,False,4
+CWE-462,1,2.1,Baixo Risco,0.0,0.0,652,748,CWE-462,CWE-462,Moderado/Baixo,False,4
+CWE-638,1,2.1,Baixo Risco,0.0,0.0,701,749,CWE-638,CWE-638,Moderado/Baixo,False,4

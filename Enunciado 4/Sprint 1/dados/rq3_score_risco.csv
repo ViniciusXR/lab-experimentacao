@@ -1,0 +1,31 @@
+﻿rank_risco,cwe_id,cwe_nome_curto,cwe_label,cves_count,cvss_medio,score_risco,faixa_risco
+1,CWE-79,XSS,CWE-79 - XSS,41171,5.5339146910221535,0.5534,Critico
+2,CWE-89,SQL Injection,CWE-89 - SQL Injection,17467,7.708060914868038,0.327,Alto
+3,CWE-787,Out-of-bounds Write,CWE-787 - Out-of-bounds Write,13192,7.937105821710127,0.2543,Alto
+4,CWE-119,Buffer Overflow,CWE-119 - Buffer Overflow,13229,7.904681591287249,0.254,Alto
+5,CWE-20,Improper Input Validation,CWE-20 - Improper Input Validation,11653,6.901905906593406,0.1954,Moderado/Baixo
+6,CWE-352,CSRF,CWE-352 - CSRF,8744,6.940107502287283,0.1474,Moderado/Baixo
+7,CWE-22,Path Traversal,CWE-22 - Path Traversal,7952,7.036217303822937,0.1359,Moderado/Baixo
+8,CWE-125,Out-of-bounds Read,CWE-125 - Out-of-bounds Read,8030,6.760712506228201,0.1319,Moderado/Baixo
+9,CWE-200,Information Exposure,CWE-200 - Information Exposure,9468,5.622763282982993,0.1293,Moderado/Baixo
+10,CWE-416,Use After Free,CWE-416 - Use After Free,6418,7.809925210345902,0.1217,Moderado/Baixo
+11,CWE-78,OS Command Injection,CWE-78 - OS Command Injection,5035,8.418398569441685,0.103,Moderado/Baixo
+12,CWE-94,Code Injection,CWE-94 - Code Injection,5579,7.410971674435282,0.1004,Moderado/Baixo
+13,CWE-862,Missing Authorization,CWE-862 - Missing Authorization,6482,6.135457491127912,0.0966,Moderado/Baixo
+14,CWE-264,Permissions/Privileges,CWE-264 - Permissions/Privileges,5469,6.308906364301389,0.0838,Moderado/Baixo
+15,CWE-287,Improper Authentication,CWE-287 - Improper Authentication,3974,7.5930531084822555,0.0733,Moderado/Baixo
+16,CWE-434,Unrestricted File Upload,CWE-434 - Unrestricted File Upload,3692,8.15387323943662,0.0731,Moderado/Baixo
+17,CWE-476,NULL Pointer Dereference,CWE-476 - NULL Pointer Dereference,4723,6.165325142978182,0.0707,Moderado/Baixo
+18,CWE-120,Classic Buffer Overflow,CWE-120 - Classic Buffer Overflow,3697,7.871138761157696,0.0707,Moderado/Baixo
+19,CWE-284,Improper Access Control,CWE-284 - Improper Access Control,4265,6.594607268464244,0.0683,Moderado/Baixo
+20,CWE-77,Command Injection,CWE-77 - Command Injection,2883,7.854179673950746,0.055,Moderado/Baixo
+21,CWE-74,Injection (umbrella),CWE-74 - Injection (umbrella),3814,5.738804404824331,0.0532,Moderado/Baixo
+22,CWE-190,Integer Overflow,CWE-190 - Integer Overflow,2882,7.57911172796669,0.0531,Moderado/Baixo
+23,CWE-121,Stack-based Buffer Overflow,CWE-121 - Stack-based Buffer Overflow,2687,8.009973948641607,0.0523,Moderado/Baixo
+24,CWE-502,Deserialization,CWE-502 - Deserialization,2280,8.55061403508772,0.0474,Moderado/Baixo
+25,CWE-269,Improper Privilege Management,CWE-269 - Improper Privilege Management,2473,7.608087343307723,0.0457,Moderado/Baixo
+26,CWE-399,Resource Management Errors,CWE-399 - Resource Management Errors,2694,6.606646862235426,0.0432,Moderado/Baixo
+27,CWE-400,Uncontrolled Resource Consumption,CWE-400 - Uncontrolled Resource Consumption,2641,6.7156758803483525,0.0431,Moderado/Baixo
+28,CWE-863,Incorrect Authorization,CWE-863 - Incorrect Authorization,2422,6.681090008257638,0.0393,Moderado/Baixo
+29,CWE-306,Missing Authentication,CWE-306 - Missing Authentication,1871,7.9780331373597,0.0363,Moderado/Baixo
+30,CWE-122,Heap-based Buffer Overflow,CWE-122 - Heap-based Buffer Overflow,1829,7.814543466375069,0.0347,Moderado/Baixo

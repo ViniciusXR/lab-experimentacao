@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dashboard Final — Lab04</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--accent:#38bdf8;--muted:#94a3b8}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:1.5rem 2rem;border-bottom:1px solid #334155}header h1{margin:0 0 .4rem;font-size:1.5rem}header p{margin:0;color:var(--muted)}
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;padding:1rem 2rem;background:#1e293b;position:sticky;top:0;z-index:10}
+.tabs a{color:var(--accent);text-decoration:none;padding:.4rem .8rem;border:1px solid #334155;border-radius:6px;font-size:.85rem}
+.page{padding:1.5rem 2rem;border-bottom:2px solid #334155;page-break-after:always}
+.page h2{font-size:1.2rem;margin:0 0 1rem}
+.page h3{font-size:1rem;margin:1.5rem 0 .75rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;margin-bottom:1rem}
+.kpis.mini{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.kpi{background:var(--card);border:1px solid #334155;border-radius:10px;padding:.75rem}
+.kpi span{display:block;font-size:.75rem;color:var(--muted);text-transform:uppercase}
+.kpi strong{display:block;font-size:1.3rem;color:var(--accent);margin-top:.25rem}
+.question,.note{padding:1rem;border-radius:8px;margin-bottom:1rem;line-height:1.5}
+.question{background:#172554;border-left:4px solid var(--accent)}
+.note{background:#1a2e1a;border-left:4px solid #3B8C3F;color:#cbd5e1}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;margin-bottom:1rem;font-size:.85rem}
+th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid #334155}
+th{background:#334155}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:1rem}
+figure{background:var(--card);border:1px solid #334155;border-radius:10px;padding:.75rem;margin:0}
+figure h3{margin:0 0 .5rem;font-size:.9rem;color:var(--muted)}
+figure img{width:100%;height:auto;border-radius:6px;background:#fff}
+@media print{
+  .tabs{display:none}
+  body{background:#fff;color:#000}
+  .page,.kpi,figure,table{background:#fff;border-color:#ccc}
+  .kpi strong{color:#000}
+}
+</style>
+</head><body>
+<header><h1>Dashboard Final — Lab04</h1>
+<p>TI6 — Priorização estratégica de CWEs · NIST NVD 1999–2025</p></header>
+<nav class="tabs">
+<a href="#p1">P1 · Caracterização</a>
+<a href="#p2">P2 · RQ1</a>
+<a href="#p3">P3 · RQ2</a>
+<a href="#p4">P4 · RQ3</a>
+<a href="#p5">Síntese GQM</a>
+</nav>
+<section id="p1" class="page">
+<h2>Caracterização do Dataset — Vulnerabilidades NVD (1999–2025)</h2>
+<div class="kpis">
+  <div class="kpi"><span>CVEs distintos</span><strong>253.802</strong></div>
+  <div class="kpi"><span>Relações CVE↔CWE</span><strong>278.912</strong></div>
+  <div class="kpi"><span>CWEs distintas</span><strong>749</strong></div>
+  <div class="kpi"><span>Cobertura CVSS</span><strong>99,99%</strong></div>
+  <div class="kpi"><span>CVSS médio</span><strong>6,88</strong></div>
+  <div class="kpi"><span>CVSS mediana</span><strong>7,00</strong></div>
+  <div class="kpi"><span>Gini</span><strong>0,9223</strong></div>
+  <div class="kpi"><span>Período</span><strong>1999–2025</strong></div>
+</div>
+<div class="note">Fonte: NIST NVD. Unidade: relação CVE↔CWE. Relações (278.912) > CVEs distintos (253.802) pois cada CVE pode ter múltiplas CWEs.</div>
+<table><thead><tr><th>Severidade</th><th>Nº CVEs</th><th>%</th><th>CVSS médio</th><th>CVSS mediana</th></tr></thead>
+<tbody><tr><td>LOW</td><td>10.897</td><td>3,91%</td><td>2,62</td><td>2,30</td></tr>
+<tr><td>MEDIUM</td><td>127.021</td><td>45,54%</td><td>5,58</td><td>5,50</td></tr>
+<tr><td>HIGH</td><td>108.894</td><td>39,04%</td><td>7,98</td><td>7,80</td></tr>
+<tr><td>CRITICAL</td><td>32.057</td><td>11,49%</td><td>9,72</td><td>9,80</td></tr></tbody></table>
+<div class="charts"><figure><h3>01 cves por ano</h3><img src="../graficos/p1_caracterizacao/01_cves_por_ano.png" alt="01 cves por ano"/></figure>
+<figure><h3>02 severidade donut</h3><img src="../graficos/p1_caracterizacao/02_severidade_donut.png" alt="02 severidade donut"/></figure>
+<figure><h3>03 severidade por ano 100pct</h3><img src="../graficos/p1_caracterizacao/03_severidade_por_ano_100pct.png" alt="03 severidade por ano 100pct"/></figure>
+<figure><h3>04 distribuicao cvss</h3><img src="../graficos/p1_caracterizacao/04_distribuicao_cvss.png" alt="04 distribuicao cvss"/></figure>
+</div>
+
+</section>
+<section id="p2" class="page">
+<h2>RQ1 — Quais CWEs concentram a maior parte das vulnerabilidades?</h2>
+<div class="question">Hipótese: distribuição não-uniforme (Pareto). Veredito: 38 CWEs = 80%; Gini = 0,92.</div>
+<div class="kpis mini"><div class="kpi"><span>CWEs Pareto 80%: 38</span></div><div class="kpi"><span>Gini: 0,9223</span></div></div>
+<div class="charts"><figure><h3>01 pareto top30</h3><img src="../graficos/p2_rq1/01_pareto_top30.png" alt="01 pareto top30"/></figure>
+<figure><h3>02 tendencia top10</h3><img src="../graficos/p2_rq1/02_tendencia_top10.png" alt="02 tendencia top10"/></figure>
+<figure><h3>03 curva lorenz</h3><img src="../graficos/p2_rq1/03_curva_lorenz.png" alt="03 curva lorenz"/></figure>
+<figure><h3>04 persistencia jaccard</h3><img src="../graficos/p2_rq1/04_persistencia_jaccard.png" alt="04 persistencia jaccard"/></figure>
+</div>
+
+</section>
+<section id="p3" class="page">
+<h2>RQ2 — Quais CWEs têm maior potencial técnico de dano (CVSS)?</h2>
+<div class="question">Hipótese: severidade varia entre CWEs. Veredito: Kruskal-Wallis p < 0,001; cluster CVSS ≈ 9,8.</div>
+<div class="kpis mini"><div class="kpi"><span>CVSS médio global: 6,88</span></div><div class="kpi"><span>Mediana: 7,00</span></div></div>
+<div class="charts"><figure><h3>01 top30 cvss medio</h3><img src="../graficos/p3_rq2/01_top30_cvss_medio.png" alt="01 top30 cvss medio"/></figure>
+<figure><h3>02 top30 high critical</h3><img src="../graficos/p3_rq2/02_top30_high_critical.png" alt="02 top30 high critical"/></figure>
+</div>
+
+</section>
+<section id="p4" class="page">
+<h2>RQ3 — Ser frequente é o mesmo que ser perigoso?</h2>
+<div class="question">Veredito: Spearman ρ ≈ −0,02 (independentes), mas 53 CWEs em Dupla Ameaça.</div>
+<div class="kpis mini"><div class="kpi"><span>Spearman ρ: −0,018</span></div><div class="kpi"><span>CWEs Dupla Ameaça: 53</span></div></div>
+<div class="charts"><figure><h3>01 dispersao quadrantes</h3><img src="../graficos/p4_rq3/01_dispersao_quadrantes.png" alt="01 dispersao quadrantes"/></figure>
+<figure><h3>02 score risco top30</h3><img src="../graficos/p4_rq3/02_score_risco_top30.png" alt="02 score risco top30"/></figure>
+<figure><h3>03 resumo quadrantes</h3><img src="../graficos/p4_rq3/03_resumo_quadrantes.png" alt="03 resumo quadrantes"/></figure>
+</div>
+
+<h3>Fila de priorização estratégica (Top 20 — quadrante Dupla Ameaça)</h3>
+<table><thead><tr><th>#</th><th>CWE</th><th>Nome</th><th>CVEs</th><th>CVSS médio</th><th>% HI/CR</th><th>Score</th></tr></thead>
+<tbody><tr><td>1</td><td>CWE-89</td><td>SQL Injection</td><td>17.467</td><td>7,71</td><td>71,8%</td><td>0,3270</td></tr>
+<tr><td>2</td><td>CWE-787</td><td>Out-of-bounds Write</td><td>13.192</td><td>7,94</td><td>81,3%</td><td>0,2543</td></tr>
+<tr><td>3</td><td>CWE-119</td><td>Buffer Overflow</td><td>13.229</td><td>7,90</td><td>75,9%</td><td>0,2540</td></tr>
+<tr><td>4</td><td>CWE-416</td><td>Use After Free</td><td>6.418</td><td>7,81</td><td>82,8%</td><td>0,1217</td></tr>
+<tr><td>5</td><td>CWE-78</td><td>OS Command Injection</td><td>5.035</td><td>8,42</td><td>87,8%</td><td>0,1030</td></tr>
+<tr><td>6</td><td>CWE-287</td><td>Improper Authentication</td><td>3.974</td><td>7,59</td><td>65,1%</td><td>0,0733</td></tr>
+<tr><td>7</td><td>CWE-434</td><td>Unrestricted File Upload</td><td>3.692</td><td>8,15</td><td>80,9%</td><td>0,0731</td></tr>
+<tr><td>8</td><td>CWE-120</td><td>Classic Buffer Overflow</td><td>3.697</td><td>7,87</td><td>77,1%</td><td>0,0707</td></tr>
+<tr><td>9</td><td>CWE-77</td><td>Command Injection</td><td>2.883</td><td>7,85</td><td>73,9%</td><td>0,0550</td></tr>
+<tr><td>10</td><td>CWE-190</td><td>Integer Overflow</td><td>2.882</td><td>7,58</td><td>75,5%</td><td>0,0531</td></tr>
+<tr><td>11</td><td>CWE-121</td><td>Stack-based Buffer Overflow</td><td>2.687</td><td>8,01</td><td>85,1%</td><td>0,0523</td></tr>
+<tr><td>12</td><td>CWE-502</td><td>Deserialization</td><td>2.280</td><td>8,55</td><td>90,1%</td><td>0,0474</td></tr>
+<tr><td>13</td><td>CWE-269</td><td>Improper Privilege Management</td><td>2.473</td><td>7,61</td><td>75,8%</td><td>0,0457</td></tr>
+<tr><td>14</td><td>CWE-306</td><td>Missing Authentication</td><td>1.871</td><td>7,98</td><td>75,5%</td><td>0,0363</td></tr>
+<tr><td>15</td><td>CWE-122</td><td>Heap-based Buffer Overflow</td><td>1.829</td><td>7,81</td><td>84,5%</td><td>0,0347</td></tr>
+<tr><td>16</td><td>CWE-798</td><td>Hard-coded Credentials</td><td>1.570</td><td>8,38</td><td>82,6%</td><td>0,0320</td></tr>
+<tr><td>17</td><td>CWE-611</td><td>XXE</td><td>1.188</td><td>7,58</td><td>69,3%</td><td>0,0219</td></tr>
+<tr><td>18</td><td>CWE-98</td><td>CWE-98</td><td>721</td><td>8,05</td><td>96,3%</td><td>0,0141</td></tr>
+<tr><td>19</td><td>CWE-843</td><td>CWE-843</td><td>680</td><td>8,06</td><td>83,5%</td><td>0,0133</td></tr>
+<tr><td>20</td><td>CWE-415</td><td>CWE-415</td><td>699</td><td>7,66</td><td>78,7%</td><td>0,0130</td></tr></tbody></table>
+</section>
+<section id="p5" class="page">
+<h2>Síntese GQM — Pergunta → Métrica → Veredito</h2>
+<table><thead><tr><th>ID</th><th>Pergunta</th><th>Métricas</th><th>Veredito</th><th>Evidência</th></tr></thead>
+<tbody><tr><td>P1</td><td>Frequência: quais CWEs mais se repetem?</td><td>M1, M2, M7, M9, M10</td><td>CONFIRMADA</td><td>38 CWEs cobrem 80% das CVEs; Gini = 0,92</td></tr>
+<tr><td>P2</td><td>Severidade: quais CWEs têm maior potencial de dano?</td><td>M3, M4, Kruskal-Wallis</td><td>CONFIRMADA</td><td>Cluster de ~15 CWEs com CVSS médio ≈ 9,8 (100% CRITICAL); Kruskal-Wallis p < 0,001</td></tr>
+<tr><td>P3</td><td>Interação: frequência e severidade andam juntas?</td><td>M5, M6, M8, M11, Mann-Whitney</td><td>CONFIRMADA (com nuance)</td><td>Spearman ρ ≈ -0,02 (independentes), mas 53 CWEs em Dupla Ameaça</td></tr></tbody></table>
+<h3>Testes estatísticos</h3>
+<table><thead><tr><th>Teste</th><th>Hipótese</th><th>p-valor</th><th>Resultado</th></tr></thead>
+<tbody><tr><td>Pareto (M2)</td><td>H1/H2</td><td>—</td><td>CONFIRMA concentração (Pareto)</td></tr>
+<tr><td>Kruskal-Wallis</td><td>H3/H4</td><td>< 0,001</td><td>CONFIRMA variação de severidade</td></tr>
+<tr><td>Spearman (M6)</td><td>H5/H6</td><td>0,621</td><td>CONFIRMA independência (risco bimodal)</td></tr>
+<tr><td>Mann-Whitney U</td><td>H5/H6 (sanity)</td><td>< 0,001</td><td>CONFIRMA distinção entre grupos</td></tr></tbody></table>
+<div class="note">Exportar PDF: Ctrl+P → Salvar como PDF (marque 'Gráficos de fundo').</div>
+</section>
+</body></html>
