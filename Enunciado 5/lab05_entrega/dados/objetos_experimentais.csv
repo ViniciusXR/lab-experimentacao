@@ -1,0 +1,6 @@
+﻿scenario_id;scenario_name;rest_endpoint;graphql_operation;planned_trials_per_treatment;logical_result
+Q1;Lista de repositorios;/api/repos?limit=25;Q1_LIST_REPOSITORIES;120;25 repositorios com metadados principais
+Q2;Detalhe do repositorio;/api/repos/{owner}/{name};Q2_REPOSITORY_DETAIL;120;1 repositorio com metadados de detalhe
+Q3;Issues recentes;/api/repos/{owner}/{name}/issues?limit=40;Q3_RECENT_ISSUES;120;40 issues recentes
+Q4;Contribuidores;/api/repos/{owner}/{name}/contributors?limit=30;Q4_CONTRIBUTORS;120;30 contribuidores
+Q5;Visao aninhada;Composicao de 4 endpoints REST;Q5_NESTED_OVERVIEW;120;grafo de repositorio com listas aninhadas

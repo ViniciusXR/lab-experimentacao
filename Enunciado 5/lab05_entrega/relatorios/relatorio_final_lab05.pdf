@@ -1,0 +1,382 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 841.89 595.28] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 7891 >>
+stream
+0,145 0,220 0,345 rg
+BT /F2 18.00 Tf 322.00 552.00 Td (Relatorio Final - Lab05) Tj ET
+0,000 0,000 0,000 rg
+BT /F2 16.00 Tf 48.00 522.00 Td (GraphQL vs REST - Um experimento controlado) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.50 Tf 48.00 501.00 Td (Engenharia de Software - Laboratorio de Experimentacao de Software) Tj ET
+0,122 0,541 0,439 rg
+BT /F2 13.50 Tf 48.00 465.00 Td (1. Introducao) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.50 Tf 48.00 446.00 Td (Este relatorio apresenta um experimento controlado para comparar REST e GraphQL em tempo de resposta e tamanho do payload. As hipoteses) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.50 Tf 48.00 433.00 Td (alternativas avaliam se GraphQL e mais rapido e se retorna respostas menores que REST.) Tj ET
+0,122 0,541 0,439 rg
+BT /F2 13.50 Tf 48.00 397.00 Td (2. Metodologia) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 9.80 Tf 48.00 377.00 Td (- Projeto intra-sujeitos: cada cenario foi executado com REST e GraphQL.) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 9.80 Tf 48.00 360.00 Td (- Tratamentos: REST com recursos completos e GraphQL com projecao explicita de campos.) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 9.80 Tf 48.00 343.00 Td (- Objetos experimentais: catalogo local deterministico de repositorios, issues, releases e contribuidores.) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 9.80 Tf 48.00 326.00 Td (- Medicoes: 1.200 trials, com 120 repeticoes por tratamento em cada cenario.) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 9.80 Tf 48.00 309.00 Td (- Teste estatistico: Mann-Whitney U bilateral, alfa = 0,05, com Cliff's delta.) Tj ET
+0,122 0,541 0,439 rg
+BT /F2 13.50 Tf 48.00 275.00 Td (3. Resultados descritivos) Tj ET
+0,145 0,220 0,345 rg
+165,00 241,00 492,00 16,00 re f
+0.145 0.220 0.345 RG
+1,000 1,000 1,000 rg
+BT /F2 7.10 Tf 171.00 246.00 Td (Cenario) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 7.10 Tf 347.00 246.00 Td (Tratamento) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 7.10 Tf 411.00 246.00 Td (n) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 7.10 Tf 445.00 246.00 Td (Mediana ms) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 7.10 Tf 513.00 246.00 Td (P95 ms) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 7.10 Tf 581.00 246.00 Td (Mediana bytes) Tj ET
+1,000 1,000 1,000 rg
+165,00 225,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 230.00 Td (Q1 - Lista de repositorios) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 230.00 Td (GraphQL) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 230.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 230.00 Td (0.132700) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 230.00 Td (0.216625) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 230.00 Td (2552) Tj ET
+0,957 0,969 0,984 rg
+165,00 209,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 214.00 Td (Q1 - Lista de repositorios) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 214.00 Td (REST) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 214.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 214.00 Td (0.582300) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 214.00 Td (0.889955) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 214.00 Td (21239) Tj ET
+1,000 1,000 1,000 rg
+165,00 193,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 198.00 Td (Q2 - Detalhe do repositorio) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 198.00 Td (GraphQL) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 198.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 198.00 Td (0.018650) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 198.00 Td (0.039370) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 198.00 Td (185) Tj ET
+0,957 0,969 0,984 rg
+165,00 177,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 182.00 Td (Q2 - Detalhe do repositorio) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 182.00 Td (REST) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 182.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 182.00 Td (0.255600) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 182.00 Td (0.383035) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 182.00 Td (12440) Tj ET
+1,000 1,000 1,000 rg
+165,00 161,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 166.00 Td (Q3 - Issues recentes) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 166.00 Td (GraphQL) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 166.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 166.00 Td (0.320650) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 166.00 Td (0.479890) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 166.00 Td (7633) Tj ET
+0,957 0,969 0,984 rg
+165,00 145,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 150.00 Td (Q3 - Issues recentes) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 150.00 Td (REST) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 150.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 150.00 Td (0.965800) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 150.00 Td (1.378410) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 150.00 Td (54394) Tj ET
+1,000 1,000 1,000 rg
+165,00 129,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 134.00 Td (Q4 - Contribuidores) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 134.00 Td (GraphQL) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 134.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 134.00 Td (0.094100) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 134.00 Td (0.153160) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 134.00 Td (2053) Tj ET
+0,957 0,969 0,984 rg
+165,00 113,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 118.00 Td (Q4 - Contribuidores) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 118.00 Td (REST) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 118.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 118.00 Td (0.416700) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 118.00 Td (0.595220) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 118.00 Td (21183) Tj ET
+1,000 1,000 1,000 rg
+165,00 97,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 102.00 Td (Q5 - Visao aninhada) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 102.00 Td (GraphQL) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 102.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 102.00 Td (0.086000) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 102.00 Td (0.137815) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 102.00 Td (1629) Tj ET
+0,957 0,969 0,984 rg
+165,00 81,00 492,00 16,00 re f
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 171.00 86.00 Td (Q5 - Visao aninhada) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 347.00 86.00 Td (REST) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 411.00 86.00 Td (120) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 445.00 86.00 Td (0.719050) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 513.00 86.00 Td (0.982210) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 7.10 Tf 581.00 86.00 Td (34223) Tj ET
+0.820 0.855 0.905 RG 0.35 w
+165,00 257,00 m 657,00 257,00 l S
+165,00 241,00 m 657,00 241,00 l S
+165,00 225,00 m 657,00 225,00 l S
+165,00 209,00 m 657,00 209,00 l S
+165,00 193,00 m 657,00 193,00 l S
+165,00 177,00 m 657,00 177,00 l S
+165,00 161,00 m 657,00 161,00 l S
+165,00 145,00 m 657,00 145,00 l S
+165,00 129,00 m 657,00 129,00 l S
+165,00 113,00 m 657,00 113,00 l S
+165,00 97,00 m 657,00 97,00 l S
+165,00 81,00 m 657,00 81,00 l S
+165,00 257,00 m 165,00 81,00 l S
+341,00 257,00 m 341,00 81,00 l S
+405,00 257,00 m 405,00 81,00 l S
+439,00 257,00 m 439,00 81,00 l S
+507,00 257,00 m 507,00 81,00 l S
+575,00 257,00 m 575,00 81,00 l S
+657,00 257,00 m 657,00 81,00 l S
+0,333 0,388 0,463 rg
+BT /F1 8.00 Tf 42.00 25.00 Td (Lab05 - GraphQL vs REST) Tj ET
+0,333 0,388 0,463 rg
+BT /F1 8.00 Tf 760.00 25.00 Td (Pagina 1) Tj ET
+
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 841.89 595.28] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 5569 >>
+stream
+0,122 0,541 0,439 rg
+BT /F2 13.50 Tf 48.00 535.00 Td (4. Testes e respostas as RQs) Tj ET
+0,122 0,541 0,439 rg
+148,00 497,00 528,00 18,00 re f
+0.145 0.220 0.345 RG
+1,000 1,000 1,000 rg
+BT /F2 8.00 Tf 154.00 502.00 Td (Cenario) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 8.00 Tf 358.00 502.00 Td (Reducao tempo) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 8.00 Tf 446.00 502.00 Td (p tempo) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 8.00 Tf 516.00 502.00 Td (Reducao tamanho) Tj ET
+1,000 1,000 1,000 rg
+BT /F2 8.00 Tf 612.00 502.00 Td (p tamanho) Tj ET
+1,000 1,000 1,000 rg
+148,00 479,00 528,00 18,00 re f
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 154.00 484.00 Td (Q1 - Lista de repositorios) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 358.00 484.00 Td (77.21%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 446.00 484.00 Td (< 0,0001) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 516.00 484.00 Td (87.98%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 612.00 484.00 Td (< 0,0001) Tj ET
+0,957 0,969 0,984 rg
+148,00 461,00 528,00 18,00 re f
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 154.00 466.00 Td (Q2 - Detalhe do repositorio) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 358.00 466.00 Td (92.70%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 446.00 466.00 Td (< 0,0001) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 516.00 466.00 Td (98.51%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 612.00 466.00 Td (< 0,0001) Tj ET
+1,000 1,000 1,000 rg
+148,00 443,00 528,00 18,00 re f
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 154.00 448.00 Td (Q3 - Issues recentes) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 358.00 448.00 Td (66.80%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 446.00 448.00 Td (< 0,0001) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 516.00 448.00 Td (85.97%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 612.00 448.00 Td (< 0,0001) Tj ET
+0,957 0,969 0,984 rg
+148,00 425,00 528,00 18,00 re f
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 154.00 430.00 Td (Q4 - Contribuidores) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 358.00 430.00 Td (77.42%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 446.00 430.00 Td (< 0,0001) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 516.00 430.00 Td (90.31%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 612.00 430.00 Td (< 0,0001) Tj ET
+1,000 1,000 1,000 rg
+148,00 407,00 528,00 18,00 re f
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 154.00 412.00 Td (Q5 - Visao aninhada) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 358.00 412.00 Td (88.04%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 446.00 412.00 Td (< 0,0001) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 516.00 412.00 Td (95.24%) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 8.00 Tf 612.00 412.00 Td (< 0,0001) Tj ET
+0,957 0,969 0,984 rg
+148,00 389,00 528,00 18,00 re f
+0,000 0,000 0,000 rg
+BT /F2 8.00 Tf 154.00 394.00 Td (Todos) Tj ET
+0,000 0,000 0,000 rg
+BT /F2 8.00 Tf 358.00 394.00 Td (81.54%) Tj ET
+0,000 0,000 0,000 rg
+BT /F2 8.00 Tf 446.00 394.00 Td (< 0,0001) Tj ET
+0,000 0,000 0,000 rg
+BT /F2 8.00 Tf 516.00 394.00 Td (90.33%) Tj ET
+0,000 0,000 0,000 rg
+BT /F2 8.00 Tf 612.00 394.00 Td (< 0,0001) Tj ET
+0.820 0.855 0.905 RG 0.35 w
+148,00 515,00 m 676,00 515,00 l S
+148,00 497,00 m 676,00 497,00 l S
+148,00 479,00 m 676,00 479,00 l S
+148,00 461,00 m 676,00 461,00 l S
+148,00 443,00 m 676,00 443,00 l S
+148,00 425,00 m 676,00 425,00 l S
+148,00 407,00 m 676,00 407,00 l S
+148,00 389,00 m 676,00 389,00 l S
+148,00 515,00 m 148,00 389,00 l S
+352,00 515,00 m 352,00 389,00 l S
+440,00 515,00 m 440,00 389,00 l S
+510,00 515,00 m 510,00 389,00 l S
+606,00 515,00 m 606,00 389,00 l S
+676,00 515,00 m 676,00 389,00 l S
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 365.00 Td (RQ1: GraphQL apresentou menor mediana de tempo em 5 de 5 cenarios com p < 0,05. No agregado, a reducao foi de 81,54% \(p < 0,0001\). Assim, H1-1 e) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 352.00 Td (apoiada neste experimento.) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 318.00 Td (RQ2: GraphQL apresentou menor tamanho de resposta em 5 de 5 cenarios com p < 0,05. No agregado, a reducao foi de 90,33% \(p < 0,0001\). Assim, H1-2 e) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 305.00 Td (apoiada neste experimento.) Tj ET
+0,122 0,541 0,439 rg
+BT /F2 13.50 Tf 48.00 270.00 Td (5. Discussao e ameacas a validade) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 251.00 Td (Os resultados favorecem GraphQL principalmente por reduzir over-fetching: o cliente declara os campos necessarios e recebe payloads menores. Como a) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 238.00 Td (execucao foi local, a conclusao isola o efeito de payload e processamento JSON, mas nao captura latencia de rede, cache HTTP, compressao ou overhead) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 225.00 Td (de servidores GraphQL reais.) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 200.00 Td (Portanto, a conclusao e valida para o desenho controlado proposto e deve ser replicada em APIs reais antes de generalizacoes amplas.) Tj ET
+0,122 0,541 0,439 rg
+BT /F2 13.50 Tf 48.00 160.00 Td (6. Conclusao) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 141.00 Td (No experimento controlado, GraphQL reduziu a mediana agregada de tempo e de tamanho das respostas em relacao a REST. As evidencias estatisticas) Tj ET
+0,000 0,000 0,000 rg
+BT /F1 10.30 Tf 48.00 128.00 Td (apoiam as duas hipoteses alternativas formuladas para o Lab05.) Tj ET
+0,333 0,388 0,463 rg
+BT /F1 8.00 Tf 42.00 25.00 Td (Lab05 - GraphQL vs REST) Tj ET
+0,333 0,388 0,463 rg
+BT /F1 8.00 Tf 760.00 25.00 Td (Pagina 2) Tj ET
+
+endstream
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000266 00000 n 
+0000000408 00000 n 
+0000008351 00000 n 
+0000008493 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+14114
+%%EOF

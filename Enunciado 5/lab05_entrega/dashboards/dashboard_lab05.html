@@ -1,0 +1,385 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lab05 - Dashboard GraphQL vs REST</title>
+<style>
+:root {
+  --page: #f7f8fb;
+  --ink: #17202a;
+  --muted: #5d6978;
+  --line: #d7dde7;
+  --panel: #ffffff;
+  --rest: #d5534a;
+  --graphql: #1f8a70;
+  --time: #3867d6;
+  --size: #a35c1a;
+  --accent: #253858;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.45;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 32px;
+  color: #fff;
+  background: #253858;
+  border-bottom: 5px solid #1f8a70;
+}
+
+h1, h2, p { margin: 0; }
+h1 { font-size: clamp(30px, 5vw, 54px); font-weight: 750; letter-spacing: 0; }
+h2 { margin-bottom: 16px; font-size: 18px; color: var(--accent); }
+.eyebrow { color: #b7d8d0; font-size: 13px; font-weight: 700; text-transform: uppercase; }
+.subtitle { color: #d9e4f2; font-size: 16px; }
+.status {
+  max-width: 280px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 8px;
+  color: #ecfff9;
+  font-weight: 650;
+  text-align: center;
+}
+
+main { width: min(1280px, calc(100% - 32px)); margin: 24px auto 40px; }
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.kpi, .panel, .discussion {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(23, 32, 42, .06);
+}
+
+.kpi { padding: 16px; min-height: 112px; }
+.kpi span { display: block; color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; }
+.kpi strong { display: block; margin-top: 8px; font-size: 30px; color: var(--accent); }
+.kpi small { display: block; margin-top: 6px; color: var(--muted); }
+
+.grid { display: grid; gap: 18px; margin-bottom: 18px; }
+.grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.panel { padding: 18px; overflow-x: auto; }
+.panel.full { margin-bottom: 18px; }
+.discussion { padding: 20px; display: grid; gap: 10px; }
+
+svg { width: 100%; height: auto; display: block; }
+.axis { stroke: #536170; stroke-width: 1.25; }
+.gridline { stroke: #e4e8ef; stroke-width: 1; }
+.tick, .label, .legend { fill: #536170; font-size: 12px; }
+.bar { rx: 3px; }
+.rest { fill: var(--rest); }
+.graphql { fill: var(--graphql); }
+.time { fill: var(--time); }
+.size { fill: var(--size); }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+th { color: var(--accent); background: #edf1f7; font-size: 12px; text-transform: uppercase; }
+tr:last-child td { border-bottom: 0; }
+.pill { display: inline-block; min-width: 76px; padding: 4px 8px; border-radius: 999px; color: #fff; text-align: center; font-size: 12px; font-weight: 700; }
+.pill.rest { background: var(--rest); }
+.pill.graphql { background: var(--graphql); }
+
+@media (max-width: 900px) {
+  header { align-items: flex-start; flex-direction: column; }
+  .kpis, .grid.two { grid-template-columns: 1fr; }
+  main { width: min(100% - 20px, 1280px); }
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <p class="eyebrow">Laboratorio 05</p>
+    <h1>GraphQL vs REST</h1>
+    <p class="subtitle">Dashboard de resultados do experimento controlado</p>
+  </div>
+  <div class="status">RQ1 e RQ2 apoiadas no cenario controlado</div>
+</header>
+<main>
+<section class="kpis" aria-label="Indicadores principais">
+<article class="kpi">
+  <span>Medi&#231;&#245;es</span>
+  <strong>1.200</strong>
+  <small>trials coletados</small>
+</article>
+<article class="kpi">
+  <span>Cen&#225;rios</span>
+  <strong>5</strong>
+  <small>consultas equivalentes</small>
+</article>
+<article class="kpi">
+  <span>Redu&#231;&#227;o de tempo</span>
+  <strong>81,54%</strong>
+  <small>mediana agregada</small>
+</article>
+<article class="kpi">
+  <span>Redu&#231;&#227;o de tamanho</span>
+  <strong>90,33%</strong>
+  <small>mediana agregada</small>
+</article>
+</section>
+<section class="grid two">
+<section class="panel">
+  <h2>Tempo de resposta por cen&#225;rio</h2>
+  <svg viewBox="0 0 760 340" role="img" aria-label="Grafico de barras">
+<line x1="72" y1="258" x2="732" y2="258" class="axis" />
+<line x1="72" y1="28" x2="72" y2="258" class="axis" />
+<line x1="72" y1="258,00" x2="732" y2="258,00" class="gridline" />
+<text x="64" y="262,00" class="tick" text-anchor="end">0,0000 ms</text>
+<line x1="72" y1="200,50" x2="732" y2="200,50" class="gridline" />
+<text x="64" y="204,50" class="tick" text-anchor="end">0,2704 ms</text>
+<line x1="72" y1="143,00" x2="732" y2="143,00" class="gridline" />
+<text x="64" y="147,00" class="tick" text-anchor="end">0,5408 ms</text>
+<line x1="72" y1="85,50" x2="732" y2="85,50" class="gridline" />
+<text x="64" y="89,50" class="tick" text-anchor="end">0,8113 ms</text>
+<line x1="72" y1="28,00" x2="732" y2="28,00" class="gridline" />
+<text x="64" y="32,00" class="tick" text-anchor="end">1,0817 ms</text>
+<rect x="101,00" y="134,19" width="33,00" height="123,81" class="bar rest"><title>Q1 REST: 0,5823 ms</title></rect>
+<rect x="142,00" y="229,78" width="33,00" height="28,22" class="bar graphql"><title>Q1 GraphQL: 0,1327 ms</title></rect>
+<text x="138,00" y="283" class="label" text-anchor="middle">Q1</text>
+<rect x="233,00" y="203,65" width="33,00" height="54,35" class="bar rest"><title>Q2 REST: 0,2556 ms</title></rect>
+<rect x="274,00" y="254,03" width="33,00" height="3,97" class="bar graphql"><title>Q2 GraphQL: 0,0186 ms</title></rect>
+<text x="270,00" y="283" class="label" text-anchor="middle">Q2</text>
+<rect x="365,00" y="52,64" width="33,00" height="205,36" class="bar rest"><title>Q3 REST: 0,9658 ms</title></rect>
+<rect x="406,00" y="189,82" width="33,00" height="68,18" class="bar graphql"><title>Q3 GraphQL: 0,3206 ms</title></rect>
+<text x="402,00" y="283" class="label" text-anchor="middle">Q3</text>
+<rect x="497,00" y="169,40" width="33,00" height="88,60" class="bar rest"><title>Q4 REST: 0,4167 ms</title></rect>
+<rect x="538,00" y="237,99" width="33,00" height="20,01" class="bar graphql"><title>Q4 GraphQL: 0,0941 ms</title></rect>
+<text x="534,00" y="283" class="label" text-anchor="middle">Q4</text>
+<rect x="629,00" y="105,11" width="33,00" height="152,89" class="bar rest"><title>Q5 REST: 0,7190 ms</title></rect>
+<rect x="670,00" y="239,71" width="33,00" height="18,29" class="bar graphql"><title>Q5 GraphQL: 0,0860 ms</title></rect>
+<text x="666,00" y="283" class="label" text-anchor="middle">Q5</text>
+<rect x="80" y="300" width="14" height="14" class="bar rest" /><text x="100" y="312" class="legend">REST</text>
+<rect x="176" y="300" width="14" height="14" class="bar graphql" /><text x="196" y="312" class="legend">GraphQL</text>
+</svg>
+
+</section>
+<section class="panel">
+  <h2>Tamanho da resposta por cen&#225;rio</h2>
+  <svg viewBox="0 0 760 340" role="img" aria-label="Grafico de barras">
+<line x1="72" y1="258" x2="732" y2="258" class="axis" />
+<line x1="72" y1="28" x2="72" y2="258" class="axis" />
+<line x1="72" y1="258,00" x2="732" y2="258,00" class="gridline" />
+<text x="64" y="262,00" class="tick" text-anchor="end">0</text>
+<line x1="72" y1="200,50" x2="732" y2="200,50" class="gridline" />
+<text x="64" y="204,50" class="tick" text-anchor="end">15.230</text>
+<line x1="72" y1="143,00" x2="732" y2="143,00" class="gridline" />
+<text x="64" y="147,00" class="tick" text-anchor="end">30.461</text>
+<line x1="72" y1="85,50" x2="732" y2="85,50" class="gridline" />
+<text x="64" y="89,50" class="tick" text-anchor="end">45.691</text>
+<line x1="72" y1="28,00" x2="732" y2="28,00" class="gridline" />
+<text x="64" y="32,00" class="tick" text-anchor="end">60.921</text>
+<rect x="101,00" y="177,82" width="33,00" height="80,18" class="bar rest"><title>Q1 REST: 21.239</title></rect>
+<rect x="142,00" y="248,37" width="33,00" height="9,63" class="bar graphql"><title>Q1 GraphQL: 2.552</title></rect>
+<text x="138,00" y="283" class="label" text-anchor="middle">Q1</text>
+<rect x="233,00" y="211,03" width="33,00" height="46,97" class="bar rest"><title>Q2 REST: 12.440</title></rect>
+<rect x="274,00" y="257,30" width="33,00" height="0,70" class="bar graphql"><title>Q2 GraphQL: 185</title></rect>
+<text x="270,00" y="283" class="label" text-anchor="middle">Q2</text>
+<rect x="365,00" y="52,64" width="33,00" height="205,36" class="bar rest"><title>Q3 REST: 54.394</title></rect>
+<rect x="406,00" y="229,18" width="33,00" height="28,82" class="bar graphql"><title>Q3 GraphQL: 7.633</title></rect>
+<text x="402,00" y="283" class="label" text-anchor="middle">Q3</text>
+<rect x="497,00" y="178,03" width="33,00" height="79,97" class="bar rest"><title>Q4 REST: 21.183</title></rect>
+<rect x="538,00" y="250,25" width="33,00" height="7,75" class="bar graphql"><title>Q4 GraphQL: 2.053</title></rect>
+<text x="534,00" y="283" class="label" text-anchor="middle">Q4</text>
+<rect x="629,00" y="128,80" width="33,00" height="129,20" class="bar rest"><title>Q5 REST: 34.223</title></rect>
+<rect x="670,00" y="251,85" width="33,00" height="6,15" class="bar graphql"><title>Q5 GraphQL: 1.629</title></rect>
+<text x="666,00" y="283" class="label" text-anchor="middle">Q5</text>
+<rect x="80" y="300" width="14" height="14" class="bar rest" /><text x="100" y="312" class="legend">REST</text>
+<rect x="176" y="300" width="14" height="14" class="bar graphql" /><text x="196" y="312" class="legend">GraphQL</text>
+</svg>
+
+</section>
+</section>
+<section class="grid two">
+<section class="panel">
+  <h2>Redu&#231;&#227;o percentual observada</h2>
+  <svg viewBox="0 0 760 340" role="img" aria-label="Grafico de reducao percentual">
+<line x1="72" y1="258" x2="732" y2="258" class="axis" />
+<line x1="72" y1="28" x2="72" y2="258" class="axis" />
+<line x1="72" y1="258,00" x2="732" y2="258,00" class="gridline" />
+<text x="64" y="262,00" class="tick" text-anchor="end">0%</text>
+<line x1="72" y1="200,50" x2="732" y2="200,50" class="gridline" />
+<text x="64" y="204,50" class="tick" text-anchor="end">28%</text>
+<line x1="72" y1="143,00" x2="732" y2="143,00" class="gridline" />
+<text x="64" y="147,00" class="tick" text-anchor="end">55%</text>
+<line x1="72" y1="85,50" x2="732" y2="85,50" class="gridline" />
+<text x="64" y="89,50" class="tick" text-anchor="end">83%</text>
+<line x1="72" y1="28,00" x2="732" y2="28,00" class="gridline" />
+<text x="64" y="32,00" class="tick" text-anchor="end">110%</text>
+<rect x="101,00" y="97,05" width="33,00" height="160,95" class="bar time"><title>Q1 tempo: 77,21%</title></rect>
+<rect x="142,00" y="74,59" width="33,00" height="183,41" class="bar size"><title>Q1 tamanho: 87,98%</title></rect>
+<text x="138,00" y="283" class="label" text-anchor="middle">Q1</text>
+<rect x="233,00" y="64,75" width="33,00" height="193,25" class="bar time"><title>Q2 tempo: 92,70%</title></rect>
+<rect x="274,00" y="52,64" width="33,00" height="205,36" class="bar size"><title>Q2 tamanho: 98,51%</title></rect>
+<text x="270,00" y="283" class="label" text-anchor="middle">Q2</text>
+<rect x="365,00" y="118,75" width="33,00" height="139,25" class="bar time"><title>Q3 tempo: 66,80%</title></rect>
+<rect x="406,00" y="78,78" width="33,00" height="179,22" class="bar size"><title>Q3 tamanho: 85,97%</title></rect>
+<text x="402,00" y="283" class="label" text-anchor="middle">Q3</text>
+<rect x="497,00" y="96,61" width="33,00" height="161,39" class="bar time"><title>Q4 tempo: 77,42%</title></rect>
+<rect x="538,00" y="69,74" width="33,00" height="188,26" class="bar size"><title>Q4 tamanho: 90,31%</title></rect>
+<text x="534,00" y="283" class="label" text-anchor="middle">Q4</text>
+<rect x="629,00" y="74,47" width="33,00" height="183,53" class="bar time"><title>Q5 tempo: 88,04%</title></rect>
+<rect x="670,00" y="59,46" width="33,00" height="198,54" class="bar size"><title>Q5 tamanho: 95,24%</title></rect>
+<text x="666,00" y="283" class="label" text-anchor="middle">Q5</text>
+<rect x="80" y="300" width="14" height="14" class="bar time" /><text x="100" y="312" class="legend">Tempo</text>
+<rect x="184" y="300" width="14" height="14" class="bar size" /><text x="204" y="312" class="legend">Tamanho</text>
+</svg>
+
+</section>
+<section class="panel">
+  <h2>S&#237;ntese estat&#237;stica</h2>
+  <table>
+<thead><tr><th>Cenario</th><th>Tempo</th><th>p tempo</th><th>Tamanho</th><th>p tamanho</th></tr></thead>
+<tbody>
+<tr>
+<td>Q1</td>
+<td>77,21%</td>
+<td>< 0,0001</td>
+<td>87,98%</td>
+<td>< 0,0001</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>92,70%</td>
+<td>< 0,0001</td>
+<td>98,51%</td>
+<td>< 0,0001</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>66,80%</td>
+<td>< 0,0001</td>
+<td>85,97%</td>
+<td>< 0,0001</td>
+</tr>
+<tr>
+<td>Q4</td>
+<td>77,42%</td>
+<td>< 0,0001</td>
+<td>90,31%</td>
+<td>< 0,0001</td>
+</tr>
+<tr>
+<td>Q5</td>
+<td>88,04%</td>
+<td>< 0,0001</td>
+<td>95,24%</td>
+<td>< 0,0001</td>
+</tr>
+</tbody></table>
+
+</section>
+</section>
+<section class="panel full">
+  <h2>Resumo por tratamento</h2>
+<table>
+<thead><tr><th>Cenario</th><th>Tratamento</th><th>n</th><th>Mediana ms</th><th>P95 ms</th><th>Mediana bytes</th></tr></thead>
+<tbody>
+<tr>
+<td>Q1 - Lista de repositorios</td>
+<td><span class="pill graphql">GraphQL</span></td>
+<td>120</td>
+<td>0,1327</td>
+<td>0,2166</td>
+<td>2.552</td>
+</tr>
+<tr>
+<td>Q1 - Lista de repositorios</td>
+<td><span class="pill rest">REST</span></td>
+<td>120</td>
+<td>0,5823</td>
+<td>0,8900</td>
+<td>21.239</td>
+</tr>
+<tr>
+<td>Q2 - Detalhe do repositorio</td>
+<td><span class="pill graphql">GraphQL</span></td>
+<td>120</td>
+<td>0,0186</td>
+<td>0,0394</td>
+<td>185</td>
+</tr>
+<tr>
+<td>Q2 - Detalhe do repositorio</td>
+<td><span class="pill rest">REST</span></td>
+<td>120</td>
+<td>0,2556</td>
+<td>0,3830</td>
+<td>12.440</td>
+</tr>
+<tr>
+<td>Q3 - Issues recentes</td>
+<td><span class="pill graphql">GraphQL</span></td>
+<td>120</td>
+<td>0,3206</td>
+<td>0,4799</td>
+<td>7.633</td>
+</tr>
+<tr>
+<td>Q3 - Issues recentes</td>
+<td><span class="pill rest">REST</span></td>
+<td>120</td>
+<td>0,9658</td>
+<td>1,3784</td>
+<td>54.394</td>
+</tr>
+<tr>
+<td>Q4 - Contribuidores</td>
+<td><span class="pill graphql">GraphQL</span></td>
+<td>120</td>
+<td>0,0941</td>
+<td>0,1532</td>
+<td>2.053</td>
+</tr>
+<tr>
+<td>Q4 - Contribuidores</td>
+<td><span class="pill rest">REST</span></td>
+<td>120</td>
+<td>0,4167</td>
+<td>0,5952</td>
+<td>21.183</td>
+</tr>
+<tr>
+<td>Q5 - Visao aninhada</td>
+<td><span class="pill graphql">GraphQL</span></td>
+<td>120</td>
+<td>0,0860</td>
+<td>0,1378</td>
+<td>1.629</td>
+</tr>
+<tr>
+<td>Q5 - Visao aninhada</td>
+<td><span class="pill rest">REST</span></td>
+<td>120</td>
+<td>0,7190</td>
+<td>0,9822</td>
+<td>34.223</td>
+</tr>
+</tbody></table>
+
+</section>
+<section class="discussion">
+  <h2>Discussão</h2>
+  <p>As consultas GraphQL retornaram payloads menores em todos os cenários porque projetam somente os campos usados pelo cliente. A queda no tamanho também reduziu o custo de serialização e parsing JSON, resultando em menor mediana de tempo no agregado.</p>
+  <p>Como a execução foi local e determinística, os resultados devem ser interpretados como evidência do efeito de over-fetching, não como comparação universal entre todas as implementações reais de REST e GraphQL.</p>
+</section>
+</main>
+</body></html>

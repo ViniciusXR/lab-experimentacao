@@ -1,0 +1,37 @@
+﻿query Q1_LIST_REPOSITORIES {
+  repositories(first: 25) {
+    nodes { id name owner { login } stars primaryLanguage }
+  }
+}
+
+query Q2_REPOSITORY_DETAIL($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    id name owner { login } stars forks license topics
+  }
+}
+
+query Q3_RECENT_ISSUES($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    issues(first: 40) {
+      nodes { id title state author { login } createdAt labels }
+    }
+  }
+}
+
+query Q4_CONTRIBUTORS($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    contributors(first: 30) {
+      nodes { login contributions company }
+    }
+  }
+}
+
+query Q5_NESTED_OVERVIEW($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    id name owner { login }
+    stars primaryLanguage
+    issues(first: 10) { nodes { title state author { login } } }
+    contributors(first: 10) { nodes { login contributions } }
+    latestRelease { tagName publishedAt }
+  }
+}

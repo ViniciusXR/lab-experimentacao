@@ -1,0 +1,32 @@
+﻿{
+  "Q1_LIST_REPOSITORIES": {
+    "method": "GET",
+    "endpoint": "/api/repos?limit=25",
+    "logicalFields": ["id", "name", "owner", "stars", "primaryLanguage"],
+    "restBehavior": "Retorna objetos de repositorio completos, incluindo campos nao usados pelo cliente."
+  },
+  "Q2_REPOSITORY_DETAIL": {
+    "method": "GET",
+    "endpoint": "/api/repos/{owner}/{name}",
+    "logicalFields": ["id", "name", "owner", "stars", "forks", "license", "topics"],
+    "restBehavior": "Retorna detalhe completo do repositorio."
+  },
+  "Q3_RECENT_ISSUES": {
+    "method": "GET",
+    "endpoint": "/api/repos/{owner}/{name}/issues?limit=40",
+    "logicalFields": ["id", "title", "state", "author", "createdAt", "labels"],
+    "restBehavior": "Retorna issues completas com corpo, timeline e metadados adicionais."
+  },
+  "Q4_CONTRIBUTORS": {
+    "method": "GET",
+    "endpoint": "/api/repos/{owner}/{name}/contributors?limit=30",
+    "logicalFields": ["login", "contributions", "company"],
+    "restBehavior": "Retorna perfis completos de usuarios."
+  },
+  "Q5_NESTED_OVERVIEW": {
+    "method": "GET",
+    "endpoint": "Composicao de /repos, /issues, /contributors e /releases/latest",
+    "logicalFields": ["repo", "issues", "contributors", "latestRelease"],
+    "restBehavior": "Cliente precisa combinar multiplos endpoints."
+  }
+}

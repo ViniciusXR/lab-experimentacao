@@ -1,0 +1,14 @@
+﻿{
+  "laboratory": "Lab05 - GraphQL vs REST",
+  "generatedAtUtc": "2026-06-25T02:07:17.1771668+00:00",
+  "datasetSeed": 20260624,
+  "trialSeed": 5052026,
+  "warmupIterations": 20,
+  "trialsPerTreatment": 120,
+  "measurementCount": 1200,
+  "dotnetVersion": "10.0.9",
+  "os": "Microsoft Windows 10.0.26200",
+  "architecture": "X64",
+  "processorCount": 16,
+  "machineName": "VXPC"
+}
