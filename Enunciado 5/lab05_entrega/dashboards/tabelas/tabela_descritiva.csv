@@ -1,0 +1,11 @@
+﻿Cenario;Tratamento;n;Mediana tempo (ms);P95 tempo (ms);Mediana tamanho (bytes)
+Q1 - Lista de repositorios;REST;120;0.5823;0.889955;21239.0
+Q1 - Lista de repositorios;GraphQL;120;0.1327;0.216625;2552.0
+Q2 - Detalhe do repositorio;REST;120;0.2556;0.383035;12440.0
+Q2 - Detalhe do repositorio;GraphQL;120;0.01865;0.03937;185.0
+Q3 - Issues recentes;REST;120;0.9658;1.37841;54394.0
+Q3 - Issues recentes;GraphQL;120;0.32065;0.47989;7633.0
+Q4 - Contribuidores;REST;120;0.4167;0.59522;21183.0
+Q4 - Contribuidores;GraphQL;120;0.0941;0.15316;2053.0
+Q5 - Visao aninhada;REST;120;0.71905;0.98221;34223.0
+Q5 - Visao aninhada;GraphQL;120;0.086;0.137815;1629.0

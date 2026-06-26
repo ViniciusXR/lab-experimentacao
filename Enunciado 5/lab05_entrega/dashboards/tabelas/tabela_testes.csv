@@ -1,0 +1,7 @@
+﻿Cenario;Descricao;Reducao tempo (%);p (tempo);Cliff (tempo);Reducao tamanho (%);p (tamanho);Cliff (tamanho);RQ1;RQ2
+Q1;Lista de repositorios;77.21;0.0;-1.0;87.98;0.0;-1.0;H1 apoiada;H1 apoiada
+Q2;Detalhe do repositorio;92.7;0.0;-1.0;98.51;0.0;-1.0;H1 apoiada;H1 apoiada
+Q3;Issues recentes;66.8;0.0;-1.0;85.97;0.0;-1.0;H1 apoiada;H1 apoiada
+Q4;Contribuidores;77.42;0.0;-1.0;90.31;0.0;-1.0;H1 apoiada;H1 apoiada
+Q5;Visao aninhada;88.04;0.0;-1.0;95.24;0.0;-1.0;H1 apoiada;H1 apoiada
+ALL;Todos os cenarios;81.54;0.0;-0.9188;90.33;0.0;-1.0;H1 apoiada;H1 apoiada
