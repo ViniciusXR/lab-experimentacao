@@ -1,7 +1,7 @@
 ﻿scenario_id;scenario_name;rest_median_ms;graphql_median_ms;time_reduction_pct;time_p_value;time_cliffs_delta;rest_median_bytes;graphql_median_bytes;size_reduction_pct;size_p_value;size_cliffs_delta;rq1_verdict;rq2_verdict
-Q1;Lista de repositorios;0.582300;0.132700;77.21;0.00000000;-1.0000;21239.00;2552.00;87.98;0.00000000;-1.0000;H1 apoiada;H1 apoiada
-Q2;Detalhe do repositorio;0.255600;0.018650;92.70;0.00000000;-1.0000;12440.00;185.00;98.51;0.00000000;-1.0000;H1 apoiada;H1 apoiada
-Q3;Issues recentes;0.965800;0.320650;66.80;0.00000000;-1.0000;54394.00;7633.00;85.97;0.00000000;-1.0000;H1 apoiada;H1 apoiada
-Q4;Contribuidores;0.416700;0.094100;77.42;0.00000000;-1.0000;21183.00;2053.00;90.31;0.00000000;-1.0000;H1 apoiada;H1 apoiada
-Q5;Visao aninhada;0.719050;0.086000;88.04;0.00000000;-1.0000;34223.00;1629.00;95.24;0.00000000;-1.0000;H1 apoiada;H1 apoiada
-ALL;Todos os cenarios;0.585450;0.108050;81.54;0.00000000;-0.9188;21239.00;2053.00;90.33;0.00000000;-1.0000;H1 apoiada;H1 apoiada
+Q1;Lista de repositorios;0.138250;0.030708;77.79;0.00000000;-1.0000;21239.00;2552.00;87.98;0.00000000;-1.0000;H1 apoiada;H1 apoiada
+Q2;Detalhe do repositorio;0.048646;0.003334;93.15;0.00000000;-1.0000;12440.00;185.00;98.51;0.00000000;-1.0000;H1 apoiada;H1 apoiada
+Q3;Issues recentes;0.199271;0.077521;61.10;0.00000000;-1.0000;54394.00;7633.00;85.97;0.00000000;-1.0000;H1 apoiada;H1 apoiada
+Q4;Contribuidores;0.087312;0.021208;75.71;0.00000000;-1.0000;21183.00;2053.00;90.31;0.00000000;-1.0000;H1 apoiada;H1 apoiada
+Q5;Visao aninhada;0.142479;0.018770;86.83;0.00000000;-1.0000;34223.00;1629.00;95.24;0.00000000;-1.0000;H1 apoiada;H1 apoiada
+ALL;Todos os cenarios;0.138313;0.021292;84.61;0.00000000;-0.9177;21239.00;2053.00;90.33;0.00000000;-1.0000;H1 apoiada;H1 apoiada

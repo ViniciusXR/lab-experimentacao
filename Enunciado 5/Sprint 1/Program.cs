@@ -4,7 +4,7 @@ namespace Enunciado5.Sprint1;
 
 internal static class Program
 {
-    private static async Task Main()
+    private static async Task Main(string[] args)
     {
         var labRoot = FindLabRoot();
         var outputRoot = Path.Combine(labRoot, "lab05_entrega");
@@ -38,7 +38,10 @@ internal static class Program
 
         Console.WriteLine("Lab05S01 concluido.");
         Console.WriteLine($"Artefatos gerados em: {outputRoot}");
-        Console.ReadKey();
+        if (!args.Contains("--no-wait"))
+        {
+            Console.ReadKey();
+        }
     }
 
     private static string FindLabRoot()

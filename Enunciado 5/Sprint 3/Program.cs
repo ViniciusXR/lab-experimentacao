@@ -9,7 +9,7 @@ internal static class Program
     private static readonly CultureInfo CsvCulture = CultureInfo.InvariantCulture;
     private static readonly CultureInfo PtBr = CultureInfo.GetCultureInfo("pt-BR");
 
-    private static async Task Main()
+    private static async Task Main(string[] args)
     {
         var labRoot = FindLabRoot();
         var outputRoot = Path.Combine(labRoot, "lab05_entrega");
@@ -39,7 +39,10 @@ internal static class Program
 
         Console.WriteLine("Lab05S03 concluido.");
         Console.WriteLine($"Dashboard gerado em: {outputPath}");
-        Console.ReadKey();
+        if (!args.Contains("--no-wait"))
+        {
+            Console.ReadKey();
+        }
     }
 
     private static string FindLabRoot()

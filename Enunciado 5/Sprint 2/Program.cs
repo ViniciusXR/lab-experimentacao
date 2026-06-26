@@ -27,7 +27,7 @@ internal static class Program
         WriteIndented = false
     };
 
-    private static async Task Main()
+    private static async Task Main(string[] args)
     {
         var labRoot = FindLabRoot();
         var outputRoot = Path.Combine(labRoot, "lab05_entrega");
@@ -74,7 +74,10 @@ internal static class Program
         Console.WriteLine("Lab05S02 concluido.");
         Console.WriteLine($"Medicoes coletadas: {results.Count.ToString("N0", PtBr)}");
         Console.WriteLine($"Artefatos gerados em: {outputRoot}");
-        Console.ReadKey();
+        if (!args.Contains("--no-wait"))
+        {
+            Console.ReadKey();
+        }
     }
 
     private static string FindLabRoot()

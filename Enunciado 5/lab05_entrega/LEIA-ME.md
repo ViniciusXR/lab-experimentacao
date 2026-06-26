@@ -2,7 +2,15 @@
 
 Esta pasta consolida a atividade do **Laboratório 05 - GraphQL vs REST**.
 
-## Como reproduzir
+## Execução consolidada (recomendado)
+
+Para gerar **toda** a entrega de uma vez (Sprints 1, 2, 3 e dashboard Python do Passo 6):
+
+```powershell
+dotnet run --project "Enunciado 5\Sprint 4\Sprint4.csproj"
+```
+
+## Como reproduzir (passo a passo)
 
 Execute, a partir da raiz do repositório, as três sprints em C# (geram os dados):
 
@@ -18,6 +26,8 @@ Em seguida, gere o dashboard de visualização (Passo 6) com Python (pandas + ma
 pip install -r "Enunciado 5\dashboard\requirements.txt"
 python "Enunciado 5\dashboard\gerar_dashboard.py"
 ```
+
+> **Passo 6 do enunciado:** o dashboard Python (`dashboard_lab05_python.html`) é gerado com **pandas**, **matplotlib** e **seaborn**, conforme exigido no Laboratório 05. A Sprint 4 executa este script automaticamente após as três sprints em C#.
 
 O script lê os CSVs produzidos na Sprint 2, processa-os com pandas e gera os gráficos (matplotlib/seaborn), as tabelas e o dashboard HTML.
 
